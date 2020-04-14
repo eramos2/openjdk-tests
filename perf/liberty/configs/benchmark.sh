@@ -57,7 +57,7 @@ export REQUEST_CORE=""
 export SCENARIO="DayTrader7"
 export SERVER_NAME="LibertySUDTServer-$JDK"
 export PETERFP="false"
-export RESULTS_MACHINE="lowry1"
+export RESULTS_MACHINE="panthers1.rtp.raleigh.ibm.com"
 export RESULTS_DIR="libertyResults"
 export LIBERTY_HOST="$(hostname)"
 export LAUNCH_SCRIPT="server"
@@ -65,7 +65,7 @@ export LIBERTY_BINARIES_DIR="$1/libertyBinaries"
 export LIBERTY_VERSION="openliberty-19.0.0.4"
 export APP_VERSION="daytrader-ee7"
 export WLP_SKIP_MAXPERMSIZE="1"
-
+export ANT_HOME="/usr/share/ant"
 #TODO: Need to soft-code these configs. Need to add various affinity tools in the perf pre-reqs ()
 export AFFINITY=""
 
