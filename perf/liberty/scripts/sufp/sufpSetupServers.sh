@@ -7,8 +7,8 @@ sufpScriptDir=$1
 
 echo "about to kill all java procs, unless you stop me in next 10 secs"
 sleep 15
-killall -9 java
-
+#killall -9 java
+pkill -f "*WPA_INST*"
 # run this from the <build>/wlp dir of a new Liberty build
 targDir=${sufpScriptDir}/apps/
 
