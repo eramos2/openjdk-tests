@@ -78,6 +78,7 @@ tempRootDir=/tmp
 doDebug=false
 
 #Create resutls Dir
+mkdir ${1}/libertyResults
 mkdir $resDir
 #Get Liberty builds
 echo "Downloading CL build" >> $cronjobLog
