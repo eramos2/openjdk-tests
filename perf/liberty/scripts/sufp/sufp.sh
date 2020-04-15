@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ##Expects first paramater to be the liberty build and the second parameter to be the release
 

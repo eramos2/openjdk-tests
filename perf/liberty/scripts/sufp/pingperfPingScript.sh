@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 testHost=$1
 if [[ -z $testHost ]]  ; then echo "must specify testhost name" ; exit 99 ; fi
 testRequest="${testHost}:9080/pingperf/ping/greeting"

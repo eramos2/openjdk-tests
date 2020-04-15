@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #resDir=/opt/IBM/Liberty/sufp-results
 resDir=$1
