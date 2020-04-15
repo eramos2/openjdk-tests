@@ -28,7 +28,7 @@ sleep 5
 #Remove zip files from dir
 rm -rf $wpaDir/wlp-$1.zip openliberty-all-$2-$1.zip
 
-echo "Setting up Servers" >> $logFile
+echo "Setting up Servers"
 
 for build in $targ1 $targ2;
 do
@@ -36,13 +36,13 @@ do
   $setupServers
 done
 
-echo "Finished settnig up servers" > $logFile
+echo "Finished setting up servers"
 
 java=`cat $sufpCycles | grep "export JAVA_HOME" | grep -v "\#setJava" | tail -1 | sed -e 's/\/jre//' | sed -e 's/.*java//' | tr -d '/" ' ` 
 
 echo "java: $java"
 #Log java version
-$javaDir/$java/bin/java -version &> $resultsDir/$javaVersion
+$javaDir/$java/bin/java -version
 
 echo "Running Cycles" > $logFile
 
@@ -52,13 +52,13 @@ do
   
   for app in `ls usr/servers`;
   do
-    echo "Starting test on $app for $build" >> $logFile
+    echo "Starting test on $app for $build"
     $sufpCycles ${resultsDir} ${build}_${app}_${java}_two-warmups-cpus-4-runs-25-try-1 ${app} 25
-    echo "Finished test on $app for $build" >> $logFile
+    echo "Finished test on $app for $build"
   done
 done
-echo "Finished Running Cycles" >> $logFile
-
+echo "Finished Running Cycles"
+exit
 #Parse results - (Need to enable python3 red hat software collection and virtual environment)
 scl enable rh-python36 - << EOF
 source /root/pydev/py36-venv/bin/activate
@@ -68,12 +68,12 @@ EOF
 
 sleep 30
 
-echo "Finished parsing results" >> ${logFile}
-date >> ${logFile}
+echo "Finished parsing results"
+date
 sleep 5
 
-echo "Finished sufp.sh" >> ${logFile}
-date >> ${logFile}
+echo "Finished sufp.sh"
+date
 #zip -r /datastore/emmanuel/titans/sufp-results_$1_$DATE_archive.zip /opt/IBM/Liberty/sufp-results/*
 
 
