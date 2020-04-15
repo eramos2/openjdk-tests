@@ -3,12 +3,14 @@
 #apps=(acmeair-micro acmeair-mono cdi-base cdi-fat cdi-one-jar-fat dt7 dt8 huge-ejb javaee7 javaee8 jaxrs-fat jenkins micro-profile-3 no-app no-feat petclinic pingperf spring-1.5.6 spring-2.1.1 tradelite7 tradelite8 webProfile7 webProfile8)
 apps=(no-app)
 
+sufpScriptDir=$1
+
 echo "about to kill all java procs, unless you stop me in next 10 secs"
 sleep 15
 killall -9 java
 
 # run this from the <build>/wlp dir of a new Liberty build
-targDir=/sufp/apps/
+targDir=${sufpScriptDir}/apps/
 
 setMongo="export MONGO_HOST=titans04"
 $setMongo
@@ -16,7 +18,7 @@ $setMongo
 arg=$1
 if [[ ! -z $arg ]] ; then
 	if [[ "$arg" == "ee8" ]] ; then
-		targDir=/sufp/apps-ee8/
+		targDir=${sufpScriptDir}/apps-ee8/
 	else
 		echo "unknown arg $arg ignored"
 	fi

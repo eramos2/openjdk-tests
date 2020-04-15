@@ -20,7 +20,7 @@ echo $(date) "Starting DevOpsLiberty_Titans.sh"
 
 
 wpa_root=WPA/inst1/root
-
+sufpScriptDir=${1}/scripts/sufp
 # Read latest build notification
 #latestBuildNotification=`tail -1 /automation/jobs/logs/RTP_titans01_build_notifications.log`
 latestBuildNotification="Wed Apr 8 10:30:43 EDT 2020 libfsfe06.hursley.ibm.com /liberty/dev/Xo/release2/cl200520200408-0300-_RzODQHk0EeqVMooXUPL4-g/wlp-tradelite-cl200520200408-0300.zip cl200520200408-0300 20.0.0.5"
@@ -81,10 +81,10 @@ doDebug=false
 mkdir ${1}/libertyResults
 mkdir $resDir
 #Get Liberty builds
-echo "Downloading CL build" >> $cronjobLog
+echo "Downloading CL build"
 CL_List=`python $scriptDir/buildDownload.py $stream $intranetID $ePassword $build_level $packageTypeCL $url $tempRootDir $doDebug`
 sleep 5
-echo "Downloading OL build" >> $cronjobLog
+echo "Downloading OL build"
 OL_List=`python $scriptDir/buildDownload.py $stream $intranetID $ePassword $build_level $packageTypeOL $url $tempRootDir $doDebug`
 
 #Get the directory where the zip file with the build was downloaded
@@ -93,19 +93,20 @@ OL_Tmp_Dir=`echo $OL_List | awk -F\' '{print $6}'`
 
 echo "Transfering zipped builds to SUT"
 # Transfer the zipped builds to the SUT WPA_INST directory 
-scp $CL_Tmp_Dir/*.zip $OL_Tmp_Dir/*.zip root@$SUT:/WPA_INST/
+mv $CL_Tmp_Dir/*.zip /WPA_INST/ 
+mv $OL_Tmp_Dir/*.zip /WPA_INST/
 
 sleep 5
 # Transfer sufp scripts to the SUT
 echo "Transfering scripts to SUT"
-scp -r $scriptDir/sufp root@$SUT:/ 
+#scp -r $scriptDir/sufp root@$SUT:/ 
 # Transfer pingPerf script to Load driver 
 echo "Transfering script to load driver"
-scp -r $scriptDir/sufp/pingperfPingScript.sh root@${load_driver}:/sufp/ 
+#scp -r $scriptDir/sufp/pingperfPingScript.sh root@${load_driver}:/sufp/ 
 
 #Start sufp's scripts
 echo "starting scripts"
-ssh root@$SUT "/sufp/sufp.sh ${build_level} ${release} ${resDir} ${resDirName} ${logFile}"
+ssh root@$SUT "${sufpScriptDir}/sufp.sh ${build_level} ${release} ${resDir} ${resDirName} ${logFile} ${sufpScriptDir}"
 
 echo "Finished sufp.sh, pushing results to database"
 date

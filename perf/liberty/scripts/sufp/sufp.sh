@@ -6,11 +6,12 @@ DATE=`date "+%y-%m-%d-%k-%M-%S" | tr -d " "`
 resultsDir=$3
 resDirName=$4
 logFile=$5
+sufpScriptDir=$6
 wpaDir=/WPA_INST
 javaDir=/opt/java
 javaVersion=java_version.txt
-setupServers=/sufp/sufpSetupServers.sh
-sufpCycles=/sufp/libertySufpCycles.sh
+setupServers=${sufpScriptDir}sufpSetupServers.sh
+sufpCycles=${sufpScriptDir}/libertySufpCycles.sh
 
 fullRelease=$2
 release=`echo $2 | sed 's/\.//'`
@@ -33,7 +34,7 @@ echo "Setting up Servers"
 for build in $targ1 $targ2;
 do
   cd $wpaDir/${build}/wlp
-  $setupServers
+  $setupServers ${sufpScriptDir}
 done
 
 echo "Finished setting up servers"
