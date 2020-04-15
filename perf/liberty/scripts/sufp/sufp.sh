@@ -10,7 +10,7 @@ sufpScriptDir=$6
 wpaDir=/WPA_INST
 javaDir=/opt/java
 javaVersion=java_version.txt
-setupServers=${sufpScriptDir}sufpSetupServers.sh
+setupServers=${sufpScriptDir}/sufpSetupServers.sh
 sufpCycles=${sufpScriptDir}/libertySufpCycles.sh
 
 fullRelease=$2

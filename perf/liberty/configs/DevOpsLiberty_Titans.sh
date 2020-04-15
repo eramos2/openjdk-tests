@@ -67,6 +67,7 @@ dirDate=`date "+%y%m%d_%k%M%S" | tr -d " "`
 SUT=titans05.rtp.raleigh.ibm.com
 load_driver=titans06.rtp.raleigh.ibm.com
 scriptDir=${1}/scripts
+
 resDirName=${build_level}_$dirDate
 resDir=${1}/libertyResults/$resDirName
 logFile=${resDir}/${dirDate}-sufp.log
