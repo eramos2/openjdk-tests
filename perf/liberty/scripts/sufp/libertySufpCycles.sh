@@ -13,7 +13,7 @@ shift
 
 echo "***killing all java procs ***"
 #killall -9 java
-pkill -f "*WPA_INST*"
+pkill -f "/WPA_INST*"
 sleep 3
 
 server=$1
@@ -277,7 +277,7 @@ done
 $stopCom > /dev/null
 sleep 15
 #killall -9 java   # ... just in case ...
-pkill -f "*WPA_INST*"
+pkill -f "/WPA_INST*"
 
 if [[ ! -z $twoWarmups ]] ; then
         echo " second warmup start requested"
@@ -294,7 +294,7 @@ if [[ ! -z $twoWarmups ]] ; then
         $stopCom > /dev/null
         sleep 15
 	#killall -9 java   # ... just in case ...
-	pkill -f "*WPA_INST*"
+	pkill -f "/WPA_INST*"
 fi
 
 if [[ ! -z $saveErrorLogs ]] ; then
@@ -409,7 +409,7 @@ for i in `seq 1 $iters`; do
 	$stopCom > /dev/null
 	sleep $sleepTime
 	#killall -9 java  2>/dev/null   # ... just in case ...
-	pkill -f "*WPA_INST*"
+	pkill -f "/WPA_INST*"
 	echo -e "$sutime $resptime $fp0 $fp1 \t top: $cp0 $cp1" | tee -a ${resFile}
 #	echo -e "\t\t AppClassLoader.loadClass time: $acl"  | tee -a ${resFile}
 #	egrep 'product = |CWWKZ0001I|CWWKF0008I' ${curr}/usr/servers/${server}/logs/messages.log  > $timeLog
