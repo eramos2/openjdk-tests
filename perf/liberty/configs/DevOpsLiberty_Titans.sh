@@ -106,7 +106,7 @@ echo "Transfering script to load driver"
 
 #Start sufp's scripts
 echo "starting scripts"
-ssh root@$SUT "${sufpScriptDir}/sufp.sh ${build_level} ${release} ${resDir} ${resDirName} ${logFile} ${sufpScriptDir}"
+${sufpScriptDir}/sufp.sh ${build_level} ${release} ${resDir} ${resDirName} ${logFile} ${sufpScriptDir}
 
 echo "Finished sufp.sh, pushing results to database"
 date
