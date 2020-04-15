@@ -69,4 +69,4 @@ export ANT_HOME="/usr/share/ant"
 #TODO: Need to soft-code these configs. Need to add various affinity tools in the perf pre-reqs ()
 export AFFINITY=""
 
-bash ${1}/scripts/bin/sufp-test_benchmark.sh
+bash ${1}/configs/DevOpsLiberty_Titans.sh ${1}

@@ -31,7 +31,7 @@
 
 	<test>
 		<testCaseName>OpenLibertyStartupNoApp</testCaseName>
-		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/DevOpsLiberty_Titans.sh $(TEST_RESROOT); \
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp-test.sh $(TEST_RESROOT); \
 			${TEST_STATUS}</command>
 		<!-- scripts are only tested on linux -->
 		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
