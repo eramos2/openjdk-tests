@@ -1,0 +1,41 @@
+<server>
+    <featureManager>
+  <!--  <feature>jsp-2.3</feature> -->
+        <feature>jaxb-2.2</feature>     
+<!--
+        <feature>jaxrs-1.1</feature>    
+        <feature>jaxrs-2.0</feature>    
+        <feature>jaxrs-2.1</feature>    
+-->
+        <feature>jaxrs-2.0</feature>    
+    </featureManager>
+    
+    <!--
+        allow reuse of 'busy' ports for fast server recycling on linux (where ports remain 
+        blocked for up to 2 mins after server stops)
+        ${tradelite.http.port} set in bootstrap.properties
+    -->
+    <httpEndpoint id="defaultHttpEndpoint" host="*" httpPort="9080">
+        <tcpOptions soReuseAddr="true"/>
+    </httpEndpoint>
+
+    <httpOptions maxKeepAliveRequests="-1" />
+    <applicationMonitor dropinsEnabled="false" updateTrigger="mbean"/>
+    <config updateTrigger="disabled"/>
+    
+    <!-- <applicationMonitor updateTrigger="disabled"/> -->
+     
+<!-- 
+    <executor name="LargeThreadPool" coreThreads="2" maxThreads="2" id="default" /> 
+    <executor name="LargeThreadPool" coreThreads="16" maxThreads="16" id="default" /> 
+    <executor coreThreads="08" id="default" /> 
+    <executor coreThreads="6" id="default" /> 
+    <executor coreThreads=" 8" maxThreads="24" id="default" /> 
+    <executor name="LargeThreadPool" id="default" coreThreads="40" maxThreads="50" keepAlive="60s" stealPolicy="LOCAL" rejectedWorkPolicy="CALLER_RUNS" />   
+-->
+<!-- 
+   <application type="war" id="JAXRSbench1" name="JAXRSbench1" location="/jaxrsbench/JAXRSbench1.war"/>
+   <application type="war" id="FatJAXRSbench1" name="FatJAXRSbench1" location="/jaxrsbench/FatJAXRSbench1.war"/>
+-->
+   <application type="war" id="FatJAXRSbench1" name="FatJAXRSbench1" location="/sufp/apps/jaxrs-fat/FatJAXRSbench1.war"/>
+</server>
