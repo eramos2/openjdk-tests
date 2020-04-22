@@ -27,7 +27,7 @@ unzip -q -o -d $wpaDir/$targ2 $wpaDir/openliberty-all-$2-$1.zip
 
 sleep 5
 #Remove zip files from dir
-rm -rf $wpaDir/wlp-$1.zip openliberty-all-$2-$1.zip
+rm -rf $wpaDir/wlp-$1.zip $wpaDir/openliberty-all-$2-$1.zip
 
 echo "Setting up Servers"
 
