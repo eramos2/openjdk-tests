@@ -59,6 +59,11 @@ do
   done
 done
 echo "Finished Running Cycles"
+
+## TODO Add an variable to check if builds need to be removed from SUT
+echo "Removing Builds $targ1 and $targ2"
+rm -rf $targ1 $targ2
+
 exit
 #Parse results - (Need to enable python3 red hat software collection and virtual environment)
 scl enable rh-python36 - << EOF

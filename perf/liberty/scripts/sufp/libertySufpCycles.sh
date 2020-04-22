@@ -501,10 +501,12 @@ suRes=`grep top $resFile | awk '{sum+=$1; sumsq+=($1)^2; if(min==""){min=max=$1}
 if [[ ! -z $timeToFirstRequest ]] ; then
         respRes=`grep top $resFile | awk '{rsp=$2; sum+=rsp; sumsq+=(rsp)^2; if(min==""){min=max=rsp}; if(rsp>max) {max=rsp}; if(rsp< min) {min=rsp}}END{printf "Response:   Avg: %2.0f ms, Min: %2.0f ms, Max: %2.0f ms, StdDev: %2.0f ms, SDev/Avg: %2.1f%", sum/NR, min, max, sqrt((sumsq - sum^2/NR)/NR), 100*sqrt((sumsq - sum^2/NR)/NR)/(sum/NR)}'`
         fpRes=`grep top $resFile | awk '{fp=($3/1024) ; sum+=fp; sumsq+=(fp)^2; if(min==""){min=max=fp}; if(fp>max) {max=fp}; if(fp< min) {min=fp}}END{printf "Footprint:  Avg: %2.0f MB, Min: %2.0f MB, Max: %2.0f MB, StdDev: %2.0f MB, SDev/Avg: %2.1f%", sum/NR, min, max, sqrt((sumsq - sum^2/NR)/NR), 100*sqrt((sumsq - sum^2/NR)/NR)/(sum/NR)}'`
-	avg_fp0=`grep top $resFile | awk '{x+=$3} END {printf "%.0f", x/NR/1024}'`
+	#avg_fp0=`grep top $resFile | awk '{x+=$3} END {printf "%.0f", x/NR/1024}'`
+	avg_fp0=`grep top $resFile | awk '{x+=$3} END {printf "%.0f", x/NR}'`
 else
 	fpRes=`grep top $resFile | awk '{fp=($2/1024) ; sum+=fp; sumsq+=(fp)^2; if(min==""){min=max=fp}; if(fp>max) {max=fp}; if(fp< min) {min=fp}}END{printf "Footprint:  Avg: %2.0f MB, Min: %2.0f MB, Max: %2.0f MB, StdDev: %2.0f MB, SDev/Avg: %2.1f%", sum/NR, min, max, sqrt((sumsq - sum^2/NR)/NR), 100*sqrt((sumsq - sum^2/NR)/NR)/(sum/NR)}'`
-	avg_fp0=`grep top $resFile | awk '{x+=$2} END {printf "%.0f", x/NR/1024}'`
+	#avg_fp0=`grep top $resFile | awk '{x+=$2} END {printf "%.0f", x/NR/1024}'`
+	avg_fp0=`grep top $resFile | awk '{x+=$2} END {printf "%.0f", x/NR}'`
 fi
 cpuRes=`grep top $resFile | awk -F: '{cpu=((60*$2)+$3) ; sum+=cpu; sumsq+=(cpu)^2; if(min==""){min=max=cpu}; if(cpu>max) {max=cpu}; if(cpu< min) {min=cpu}}END{printf "CPU usage:  Avg: %2.2f secs, Min: %2.2f secs, Max: %2.2f secs, StdDev: %2.2f secs, SDev/Avg: %2.2f%", sum/NR, min, max, sqrt((sumsq - sum^2/NR)/NR), 100*sqrt((sumsq - sum^2/NR)/NR)/(sum/NR)}'`
 avg_cp0=`grep top $resFile | awk -F: '{x+=$2;y+=$3}END{printf "%2.2f", 60*x/NR + y/NR}'` 
