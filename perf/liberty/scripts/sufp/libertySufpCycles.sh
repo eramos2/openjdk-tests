@@ -520,15 +520,15 @@ else
                 echo -e "${suRes} \n${respRes} \n${fpRes} \n$cpuRes " | tee -a $resFile
                 avg_firstResp=`grep top $resFile | awk '{x+=$2} END {printf "%.0f", x/NR}'`
                 #shortRes="SU: $avg_start FR: $avg_firstResp  FP: $avg_fp0  CPU: $avg_cp0 app: $server"
-				shortRes="SU: $avg_start FR: $avg_firstResp  FP: $avg_fp0  CPU: $avg_cp0 app: $server"
+				shortRes="Startup time (Launched-Smarter Planet(WAS Perf Measurement): $avg_start\nFR: $avg_firstResp\nFootprint (kb)=$avg_fp0\nCPU: $avg_cp0\napp: $server"
         else
                 echo -e "${suRes} \n${fpRes} \n$cpuRes " | tee -a $resFile
                 #shortRes="SU: $avg_start  FP: $avg_fp0  CPU: $avg_cp0 app: $server"
-				shortRes="Startup time: $avg_start  FP: $avg_fp0  CPU: $avg_cp0 app: $server"
+				shortRes="Startup time (Launched-Smarter Planet(WAS Perf Measurement): $avg_start\nFootprint (kb)=$avg_fp0\nCPU: $avg_cp0\napp: $server"
         fi
 fi
 
-echo $shortRes  | tee -a $resFile
+echo -e $shortRes  | tee -a $resFile
 
 # grab sanity check logs ...
 #logDir="${resDir}/${test}-logs"
