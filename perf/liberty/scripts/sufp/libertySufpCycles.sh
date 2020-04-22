@@ -365,13 +365,15 @@ for i in `seq 1 $iters`; do
 		sleep 15
 	fi
 #	sleep 15
-	fp0=`ps -e -o pid= -o comm= -o rss= | grep java | awk '{print $3}'`
+    libPid=`ps -ef | grep java | grep liberty | awk '{print $2}'`
+	fp0=`ps -q $libPid -o pid= -o comm= -o rss= | awk '{print $3}'`
 	cp0=`top -b -n 1 | grep java | awk '{print $11}' `
 #	acl means "time spent in/under AppClassLoader.loadClass " only works with timing hacked into com.ibm.ws.classloading.jar
 #	acl=`grep gjd ${curr}/usr/servers/${server}/logs/console.log | awk '{x+=$6}END{printf "%2.0f ms \n", x/1000000}' `
 	if [[ ! -z $extra30 ]] ; then
 		sleep 30	# let post-startup activity (if any) complete and settle down
-		fp1=`ps -e -o pid= -o comm= -o rss= | grep java | awk '{print $3}'`
+		fp1=`ps -q $libPid -o pid= -o comm= -o rss= | awk '{print $3}'`
+		libPid=`ps -ef | grep java | grep liberty | awk '{print $2}'`
 		cp1=`top -b -n 1 | grep java | awk '{print $11}' `
 	fi
 #echo "***** SLEEPING FOR DIAG *****"
@@ -517,10 +519,12 @@ else
         if [[ ! -z $timeToFirstRequest ]] ; then
                 echo -e "${suRes} \n${respRes} \n${fpRes} \n$cpuRes " | tee -a $resFile
                 avg_firstResp=`grep top $resFile | awk '{x+=$2} END {printf "%.0f", x/NR}'`
-                shortRes="SU: $avg_start FR: $avg_firstResp  FP: $avg_fp0  CPU: $avg_cp0 app: $server"
+                #shortRes="SU: $avg_start FR: $avg_firstResp  FP: $avg_fp0  CPU: $avg_cp0 app: $server"
+				shortRes="SU: $avg_start FR: $avg_firstResp  FP: $avg_fp0  CPU: $avg_cp0 app: $server"
         else
                 echo -e "${suRes} \n${fpRes} \n$cpuRes " | tee -a $resFile
-                shortRes="SU: $avg_start  FP: $avg_fp0  CPU: $avg_cp0 app: $server"
+                #shortRes="SU: $avg_start  FP: $avg_fp0  CPU: $avg_cp0 app: $server"
+				shortRes="Startup time: $avg_start  FP: $avg_fp0  CPU: $avg_cp0 app: $server"
         fi
 fi
 
