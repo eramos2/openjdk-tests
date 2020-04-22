@@ -514,6 +514,7 @@ if [[ ! -z $extra30 ]] ; then
 	#avg_fp1=`grep top $resFile | awk '{y++;x+=$3} END {print int(x/y+0.5)}'`
 	avg_fp1=`grep top $resFile | awk '{x+=$3} END {printf "%.0f", x/NR/1024}'`
 	avg_cp1=`grep top $resFile | sed -e "s/.* //" | awk -F: '{x+=$1;y+=$2}END{printf "%2.0f:%2.2f", x/NR, y/NR}'`
+	#echo "${suRes}% ; FP: $avg_fp0 MB, CPU: $avg_cp0 ; After 30 secs- FP: $avg_fp1 MB, CPU: $avg_cp1" | tee -a $resFile
 	echo "${suRes}% ; FP: $avg_fp0 MB, CPU: $avg_cp0 ; After 30 secs- FP: $avg_fp1 MB, CPU: $avg_cp1" | tee -a $resFile
 else
         if [[ ! -z $timeToFirstRequest ]] ; then
