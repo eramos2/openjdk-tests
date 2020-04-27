@@ -22,8 +22,8 @@ echo $(date) "Starting DevOpsLiberty_Titans.sh"
 wpa_root=WPA/inst1/root
 sufpScriptDir=${1}/scripts/sufp
 # Read latest build notification
-#latestBuildNotification=`tail -1 /automation/jobs/logs/RTP_titans01_build_notifications.log`
-latestBuildNotification="Wed Apr 22 06:40:42 EDT 2020 libfsfe06.hursley.ibm.com /liberty/dev/Xo/release2/cl200520200421-2210-_jS7BMIPxEeqenJZpLvCbRQ/wlp-tradelite-cl200520200421-2210.zip cl200520200421-2210 20.0.0.5"
+latestBuildNotification=`tail -1 /automation/jobs/logs/RTP_titans01_build_notifications.log`
+#latestBuildNotification="Wed Apr 22 06:40:42 EDT 2020 libfsfe06.hursley.ibm.com /liberty/dev/Xo/release2/cl200520200421-2210-_jS7BMIPxEeqenJZpLvCbRQ/wlp-tradelite-cl200520200421-2210.zip cl200520200421-2210 20.0.0.5"
 
 repository=`echo $latestBuildNotification | awk '{print $7}'`
 tradelite_build_path=`echo $latestBuildNotification | awk '{print $8}'`
