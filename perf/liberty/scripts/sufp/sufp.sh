@@ -12,7 +12,7 @@ javaDir=/opt/java
 javaVersion=java_version.txt
 setupServers=${sufpScriptDir}/sufpSetupServers.sh
 sufpCycles=${sufpScriptDir}/libertySufpCycles.sh
-
+runs=5
 fullRelease=$2
 release=`echo $2 | sed 's/\.//'`
 build=`echo $1 | sed 's/.zip//' | grep -o ".\{11\}$"`
@@ -54,7 +54,7 @@ do
   for app in `ls usr/servers`;
   do
     echo "Starting test on $app for $build"
-    $sufpCycles ${resultsDir} ${build}_${app}_${java}_two-warmups-cpus-4-runs-25-try-1 ${app} 25
+    $sufpCycles ${resultsDir} ${build}_${app}_${java}_two-warmups-cpus-4-runs-${runs}-try-1 ${app} ${runs}
     echo "Finished test on $app for $build"
   done
 done

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Array of all the apps to setup/run
 #apps=(acmeair-micro acmeair-mono cdi-base cdi-fat cdi-one-jar-fat dt7 dt8 huge-ejb javaee7 javaee8 jaxrs-fat jenkins micro-profile-3 no-app no-feat petclinic pingperf spring-1.5.6 spring-2.1.1 tradelite7 tradelite8 webProfile7 webProfile8)
-apps=(dt7)
-
+#apps=(dt7)
+echo $apps
 sufpScriptDir=$1
 
 echo "about to kill all java procs, unless you stop me in next 10 secs"
@@ -12,7 +12,7 @@ pkill -f "/WPA_INST*"
 # run this from the <build>/wlp dir of a new Liberty build
 targDir=${sufpScriptDir}/apps/
 
-setMongo="export MONGO_HOST=titans04"
+setMongo="export MONGO_HOST=titans08"
 $setMongo
 
 arg=$1
@@ -29,10 +29,10 @@ sleep 5
 
 numaargs="numactl --physcpubind 6-7,14-15"
 #export JAVA_HOME=/opt/java/j9-828-sr5-fp17/jre 
-export JAVA_HOME=/opt/java/j9-828-sr6-fp0/jre 
-export JAVA_HOME=/opt/java/j9-828-sr6-fp5/jre
-export JAVA_HOME=/opt/java/j9-828-sr6-fp6ifix/jre
-export JAVA_HOME=/opt/java/j9-828-sr6-fp7/jre
+#export JAVA_HOME=/opt/java/j9-828-sr6-fp0/jre 
+#export JAVA_HOME=/opt/java/j9-828-sr6-fp5/jre
+#export JAVA_HOME=/opt/java/j9-828-sr6-fp6ifix/jre
+#export JAVA_HOME=/opt/java/j9-828-sr6-fp7/jre
 
 #for app in `ls /sufp/apps/` 
 ## Original way of doing the setup

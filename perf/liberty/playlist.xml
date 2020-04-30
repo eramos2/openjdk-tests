@@ -15,10 +15,9 @@
 <playlist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="../../TKG/playlist.xsd">
 	<test>
-		<testCaseName>OpenLibertyStartupDT7</testCaseName>
-		<command>bash $(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark.sh $(TEST_RESROOT); \
-		${TEST_STATUS}
-		</command>
+		<testCaseName>OpenLibertyStartupFootprintNoApp</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp-test.sh no-app $(TEST_RESROOT); \
+			${TEST_STATUS}</command>
 		<!-- scripts are only tested on linux -->
 		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
 		<levels>
@@ -28,10 +27,9 @@
 			<group>perf</group>
 		</groups>
 	</test>
-
 	<test>
-		<testCaseName>OpenLibertyStartupNoApp</testCaseName>
-		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp-test.sh $(TEST_RESROOT); \
+		<testCaseName>OpenLibertyStartupFootprintDT7</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp-test.sh dt7 $(TEST_RESROOT); \
 			${TEST_STATUS}</command>
 		<!-- scripts are only tested on linux -->
 		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>

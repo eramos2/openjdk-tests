@@ -31,13 +31,20 @@ echo "JDK=${JDK}"
 export JDK_DIR="${TEST_JDK_HOME}/.."
 echo "JDK_DIR=${JDK_DIR}"
 
+export JAVA_HOME="${JDK_DIR}/${JDK}/jre"
+echo "JAVA_HOME=${JAVA_HOME}"
+
+export apps="${1}"
+echo "apps=${apps}"
+
+shift
 ######### Generated Script #########
 
 if [ -z "${DB_SETUP}" ]; then
 	#TODO: Need to do some cleanup and restructure some files for adding other configs
 	echo ""
 	echo "********** START OF NEW TESTCI BENCHMARK JOB **********"
-	echo "Benchmark Name: LibertyStartupDT Benchmark Variant: 17dev-4way-0-256-qs"
+	echo "Benchmark Name: LibertyStartupFootprint Benchmark Variant: 17dev-4way-0-256-qs"
 	echo "Benchmark Product: ${JDK}"
 	echo ""
 fi
@@ -54,8 +61,9 @@ export LIB_PATH=""
 export HEALTH_CENTRE=""
 export COGNOS_WAIT=""
 export REQUEST_CORE=""
-export SCENARIO="DayTrader7"
-export SERVER_NAME="LibertySUDTServer-$JDK"
+export SCENARIO="sufp-${app}"
+#export SERVER_NAME="LibertySUDTServer-$JDK"
+export SERVER_NAME="${app}"
 export PETERFP="false"
 export RESULTS_MACHINE="panthers1.rtp.raleigh.ibm.com"
 export RESULTS_DIR="libertyResults"
@@ -63,7 +71,7 @@ export LIBERTY_HOST="$(hostname)"
 export LAUNCH_SCRIPT="server"
 export LIBERTY_BINARIES_DIR="$1/libertyBinaries"
 export LIBERTY_VERSION="openliberty-19.0.0.4"
-export APP_VERSION="daytrader-ee7"
+export APP_VERSION="${app}"
 export WLP_SKIP_MAXPERMSIZE="1"
 export ANT_HOME="/usr/share/ant"
 #TODO: Need to soft-code these configs. Need to add various affinity tools in the perf pre-reqs ()

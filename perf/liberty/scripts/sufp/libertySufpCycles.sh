@@ -89,7 +89,7 @@ setJava="export JAVA_HOME=/opt/java/j9-828-sr6-fp7/jre "
 #setJava="export JAVA_HOME=/opt/java/openj9-8u232b03-190906-vijay/jre"
 #setJava="export JAVA_HOME=/opt/java/openj9-8u232b05-190917/jre"
 #setJava="export JAVA_HOME=/opt/java/openhs-8u232b05-190917/jre"
-$setJava
+#$setJava
 
 #numaargs="numactl -N 0"
 #numaargs="numactl --physcpubind 2"
@@ -111,7 +111,7 @@ numaargs="numactl --physcpubind 11-12,27-28"
 #setMalloc="export MALLOC_ARENA_MAX=1"
 #$setMalloc
 
-setMongo="export MONGO_HOST=titans04"
+setMongo="export MONGO_HOST=titans08"
 $setMongo
 
 ibmJava=`echo $JAVA_HOME | grep j9`
