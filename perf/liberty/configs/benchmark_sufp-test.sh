@@ -40,14 +40,14 @@ echo "apps=${apps}"
 shift
 ######### Generated Script #########
 
-if [ -z "${DB_SETUP}" ]; then
-	#TODO: Need to do some cleanup and restructure some files for adding other configs
-	echo ""
-	echo "********** START OF NEW TESTCI BENCHMARK JOB **********"
-	echo "Benchmark Name: LibertyStartupFootprint Benchmark Variant: 17dev-4way-0-256-qs"
-	echo "Benchmark Product: ${JDK}"
-	echo ""
-fi
+# if [ -z "${DB_SETUP}" ]; then
+# 	#TODO: Need to do some cleanup and restructure some files for adding other configs
+# 	echo ""
+# 	echo "********** START OF NEW TESTCI BENCHMARK JOB **********"
+# 	echo "Benchmark Name: LibertyStartupFootprint Benchmark Variant: 17dev-4way-0-256-qs"
+# 	echo "Benchmark Product: ${JDK}"
+# 	echo ""
+# fi
 
 #TODO: Need to tune these options. Keeping them simple for now 
 export JDK_OPTIONS="-Xmx256m"
