@@ -50,7 +50,7 @@ echo "Running Cycles" > $logFile
 for build in $targ1 $targ2;
 do
   cd $wpaDir/${build}/wlp
-  
+  echo $apps
   for app in `echo $apps`;
   do
     echo "Starting test on $app for $build"
