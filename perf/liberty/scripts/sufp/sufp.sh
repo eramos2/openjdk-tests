@@ -51,7 +51,7 @@ for build in $targ1 $targ2;
 do
   cd $wpaDir/${build}/wlp
   
-  for app in `$apps`;
+  for app in `echo $apps`;
   do
     echo "Starting test on $app for $build"
     $sufpCycles ${resultsDir} ${build}_${app}_${java}_two-warmups-cpus-4-runs-${runs}-try-1 ${app} ${runs}
