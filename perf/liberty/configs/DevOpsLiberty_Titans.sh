@@ -104,7 +104,7 @@ sleep 5
 ##TODO Add if statement to only do this if pingperf is the app to run
 # Transfer pingPerf script to Load driver 
 echo "Transfering script to load driver"
-#scp -r $scriptDir/sufp/pingperfPingScript.sh root@${load_driver}:/sufp/ 
+scp -r $scriptDir/sufp/pingperfPingScript.sh root@${load_driver}:/sufp/ 
 
 #Start sufp's scripts
 echo "starting scripts"
