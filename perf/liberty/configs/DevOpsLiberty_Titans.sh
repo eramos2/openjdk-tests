@@ -94,13 +94,14 @@ OL_Tmp_Dir=`echo $OL_List | awk -F\' '{print $6}'`
 
 echo "Transfering zipped builds to SUT"
 # Transfer the zipped builds to the SUT WPA_INST directory 
-mv $CL_Tmp_Dir/*.zip /WPA_INST/ 
-mv $OL_Tmp_Dir/*.zip /WPA_INST/
+mv $CL_Tmp_Dir/*.zip ${LIBERTY_BINARIES_DIR}/ 
+mv $OL_Tmp_Dir/*.zip ${LIBERTY_BINARIES_DIR}/
 
 sleep 5
 # Transfer sufp scripts to the SUT
-echo "Transfering scripts to SUT"
+#echo "Transfering scripts to SUT"
 #scp -r $scriptDir/sufp root@$SUT:/ 
+##TODO Add if statement to only do this if pingperf is the app to run
 # Transfer pingPerf script to Load driver 
 echo "Transfering script to load driver"
 #scp -r $scriptDir/sufp/pingperfPingScript.sh root@${load_driver}:/sufp/ 
