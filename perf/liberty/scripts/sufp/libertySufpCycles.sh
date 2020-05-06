@@ -25,7 +25,7 @@ echo "running server $server"
 shift
 
 testHost=`hostname`
-requestHost=titans02.rtp.raleigh.ibm.com
+requestHost=titans06.rtp.raleigh.ibm.com
 
 iters=$1
 if [[ -z $iters ]]; then iters=5; fi
