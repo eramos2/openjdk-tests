@@ -32,10 +32,6 @@ if [[ -z $iters ]]; then iters=5; fi
 echo "running $iters iterations"
 shift
 
-sufpScriptDir=$1
-if [[ -z $iters ]]; then echo "must specify sufp scritps dir"; exit 99; fi
-echo "sufp scripts dir - $sufpScriptDir"
-
 DATE=`date "+%y-%m-%d-%k-%M-%S" | tr -d " "`
 timeLog=$DATE-time.log
 curr=`pwd`
@@ -346,6 +342,9 @@ for i in `seq 1 $iters`; do
   	startMillis=`echo $(($(date +%s%N)/1000000))`
 	${startCom} > /dev/null
 	started=""
+	echo "before started while"
+	echo ${startedString}
+	echo ${srvrMsgsLog}
 	while [[ -z $started ]] ; do
 		echo "		`date` - waiting for startup"
 		started=`grep "${startedString}" ${srvrMsgsLog}`
@@ -354,7 +353,7 @@ for i in `seq 1 $iters`; do
         stop=`echo $started | sed -e "s/\[//" | sed -e "s/\].*//" | sed 's/\(.*\)\:/\1\./' | tr -d ','`
         let stopMillis=`date "+%s%N" -d "$stop"`/1000000
         let sutime=${stopMillis}-${startMillis}
-
+        echo "before gettiing FR" 
         resptime=""
         if [[ ! -z $timeToFirstRequest ]] ; then
         	RESP_TIME=""
