@@ -10,7 +10,7 @@ sleep 15
 #killall -9 java
 pkill -f "/WPA_INST*"
 # run this from the <build>/wlp dir of a new Liberty build
-targDir=${sufpScriptDir}/apps/
+targDir=${sufpScriptDir}/apps
 
 setMongo="export MONGO_HOST=titans08"
 $setMongo
@@ -40,7 +40,9 @@ numaargs="numactl --physcpubind 6-7,14-15"
 for app in "${apps[@]}";
 do 
 	$numaargs ./bin/server create $app  
-	/usr/bin/cp -f ${targDir}/${app}/server.xml usr/servers/${app}/  
+	/usr/bin/cp -f ${targDir}/${app}/server.xml usr/servers/${app}/
+	#Edit server.xml to point to app location
+	sed -i "s|location=\"/sufp/apps|location=${targDir}|g" usr/servers/${app}/server.xml  
 	test=`echo ${targDir}/${app} | sed -e "s/\// /g"`
 	if [[ `echo $test | grep spring ` ]] ; then
 		mkdir usr/servers/${app}/dropins/spring
