@@ -210,6 +210,19 @@
 		</groups>
 	</test>
 	<test>
+		<testCaseName>OpenLibertySUFPPingperf</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp-test.sh pingperf $(TEST_RESROOT); \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
 		<testCaseName>OpenLibertySUFPSpring156</testCaseName>
 		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp-test.sh spring-1.5.6 $(TEST_RESROOT); \
 			${TEST_STATUS}</command>
