@@ -30,6 +30,11 @@ requestHost=titans06.rtp.raleigh.ibm.com
 iters=$1
 if [[ -z $iters ]]; then iters=5; fi
 echo "running $iters iterations"
+shift
+
+sufpScriptDir=$1
+if [[ -z $iters ]]; then echo "must specify sufp scritps dir"; exit 99; fi
+echo "sufp scripts dir - $sufpScriptDir"
 
 DATE=`date "+%y-%m-%d-%k-%M-%S" | tr -d " "`
 timeLog=$DATE-time.log
@@ -37,6 +42,7 @@ curr=`pwd`
 srvrLogDir=${curr}/usr/servers/${server}/logs
 srvrConLog=${srvrLogDir}/console.log
 srvrMsgsLog=${srvrLogDir}/messages.log
+
 
 # choose java version
 setJava="export JAVA_HOME=/opt/java/hs-8u201/jre "
@@ -207,6 +213,7 @@ fi
 
 #pingperfRequestString="while [[ \"$(curl -s -o /dev/null -w ''%{http_code}'' ${testHost}:9080/pingperf/ping/greeting)\" != \"200\" ]]; do sleep 0.001; done"
 
+# This script must be located in the request host system
 pingperfRequestScript=/sufp/pingperfPingScript.sh
 
 extra30=""
