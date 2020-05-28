@@ -40,6 +40,7 @@ DATE=`date "+%y-%m-%d-%k-%M-%S" | tr -d " "`
 timeLog=$DATE-time.log
 curr=`pwd`
 srvrLogDir=${curr}/usr/servers/${server}/logs
+echo ${srvrLogDir}
 srvrConLog=${srvrLogDir}/console.log
 srvrMsgsLog=${srvrLogDir}/messages.log
 
