@@ -42,7 +42,7 @@ do
 	$numaargs ./bin/server create $app  
 	/usr/bin/cp -f ${targDir}/${app}/server.xml usr/servers/${app}/
 	#Edit server.xml to point to app location
-	sed -i "s|location=\"/sufp/apps|location=${targDir}|g" usr/servers/${app}/server.xml  
+	sed -i "s|location=\"/sufp/apps|location=\"${targDir}|g" usr/servers/${app}/server.xml  
 	test=`echo ${targDir}/${app} | sed -e "s/\// /g"`
 	if [[ `echo $test | grep spring ` ]] ; then
 		mkdir usr/servers/${app}/dropins/spring
