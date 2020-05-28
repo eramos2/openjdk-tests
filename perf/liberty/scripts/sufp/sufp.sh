@@ -12,7 +12,7 @@ javaDir=/opt/java
 javaVersion=java_version.txt
 setupServers=${sufpScriptDir}/sufpSetupServers.sh
 sufpCycles=${sufpScriptDir}/libertySufpCycles.sh
-runs=2
+runs=15
 fullRelease=$2
 release=`echo $2 | sed 's/\.//'`
 build=`echo $1 | sed 's/.zip//' | grep -o ".\{11\}$"`
@@ -31,7 +31,8 @@ rm -rf $wpaDir/wlp-$1.zip $wpaDir/openliberty-all-$2-$1.zip
 
 echo "Setting up Servers"
 
-for build in $targ1 $targ2;
+#for build in $targ1 $targ2;
+for build in $targ2;
 do
   cd $wpaDir/${build}/wlp
   $setupServers ${sufpScriptDir}
@@ -47,7 +48,8 @@ $javaDir/$java/bin/java -version
 
 echo "Running Cycles" > $logFile
 
-for build in $targ1 $targ2;
+#for build in $targ1 $targ2;
+for build in $targ2;
 do
   cd $wpaDir/${build}/wlp
   echo $apps

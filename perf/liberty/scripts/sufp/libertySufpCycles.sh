@@ -353,11 +353,11 @@ for i in `seq 1 $iters`; do
         stop=`echo $started | sed -e "s/\[//" | sed -e "s/\].*//" | sed 's/\(.*\)\:/\1\./' | tr -d ','`
         let stopMillis=`date "+%s%N" -d "$stop"`/1000000
         let sutime=${stopMillis}-${startMillis}
-        echo "before getting FR" 
+        #echo "before getting FR" 
         resptime=""
         if [[ ! -z $timeToFirstRequest ]] ; then
         	RESP_TIME=""
-			echo "Before FR while loop"
+			#echo "Before FR while loop"
                 while [[ -z $RESP_TIME ]] ; do
                         resp=`tail -3 ${srvrMsgsLog} | grep " SystemOut " | sed -e "s/.*SystemOut * O //" | awk '{print $1'} | grep -v [a-z,A-Z] | tr -d ','`
                         if [[ ! -z $resp ]] ; then
@@ -367,9 +367,9 @@ for i in `seq 1 $iters`; do
                                 sleep 2
                         fi
                 done
-			after "After FR while loop"
+			#echo "After FR while loop"
         fi
-     echo "After getting FR"
+     #echo "After getting FR"
 	if [[ -z $noSleepFPCPU ]] ; then
 		sleep 15
 	fi

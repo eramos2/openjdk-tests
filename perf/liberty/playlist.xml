@@ -158,19 +158,6 @@
 		</groups>
 	</test>
 	<test>
-		<testCaseName>OpenLibertySUFPJenkins</testCaseName>
-		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp-test.sh jenkins $(TEST_RESROOT); \
-			${TEST_STATUS}</command>
-		<!-- scripts are only tested on linux -->
-		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
-		<levels>
-			<level>extended</level>
-		</levels>
-		<groups>
-			<group>perf</group>
-		</groups>
-	</test>
-	<test>
 		<testCaseName>OpenLibertySUFPMicroProfile3</testCaseName>
 		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp-test.sh micro-profile-3 $(TEST_RESROOT); \
 			${TEST_STATUS}</command>
@@ -212,19 +199,6 @@
 	<test>
 		<testCaseName>OpenLibertySUFPPetclinic</testCaseName>
 		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp-test.sh petclinic $(TEST_RESROOT); \
-			${TEST_STATUS}</command>
-		<!-- scripts are only tested on linux -->
-		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
-		<levels>
-			<level>extended</level>
-		</levels>
-		<groups>
-			<group>perf</group>
-		</groups>
-	</test>
-	<test>
-		<testCaseName>OpenLibertySUFPPingperf</testCaseName>
-		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp-test.sh pingperf $(TEST_RESROOT); \
 			${TEST_STATUS}</command>
 		<!-- scripts are only tested on linux -->
 		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
