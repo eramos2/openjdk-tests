@@ -37,5 +37,5 @@
    <application type="war" id="JAXRSbench1" name="JAXRSbench1" location="/jaxrsbench/JAXRSbench1.war"/>
    <application type="war" id="FatJAXRSbench1" name="FatJAXRSbench1" location="/jaxrsbench/FatJAXRSbench1.war"/>
 -->
-   <application type="war" id="FatJAXRSbench1" name="FatJAXRSbench1" location="/sufp/apps/jaxrs-fat/FatJAXRSbench1.war"/>
+   <application type="war" id="FatJAXRSbench1" name="FatJAXRSbench1" location="/sufp/apps/jaxrs-fat/FatJAXRSbench1.war" context-root="jaxrs-fat" />
 </server>

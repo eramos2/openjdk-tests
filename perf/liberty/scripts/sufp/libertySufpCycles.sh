@@ -25,6 +25,7 @@ echo "running server $server"
 shift
 
 testHost=`hostname`
+testPort=9080
 requestHost=titans06.rtp.raleigh.ibm.com
 
 iters=$1
@@ -198,20 +199,86 @@ echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" | tee -a ${resDir}/${test}.env
 sleepTime=5
 timeToFirstRequest=""
 
-if [[ $server == "pingperf" ]] ; then
+if [[ $server == "acmeair-micro" ]] || \
+	[[ $server == "acmeair-mono" ]] || \
+	[[ $server == "cdi-base" ]] || \
+	[[ $server == "cdi-fat" ]] || \
+	[[ $server == "cdi-one-jar-fat" ]] || \
+	[[ $server == "pingperf" ]] || \
+	[[ $server == "dt7" ]] || \
+	[[ $server == "dt8" ]] || \
+	[[ $server == "jaxrs-fat" ]] || \
+	[[ $server == "jenkins" ]] || \
+	[[ $server == "petclinic" ]] || \
+	[[ $server == "spring-1.5.6" ]] || \
+	[[ $server == "spring-2.1.1" ]] || \
+	[[ $server == "springboot-war" ]] || \
+	[[ $server == "tradelite7" ]] || \
+	[[ $server == "tradelite8" ]] ; then
 	timeToFirstRequest="yes"
 fi
 
+#pingperfRequestScript=/sufp/pingperfPingScript.sh
+firstResponseScript=/sufp/pingFirstResponse.sh
+
+startedString=" is ready to run a smarter"
+
+#app=""
+#app="jenkins"
+#if [[ "$server" == "jenkins" ]] ; then
+#        startedString="Jenkins is fully up and running"
+#elif [[ "$server" == "springboot-war" ]] ; then
+#        startedString="Started PetClinicApplication in"
+#fi
+
+respString=""
+testTarget=""
+
+if [[ $server == "pingperf" ]] ; then
+	testTarget="/pingperf/ping/greeting"
+	respString=" SystemOut "
+elif [[ $server == "acmeair-micro" ]] ; then
+	testTarget="/"
+#	respString="SRVE0242I.*flightservice.*Initialization successful"
+	respString="Complete List : MongoClientOptions"
+elif [[ $server == "acmeair-mono" ]] ; then
+	testTarget="/rest/info/config/runtime"
+	respString="SRVE0242I.*acmeair-monolithic.*Initialization successful"
+elif [[ $server == "cdi-base" ]] || [[ $server == "cdi-fat" ]] || [[ $server == "cdi-one-jar-fat" ]] ; then
+	testTarget="/meetings/rest/meetings"
+	respString="SRVE0242I.*meetings.*Initialization successful"
+elif [[ $server == "dt7" ]] || [[ $server == "dt8" ]] ; then
+	testTarget="/daytrader/servlet/PingServlet"
+	respString="SRVE0242I.*PingServlet.*Initialization successful"
+elif [[ $server == "jaxrs-fat" ]] ; then
+	testTarget="/jaxrs-fat/rest/hello/sayHello"
+	respString="SRVE0242I.*jaxrs-fat.*Initialization successful"
+elif [[ $server == "jenkins" ]] ; then
+	testTarget="/jenkins/"
+	respString="SRVE0242I.*jenkins.*Initialization successful"
+elif [[ $server == "petclinic" ]] ; then
+	testTarget="/petclinic/"
+	respString="SRVE0242I.*petclinic.*welcome.jsp.*Initialization successful"
+elif [[ $server == "spring-1.5.6" ]] || [[ $server == "spring-2.1.1" ]] ; then
+        testTarget="/"
+	respString="SRVE0242I.*authservice-springboot.*Initialization successful"
+elif [[ $server == "springboot-war" ]] ; then
+	testTarget="/spring-petclinic/"
+	respString="SRVE0242I.*spring-petclinic.*Initialization successful"
+elif [[ $server == "tradelite7" ]] || [[ $server == "tradelite8" ]] ; then
+        testTarget="/tradelite/servlet/PingServlet"
+	respString="SRVE0242I.*PingServlet.*Initialization successful"
+fi
+
 if [[ -z $timeToFirstRequest ]] ; then
-	echo -e "\n ****  measuring startup with app  $server  **** \n"
+	echo -e "\n ****  measuring startup with config  $server  **** \n"
+	echo -e "        startedString: '${startedString}' \n"
 else
 	echo -e "\n ****  measuring first response with app  $server  ****\n"
+	echo    "        first response string: \"$respString\"  "
 fi
 
 #pingperfRequestString="while [[ \"$(curl -s -o /dev/null -w ''%{http_code}'' ${testHost}:9080/pingperf/ping/greeting)\" != \"200\" ]]; do sleep 0.001; done"
-
-# This script must be located in the request host system
-pingperfRequestScript=/sufp/pingperfPingScript.sh
 
 extra30=""
 noSleepFPCPU=""
@@ -246,14 +313,6 @@ startDebug=""
 echo "*** numaargs: $numaargs ***"  | tee -a ${resDir}/${test}.env
 echo ""
 
-startedString=" is ready to run a smarter"
-app=""
-#app="jenkins"
-if [[ "$server" == "jenkins" ]] ; then
-        startedString="Jenkins is fully up and running"
-fi
-echo -e "startedString: '${startedString}' \n"
-
 
 startCom="${numaargs} ${curr}/bin/server start ${server} "
 if [[ ! -z $startDebug ]] ; then
@@ -269,7 +328,8 @@ mkdir $logDir
 
 echo " warm up with one un-measured start first "
 if [[ ! -z $timeToFirstRequest ]] ; then
-        ( ssh $requestHost $pingperfRequestScript $testHost ) &
+#        ( ssh $requestHost $pingperfRequestScript $testHost ) &
+		( ssh $requestHost $firstResponseScript $testHost $testPort $testTarget ) &
 fi
 ${startCom} --clean > /dev/null
 started=""
@@ -286,7 +346,8 @@ pkill -f "/WPA_INST*"
 if [[ ! -z $twoWarmups ]] ; then
         echo " second warmup start requested"
         if [[ ! -z $timeToFirstRequest ]] ; then
-                ( ssh $requestHost $pingperfRequestScript $testHost ) &
+#                ( ssh $requestHost $pingperfRequestScript $testHost ) &
+				( ssh $requestHost $firstResponseScript $testHost $testPort $testTarget ) &
         fi
         ${startCom} > /dev/null
 	started=""
@@ -336,15 +397,13 @@ for i in `seq 1 $iters`; do
 		done ) &
 	fi
         if [[ ! -z $timeToFirstRequest ]] ; then
-                ( ssh $requestHost $pingperfRequestScript $testHost ) &
+#                ( ssh $requestHost $pingperfRequestScript $testHost ) &
+				( ssh $requestHost $firstResponseScript $testHost $testPort $testTarget ) &
         fi
 
   	startMillis=`echo $(($(date +%s%N)/1000000))`
 	${startCom} > /dev/null
 	started=""
-	echo "before started while"
-	echo ${startedString}
-	echo ${srvrMsgsLog}
 	while [[ -z $started ]] ; do
 		echo "		`date` - waiting for startup"
 		started=`grep "${startedString}" ${srvrMsgsLog}`
@@ -353,36 +412,34 @@ for i in `seq 1 $iters`; do
         stop=`echo $started | sed -e "s/\[//" | sed -e "s/\].*//" | sed 's/\(.*\)\:/\1\./' | tr -d ','`
         let stopMillis=`date "+%s%N" -d "$stop"`/1000000
         let sutime=${stopMillis}-${startMillis}
-        #echo "before getting FR" 
+
         resptime=""
         if [[ ! -z $timeToFirstRequest ]] ; then
         	RESP_TIME=""
-			#echo "Before FR while loop"
                 while [[ -z $RESP_TIME ]] ; do
-                        resp=`tail -3 ${srvrMsgsLog} | grep " SystemOut " | sed -e "s/.*SystemOut * O //" | awk '{print $1'} | grep -v [a-z,A-Z] | tr -d ','`
-                        if [[ ! -z $resp ]] ; then
+#                        resp=`tail -3 ${srvrMsgsLog} | grep " SystemOut " | sed -e "s/.*SystemOut * O //" | awk '{print $1'} | grep -v [a-z,A-Z] | tr -d ','`
+                        resp=`tail -20 ${srvrMsgsLog} | grep "$respString" | awk '{print $2}' | sed 's/\(.*\):/\1./'`
+						if [[ ! -z $resp ]] ; then
+#						        echo " *** resp: $resp *** "
                                 RESP_TIME=`echo $(($(date +%s%N -d $resp)/1000000))`
                                 resptime=`expr $RESP_TIME - $startMillis`
                         else
                                 sleep 2
                         fi
                 done
-			#echo "After FR while loop"
         fi
-     #echo "After getting FR"
+
 	if [[ -z $noSleepFPCPU ]] ; then
 		sleep 15
 	fi
 #	sleep 15
-    libPid=`ps -ef | grep java | grep liberty | awk '{print $2}'`
-	fp0=`ps -q $libPid -o pid= -o comm= -o rss= | awk '{print $3}'`
+	fp0=`ps -e -o pid= -o comm= -o rss= | grep java | awk '{print $3}'`
 	cp0=`top -b -n 1 | grep java | awk '{print $11}' `
 #	acl means "time spent in/under AppClassLoader.loadClass " only works with timing hacked into com.ibm.ws.classloading.jar
 #	acl=`grep gjd ${curr}/usr/servers/${server}/logs/console.log | awk '{x+=$6}END{printf "%2.0f ms \n", x/1000000}' `
 	if [[ ! -z $extra30 ]] ; then
 		sleep 30	# let post-startup activity (if any) complete and settle down
-		fp1=`ps -q $libPid -o pid= -o comm= -o rss= | awk '{print $3}'`
-		libPid=`ps -ef | grep java | grep liberty | awk '{print $2}'`
+		fp1=`ps -e -o pid= -o comm= -o rss= | grep java | awk '{print $3}'`
 		cp1=`top -b -n 1 | grep java | awk '{print $11}' `
 	fi
 #echo "***** SLEEPING FOR DIAG *****"
