@@ -7,7 +7,7 @@
     </featureManager>
 
     <!-- To access this server from a remote client add a host attribute to the following element, e.g. host="*" -->
-    <httpEndpoint httpPort="9080" httpsPort="9443" id="defaultHttpEndpoint"/>
+    <httpEndpoint host="*" httpPort="9080" httpsPort="9443" id="defaultHttpEndpoint"/>
 
 <!--
     <webContainer deferServletLoad="false"/>
@@ -21,7 +21,7 @@
 
     <applicationMonitor updateTrigger="mbean"/>
 
-    <webApplication id="meetings" location="/sufp/apps/cdi-one-jar-fat/fat-cdi-meetings-one-jar.war" name="meetings">
+    <webApplication id="meetings" location="/sufp/apps/cdi-one-jar-fat/fat-cdi-meetings-one-jar.war" name="meetings" context-root="meetings" >
       <classloader commonLibraryRef="mongodriver"/>
       <application-bnd>
         <security-role name="any">

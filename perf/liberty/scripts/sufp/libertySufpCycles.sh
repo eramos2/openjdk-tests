@@ -477,15 +477,15 @@ for i in `seq 1 $iters`; do
 	fi
 #	sleep 15
     server_pid=`ps aux | grep java | grep ws-server.jar | awk '{print $2}'`
-	fp0=`ps -e -o pid= -o comm= -o rss= | grep ${server_pid} | awk '{print $3}'`
-	cp0=`top -b -n 1 | grep ${server_pid} | awk '{print $11}' `
+	fp0=`ps -e -o pid= -o comm= -o rss= | grep "${server_pid}.*java" | awk '{print $3}'`
+	cp0=`top -b -n 1 | grep "${server_pid}.*java" | awk '{print $11}' `
 #	acl means "time spent in/under AppClassLoader.loadClass " only works with timing hacked into com.ibm.ws.classloading.jar
 #	acl=`grep gjd ${curr}/usr/servers/${server}/logs/console.log | awk '{x+=$6}END{printf "%2.0f ms \n", x/1000000}' `
 	if [[ ! -z $extra30 ]] ; then
 		sleep 30	# let post-startup activity (if any) complete and settle down
 		server_pid=`ps aux | grep java | grep ws-server.jar | awk '{print $2}'`
-		fp1=`ps -e -o pid= -o comm= -o rss= | grep ${server_pid} | awk '{print $3}'`
-		cp1=`top -b -n 1 | grep ${server_pid} | awk '{print $11}' `
+		fp1=`ps -e -o pid= -o comm= -o rss= | grep "${server_pid}.*java" | awk '{print $3}'`
+		cp1=`top -b -n 1 | grep "${server_pid}.*java" | awk '{print $11}' `
 	fi
 #echo "***** SLEEPING FOR DIAG *****"
 #sleep 5000
