@@ -13,7 +13,21 @@ shift
 
 echo "***killing all java procs ***"
 #killall -9 java
-pkill -f "/WPA_INST*"
+#pkill -f "/WPA_INST*"
+for jar in ws-launch.jar ws-server.jar; do
+    PS_MATCH=`ps aux | grep java | grep ${curr} | grep $jar | grep javaagent | grep -v grep`
+    if [ -n "$PS_MATCH" ]; then
+	  # Echo processes into build log (stdout)
+      echo "$PS_MATCH"
+	pids=`ps aux | grep java | grep $PWD | grep $jar | grep javaagent | grep -v grep | awk '{print $2}'`
+	for pid_x in $pids
+	do
+	  kill -9 ${pid_x}
+	done
+	else
+      echo "No previous $jar processes found"
+    fi
+done
 sleep 3
 
 server=$1
@@ -341,7 +355,22 @@ done
 $stopCom > /dev/null
 sleep 15
 #killall -9 java   # ... just in case ...
-pkill -f "/WPA_INST*"
+#pkill -f "/WPA_INST*"
+for jar in ws-launch.jar ws-server.jar; do
+    PS_MATCH=`ps aux | grep java | grep ${curr} | grep $jar | grep javaagent | grep -v grep`
+    if [ -n "$PS_MATCH" ]; then
+	  # Echo processes into build log (stdout)
+      echo "$PS_MATCH"
+	pids=`ps aux | grep java | grep $PWD | grep $jar | grep javaagent | grep -v grep | awk '{print $2}'`
+	for pid_x in $pids
+	do
+	  kill -9 ${pid_x}
+	done
+	else
+      echo "No previous $jar processes found"
+    fi
+done
+	
 
 if [[ ! -z $twoWarmups ]] ; then
         echo " second warmup start requested"
@@ -359,7 +388,21 @@ if [[ ! -z $twoWarmups ]] ; then
         $stopCom > /dev/null
         sleep 15
 	#killall -9 java   # ... just in case ...
-	pkill -f "/WPA_INST*"
+	#pkill -f "/WPA_INST*"
+	for jar in ws-launch.jar ws-server.jar; do
+    PS_MATCH=`ps aux | grep java | grep ${curr} | grep $jar | grep javaagent | grep -v grep`
+    if [ -n "$PS_MATCH" ]; then
+	  # Echo processes into build log (stdout)
+      echo "$PS_MATCH"
+	pids=`ps aux | grep java | grep $PWD | grep $jar | grep javaagent | grep -v grep | awk '{print $2}'`
+	for pid_x in $pids
+	do
+	  kill -9 ${pid_x}
+	done
+	else
+      echo "No previous $jar processes found"
+    fi
+done
 fi
 
 if [[ ! -z $saveErrorLogs ]] ; then
@@ -433,14 +476,16 @@ for i in `seq 1 $iters`; do
 		sleep 15
 	fi
 #	sleep 15
-	fp0=`ps -e -o pid= -o comm= -o rss= | grep java | awk '{print $3}'`
-	cp0=`top -b -n 1 | grep java | awk '{print $11}' `
+    server_pid=`ps aux | grep java | grep ws-server.jar | awk '{print $2}'`
+	fp0=`ps -e -o pid= -o comm= -o rss= | grep ${server_pid} | awk '{print $3}'`
+	cp0=`top -b -n 1 | grep ${server_pid} | awk '{print $11}' `
 #	acl means "time spent in/under AppClassLoader.loadClass " only works with timing hacked into com.ibm.ws.classloading.jar
 #	acl=`grep gjd ${curr}/usr/servers/${server}/logs/console.log | awk '{x+=$6}END{printf "%2.0f ms \n", x/1000000}' `
 	if [[ ! -z $extra30 ]] ; then
 		sleep 30	# let post-startup activity (if any) complete and settle down
-		fp1=`ps -e -o pid= -o comm= -o rss= | grep java | awk '{print $3}'`
-		cp1=`top -b -n 1 | grep java | awk '{print $11}' `
+		server_pid=`ps aux | grep java | grep ws-server.jar | awk '{print $2}'`
+		fp1=`ps -e -o pid= -o comm= -o rss= | grep ${server_pid} | awk '{print $3}'`
+		cp1=`top -b -n 1 | grep ${server_pid} | awk '{print $11}' `
 	fi
 #echo "***** SLEEPING FOR DIAG *****"
 #sleep 5000
@@ -477,7 +522,21 @@ for i in `seq 1 $iters`; do
 	$stopCom > /dev/null
 	sleep $sleepTime
 	#killall -9 java  2>/dev/null   # ... just in case ...
-	pkill -f "/WPA_INST*"
+	#pkill -f "/WPA_INST*"
+	for jar in ws-launch.jar ws-server.jar; do
+    PS_MATCH=`ps aux | grep java | grep ${curr} | grep $jar | grep javaagent | grep -v grep`
+    if [ -n "$PS_MATCH" ]; then
+	  # Echo processes into build log (stdout)
+      echo "$PS_MATCH"
+	pids=`ps aux | grep java | grep $PWD | grep $jar | grep javaagent | grep -v grep | awk '{print $2}'`
+	for pid_x in $pids
+	do
+	  kill -9 ${pid_x}
+	done
+	else
+      echo "No previous $jar processes found"
+    fi
+    done
 	echo -e "$sutime $resptime $fp0 $fp1 \t top: $cp0 $cp1" | tee -a ${resFile}
 #	echo -e "\t\t AppClassLoader.loadClass time: $acl"  | tee -a ${resFile}
 #	egrep 'product = |CWWKZ0001I|CWWKF0008I' ${curr}/usr/servers/${server}/logs/messages.log  > $timeLog
