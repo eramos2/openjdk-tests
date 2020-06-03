@@ -398,8 +398,7 @@ for i in `seq 1 $iters`; do
 	fi
         if [[ ! -z $timeToFirstRequest ]] ; then
 #                ( ssh $requestHost $pingperfRequestScript $testHost ) &
-				echo -e "Before calling first response script $requestHost $firstResponseScript $testHost $testPort $testTarget"
-				( ssh $requestHost $firstResponseScript $testHost $testPort $testTarget ) &
+				 ( ssh $requestHost $firstResponseScript $testHost $testPort $testTarget ) &
         fi
 
   	startMillis=`echo $(($(date +%s%N)/1000000))`
