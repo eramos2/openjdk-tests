@@ -538,6 +538,12 @@ for i in `seq 1 $iters`; do
     fi
     done
 	echo -e "$sutime $resptime $fp0 $fp1 \t top: $cp0 $cp1" | tee -a ${resFile}
+	if [[ ! -z $timeToFirstRequest ]] ; 
+	then
+		echo -e "Startup time: $sutime\nFirst Response: $resptime\nFootprint (kb)=$fp0\nCPU: $cp0\napp: $server"
+    else
+		echo -e"Startup time: $sutime\nFirst Response: n/a\nFootprint (kb)=$fp0\nCPU: $cp0\napp: $server"
+    fi
 #	echo -e "\t\t AppClassLoader.loadClass time: $acl"  | tee -a ${resFile}
 #	egrep 'product = |CWWKZ0001I|CWWKF0008I' ${curr}/usr/servers/${server}/logs/messages.log  > $timeLog
 	if [[ ! -z $saveLogs ]] || [[ ! -z $takeJavacore ]] || [[ ! -z $javacoreDuringStartup ]] ; then
@@ -648,11 +654,11 @@ else
                 echo -e "${suRes} \n${respRes} \n${fpRes} \n$cpuRes " | tee -a $resFile
                 avg_firstResp=`grep top $resFile | awk '{x+=$2} END {printf "%.0f", x/NR}'`
                 #shortRes="SU: $avg_start FR: $avg_firstResp  FP: $avg_fp0  CPU: $avg_cp0 app: $server"
-				shortRes="Startup time: $avg_start\nFirst Response: $avg_firstResp\nFootprint (kb)=$avg_fp0\nCPU: $avg_cp0\napp: $server"
+				shortRes="Avg_Startup_time: $avg_start\nAvg_First_Response: $avg_firstResp\nAvg_Footprint_(kb)=$avg_fp0\nAvg_CPU: $avg_cp0\napp: $server"
         else
                 echo -e "${suRes} \n${fpRes} \n$cpuRes " | tee -a $resFile
                 #shortRes="SU: $avg_start  FP: $avg_fp0  CPU: $avg_cp0 app: $server"
-				shortRes="Startup time: $avg_start\nFirst Response: n/a\nFootprint (kb)=$avg_fp0\nCPU: $avg_cp0\napp: $server"
+				shortRes="Avg_Startup_time: $avg_start\nAvg_First_Response: n/a\nAvg_Footprint_(kb)=$avg_fp0\nAvg_CPU: $avg_cp0\napp: $server"
         fi
 fi
 
