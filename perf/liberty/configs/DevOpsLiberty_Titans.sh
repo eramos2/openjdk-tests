@@ -72,7 +72,8 @@ resDirName=${build_level}_$dirDate
 resDir=${1}/libertyResults/$resDirName
 logFile=${resDir}/${dirDate}-sufp.log
 intranetID=wasperf@us.ibm.com
-ePassword="UmVncmVzc2lvbjRQQHRyb2w="
+#ePassword="UmVncmVzc2lvbjRQQHRyb2w="
+ePassword="UmVncmVzc2lvbjVQQHRyb2w="
 packageTypeCL=default
 packageTypeOL=openliberty-all
 tempRootDir=/tmp
