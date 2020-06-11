@@ -24,7 +24,7 @@ export LD_LIBRARY_PATH=/usr/local/staf/lib:$LD_LIBRARY_PATH
 
 
 echo "JDK_VERSION=${JDK_VERSION}"
-
+echo "${MEASUREMENT_RUNS}"
 export JDK="j2sdk-image"
 echo "JDK=${JDK}"
 
@@ -74,6 +74,7 @@ export LIBERTY_VERSION="openliberty-19.0.0.4"
 export APP_VERSION="${app}"
 export WLP_SKIP_MAXPERMSIZE="1"
 export ANT_HOME="/usr/share/ant"
+export MEASUREMENT_RUNS=${MEASUREMENT_RUNS}
 #TODO: Need to soft-code these configs. Need to add various affinity tools in the perf pre-reqs ()
 export AFFINITY=""
 

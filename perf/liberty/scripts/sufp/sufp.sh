@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 ##Expects first paramater to be the liberty build and the second parameter to be the release
-
+echo "${MEASUREMENT_RUNS}"
 DATE=`date "+%y-%m-%d-%k-%M-%S" | tr -d " "`
 resultsDir=$3
 resDirName=$4
