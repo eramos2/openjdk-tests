@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 ##Expects first paramater to be the liberty build and the second parameter to be the release
-echo "${MEASUREMENT_RUNS}"
 DATE=`date "+%y-%m-%d-%k-%M-%S" | tr -d " "`
 resultsDir=$3
 resDirName=$4
@@ -12,7 +11,7 @@ javaDir=/opt/java
 javaVersion=java_version.txt
 setupServers=${sufpScriptDir}/sufpSetupServers.sh
 sufpCycles=${sufpScriptDir}/libertySufpCycles.sh
-runs=3
+runs=${MEASUREMENT_RUNS}
 fullRelease=$2
 release=`echo $2 | sed 's/\.//'`
 build=`echo $1 | sed 's/.zip//' | grep -o ".\{11\}$"`
@@ -32,7 +31,7 @@ rm -rf $wpaDir/wlp-$1.zip $wpaDir/openliberty-all-$2-$1.zip
 echo "Setting up Servers"
 
 #for build in $targ1 $targ2;
-for build in $targ2;
+for build in $targ1;
 do
   cd $wpaDir/${build}/wlp
   $setupServers ${sufpScriptDir}
@@ -49,7 +48,7 @@ $javaDir/$java/bin/java -version
 echo "Running Cycles" > $logFile
 
 #for build in $targ1 $targ2;
-for build in $targ2;
+for build in $targ1;
 do
   cd $wpaDir/${build}/wlp
   echo $apps
