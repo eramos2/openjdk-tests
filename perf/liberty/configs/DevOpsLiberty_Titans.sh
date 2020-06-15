@@ -25,9 +25,14 @@ sufpScriptDir=${1}/scripts/sufp
 latestBuildNotification=`tail -1 /automation/jobs/logs/RTP_titans01_build_notifications.log`
 #latestBuildNotification="Wed Apr 22 06:40:42 EDT 2020 libfsfe06.hursley.ibm.com /liberty/dev/Xo/release2/cl200520200421-2210-_jS7BMIPxEeqenJZpLvCbRQ/wlp-tradelite-cl200520200421-2210.zip cl200520200421-2210 20.0.0.5"
 
-repository=`echo $latestBuildNotification | awk '{print $7}'`
+#repository example- `libfsfe06.hursley.ibm.com`
+repository=${LIBERTY_BUILD_REPO}
 tradelite_build_path=`echo $latestBuildNotification | awk '{print $8}'`
-build_level=`echo $latestBuildNotification | awk '{print $9}'`
+if [[ ${LIBERTY_BUILD_LEVEL} == "latest" ]]
+then
+  build_level=`echo $latestBuildNotification | awk '{print $9}'`
+fi
+build_level=${LIBERTY_BUILD_LEVEL}
 release=`echo $latestBuildNotification | awk '{print $10}'`
 
 

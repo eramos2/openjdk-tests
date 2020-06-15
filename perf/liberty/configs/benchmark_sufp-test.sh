@@ -75,6 +75,11 @@ export APP_VERSION="${app}"
 export WLP_SKIP_MAXPERMSIZE="1"
 export ANT_HOME="/usr/share/ant"
 export MEASUREMENT_RUNS=${MEASUREMENT_RUNS}
+export LIBERTY_BUILD_REPO=${LIBERTY_BUILD_REPO}
+#Expects 'latest' or 'cl200720200614-1100'
+export LIBERTY_BUILD_LEVEL=${LIBERTY_BUILD_LEVEL}
+##TODO: need to add pasword variable get it from generalLookupFile = '%s/../cfg/utils/general_lookup.txt' % wpa_path
+
 #TODO: Need to soft-code these configs. Need to add various affinity tools in the perf pre-reqs ()
 export AFFINITY=""
 
