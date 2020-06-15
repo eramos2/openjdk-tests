@@ -37,24 +37,24 @@ release=`echo $latestBuildNotification | awk '{print $10}'`
 
 
 # Check build_level and realease have the same label
-buildReleaseTag=`echo $build_level | awk '{print substr($1, 3, 4)}'`
-releaseLength=`echo $release | awk '{print length}'`
-if [[ $releaseLength == 8 ]]
-then
-  releaseShort=`echo $release | awk '{print substr($1, 1, 2)substr($1, 6, 1)substr($1,8,1)}'`
-elif [[ $releaseLength == 9 ]]
-then
-  releaseShort=`echo $release | awk '{print substr($1, 1, 2)substr($1, 8, 2)}'`
-else
-  echo "Release label $release has more characters than were expected.  Must be 8 or 9 characters it was $releaseLength, i.e. '20.0.0.4'|'20.0.0.12'. Please try again"
-  exit 2
-fi
+#buildReleaseTag=`echo $build_level | awk '{print substr($1, 3, 4)}'`
+# releaseLength=`echo $release | awk '{print length}'`
+# if [[ $releaseLength == 8 ]]
+# then
+#   releaseShort=`echo $release | awk '{print substr($1, 1, 2)substr($1, 6, 1)substr($1,8,1)}'`
+# elif [[ $releaseLength == 9 ]]
+# then
+#   releaseShort=`echo $release | awk '{print substr($1, 1, 2)substr($1, 8, 2)}'`
+# else
+#   echo "Release label $release has more characters than were expected.  Must be 8 or 9 characters it was $releaseLength, i.e. '20.0.0.4'|'20.0.0.12'. Please try again"
+#   exit 2
+# fi
 
-if [[ $releaseShort != $buildReleaseTag ]]
-then
-  echo "Build label tag and release label tag are not the same. Must be 'cl2004xxxx' and '20.0.0.4'.  Please try again "
-  exit 2
-fi
+# if [[ $releaseShort != $buildReleaseTag ]]
+# then
+#   echo "Build label tag and release label tag are not the same. Must be 'cl2004xxxx' and '20.0.0.4'.  Please try again "
+#   exit 2
+# fi
 
 url=https://${repository}
 build_path=$(echo ${tradelite_build_path%\/*})
