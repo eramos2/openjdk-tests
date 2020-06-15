@@ -27,14 +27,23 @@ latestBuildNotification=`tail -1 /automation/jobs/logs/RTP_titans01_build_notifi
 
 #repository example- `libfsfe06.hursley.ibm.com`
 repository=${LIBERTY_BUILD_REPO}
+url=false
 tradelite_build_path=`echo $latestBuildNotification | awk '{print $8}'`
 if [[ ${LIBERTY_BUILD_LEVEL} == "latest" ]]
 then
   build_level=`echo $latestBuildNotification | awk '{print $9}'`
+  build_path=$(echo ${tradelite_build_path%\/*})
+  url=https://${repository}${build_path}
 fi
 build_level=${LIBERTY_BUILD_LEVEL}
 release=`echo $latestBuildNotification | awk '{print $10}'`
 
+
+#stream=$(echo $tradelite_build_path | cut -d/ -f4)
+#Need to add this parameter to jenkins
+stream=Xo
+
+common=devops_${stream}.cfg
 
 # Check build_level and realease have the same label
 #buildReleaseTag=`echo $build_level | awk '{print substr($1, 3, 4)}'`
@@ -56,11 +65,6 @@ release=`echo $latestBuildNotification | awk '{print $10}'`
 #   exit 2
 # fi
 
-url=https://${repository}
-build_path=$(echo ${tradelite_build_path%\/*})
-stream=$(echo $tradelite_build_path | cut -d/ -f4)
-url=https://${repository}${build_path}
-common=devops_${stream}.cfg
 
 
 # Define a timestamp function

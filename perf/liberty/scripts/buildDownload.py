@@ -1,5 +1,6 @@
 # python ./buildLists.py Xo wasperf@us.ibm.com Y29sZFMwZGE= latest default false
 
+
 import urllib2
 import re
 import base64
@@ -68,12 +69,44 @@ if (urlAddress == 'false'):
     data = getData(url)
     if (doDebug == 'true'):
       print data
-    url=(re.findall(r'<meta.*URL=(.*)\">',data))[0]
+    urlRelease=(re.findall(r'<meta.*URL=(.*)\">',data))[0]
+    if (doDebug == 'true'):
+      print urlRelease
+
+    url = 'https://libertyfs.hursley.ibm.com/liberty/dev/%s/release2' % (stream) 
+    data = getData(url)
+    tf.write('Requested Build Level : %s\n' % link)
+    url='https://libertyfs.hursley.ibm.com/liberty/dev/%s/release2/%s' % (stream,link)
     if (doDebug == 'true'):
       print url
+    tf.write('Initial URL : %s\n' % url)
+    #data = urllib2.urlopen(url).read()
+    data = getData(url)
+    if (doDebug == 'true'):
+      print data
+    urlRelease2=(re.findall(r'<meta.*URL=(.*)\">',data))[0]
+    if (doDebug == 'true'):
+      print urlRelease2
+
+    if os.path.basename(urlRelease) > os.path.basename(urlRelease2):
+      url=urlRelease
+    else: 
+      url=urlRelease2
+    print "Found latest at " + url
+
   else:
     link=re.findall(r'<td><a href=.*/\">(%s.*)/</a>' % buildLevel,data)
-    url='https://libertyfs.hursley.ibm.com/liberty/dev/%s/release/%s' % (stream,link[0])
+    if link:
+      url='https://libertyfs.hursley.ibm.com/liberty/dev/%s/release/%s' % (stream,link[0])
+    else:
+      url = 'https://libertyfs.hursley.ibm.com/liberty/dev/%s/release2' % (stream)
+      data = getData(url)
+      link=re.findall(r'<td><a href=.*/\">(%s.*)/</a>' % buildLevel,data)
+      if not link:
+        print "Build " + buildLevel + " not found in release or release2"
+      url='https://libertyfs.hursley.ibm.com/liberty/dev/%s/release2/%s' % (stream,link[0])
+    print "Found " + buildLevel + " at " + url
+
 if (doDebug == 'true'):
    print url
 if (packageType != 'default'  and packageType != 'tradelite' ):

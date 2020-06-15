@@ -31,7 +31,7 @@ rm -rf $wpaDir/wlp-$1.zip $wpaDir/openliberty-all-$2-$1.zip
 echo "Setting up Servers"
 
 #for build in $targ1 $targ2;
-for build in $targ1;
+for build in ${LIBERTY_VERSION}-liberty-${1};
 do
   cd $wpaDir/${build}/wlp
   $setupServers ${sufpScriptDir}
@@ -48,7 +48,7 @@ $javaDir/$java/bin/java -version
 echo "Running Cycles" > $logFile
 
 #for build in $targ1 $targ2;
-for build in $targ1;
+for build in ${LIBERTY_VERSION}-liberty-${1};
 do
   cd $wpaDir/${build}/wlp
   echo $apps
