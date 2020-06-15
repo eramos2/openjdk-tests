@@ -86,7 +86,7 @@ ePassword="UmVncmVzc2lvbjVQQHRyb2w="
 packageTypeCL=default
 packageTypeOL=openliberty-all
 tempRootDir=/tmp
-doDebug=false
+doDebug=true
 
 #Create resutls Dir
 mkdir ${1}/libertyResults
