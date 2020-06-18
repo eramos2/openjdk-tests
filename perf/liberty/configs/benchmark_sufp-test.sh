@@ -79,6 +79,7 @@ export LIBERTY_BUILD_REPO=${LIBERTY_BUILD_REPO}
 #Expects 'latest' or 'cl200720200614-1100'
 export LIBERTY_BUILD_LEVEL=${LIBERTY_BUILD_LEVEL}
 export LIBERTY_VERSION=${LIBERTY_VERSION}
+export LIBERTY_RELEASE=${LIBERTY_RELEASE}
 ##TODO: need to add pasword variable get it from generalLookupFile = '%s/../cfg/utils/general_lookup.txt' % wpa_path
 
 #TODO: Need to soft-code these configs. Need to add various affinity tools in the perf pre-reqs ()

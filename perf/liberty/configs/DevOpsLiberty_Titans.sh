@@ -29,14 +29,17 @@ latestBuildNotification=`tail -1 /automation/jobs/logs/RTP_titans01_build_notifi
 repository=${LIBERTY_BUILD_REPO}
 url=false
 tradelite_build_path=`echo $latestBuildNotification | awk '{print $8}'`
-if [[ ${LIBERTY_BUILD_LEVEL} == "latest" ]]
+build_level=${LIBERTY_BUILD_LEVEL}
+release=${LIBERTY_RELEASE}
+if [[ ${build_level} == "latest" ]]
 then
   build_level=`echo $latestBuildNotification | awk '{print $9}'`
+  release=`echo $latestBuildNotification | awk '{print $10}'`
   build_path=$(echo ${tradelite_build_path%\/*})
   url=https://${repository}${build_path}
 fi
-build_level=${LIBERTY_BUILD_LEVEL}
-release=`echo $latestBuildNotification | awk '{print $10}'`
+
+
 
 
 #stream=$(echo $tradelite_build_path | cut -d/ -f4)
@@ -86,7 +89,7 @@ ePassword="UmVncmVzc2lvbjVQQHRyb2w="
 packageTypeCL=default
 packageTypeOL=openliberty-all
 tempRootDir=/tmp
-doDebug=true
+doDebug=false
 
 #Create resutls Dir
 mkdir ${1}/libertyResults
@@ -97,7 +100,7 @@ CL_List=`python $scriptDir/buildDownload.py $stream $intranetID $ePassword $buil
 sleep 5
 echo "Downloading OL build"
 OL_List=`python $scriptDir/buildDownload.py $stream $intranetID $ePassword $build_level $packageTypeOL $url $tempRootDir $doDebug`
-
+echo "${CL_List}"
 #Get the directory where the zip file with the build was downloaded
 CL_Tmp_Dir=`echo $CL_List | awk -F\' '{print $6}'`
 OL_Tmp_Dir=`echo $OL_List | awk -F\' '{print $6}'`
