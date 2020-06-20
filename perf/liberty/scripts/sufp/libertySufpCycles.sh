@@ -234,6 +234,10 @@ fi
 
 #pingperfRequestScript=/sufp/pingperfPingScript.sh
 firstResponseScript=/sufp/pingFirstResponse.sh
+cleanupScript=/sufp/cleanupScripts.sh
+
+echo "*** kill any zombie ping scripts on requestHost ***" 
+ssh ${requestHost} "${cleanupScript} ${firstResponseScript}"
 
 startedString=" is ready to run a smarter"
 
