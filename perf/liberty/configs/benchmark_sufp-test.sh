@@ -38,6 +38,18 @@ export apps="${1}"
 echo "apps=${apps}"
 
 shift
+
+export TEST_RESROOT="${1}"
+echo "TEST_RESROOT=${TEST_RESROOT}"
+
+shift
+
+
+export LIBERTY_VERSION="${1}"
+echo "LIBERTY_VERSION=${LIBERTY_VERSION}"
+
+shift
+
 ######### Generated Script #########
 
 # if [ -z "${DB_SETUP}" ]; then
@@ -69,7 +81,7 @@ export RESULTS_MACHINE="panthers1.rtp.raleigh.ibm.com"
 export RESULTS_DIR="libertyResults"
 export LIBERTY_HOST="$(hostname)"
 export LAUNCH_SCRIPT="server"
-export LIBERTY_BINARIES_DIR="$1/libertyBinaries"
+export LIBERTY_BINARIES_DIR="${TEST_RESROOT}/libertyBinaries"
 export LIBERTY_VERSION="openliberty-19.0.0.4"
 export APP_VERSION="${app}"
 export WLP_SKIP_MAXPERMSIZE="1"

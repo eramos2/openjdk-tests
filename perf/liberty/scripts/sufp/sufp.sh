@@ -12,21 +12,23 @@ javaVersion=java_version.txt
 setupServers=${sufpScriptDir}/sufpSetupServers.sh
 sufpCycles=${sufpScriptDir}/libertySufpCycles.sh
 runs=${MEASUREMENT_RUNS}
+libertyVersion=${LIBERTY_VERSION}
 fullRelease=$2
 release=`echo $2 | sed 's/\.//'`
 build=`echo $1 | sed 's/.zip//' | grep -o ".\{11\}$"`
 
-targ1=CL-liberty-${1}
-targ2=OL-liberty-${1}
-
-
-unzip -q -o -d $wpaDir/$targ1 $wpaDir/wlp-$1.zip
-unzip -q -o -d $wpaDir/$targ2 $wpaDir/openliberty-all-$2-$1.zip
-
-
-sleep 5
-#Remove zip files from dir
-rm -rf $wpaDir/wlp-$1.zip $wpaDir/openliberty-all-$2-$1.zip
+if [[ ${libertyVersion} == "CL" ]]
+then
+  targ1=CL-liberty-${1}
+  unzip -q -o -d $wpaDir/$targ1 $wpaDir/wlp-$1.zip
+  sleep 5
+  rm -rf $wpaDir/wlp-$1.zip
+else
+  targ1=OL-liberty-${1}
+  unzip -q -o -d $wpaDir/$targ1 $wpaDir/openliberty-all-$2-$1.zip
+  sleep 5
+  rm -rf $wpaDir/openliberty-all-$2-$1.zip
+fi 
 
 echo "Setting up Servers"
 
@@ -62,8 +64,8 @@ done
 echo "Finished Running Cycles"
 
 ## TODO Add an variable to check if builds need to be removed from SUT
-echo "Removing Builds $targ1 and $targ2"
-rm -rf $targ1 $targ2
+echo "Removing Builds $targ1"
+rm -rf $targ1
 
 exit
 #Parse results - (Need to enable python3 red hat software collection and virtual environment)
