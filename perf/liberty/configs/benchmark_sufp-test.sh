@@ -97,4 +97,4 @@ export LIBERTY_RELEASE=${LIBERTY_RELEASE}
 #TODO: Need to soft-code these configs. Need to add various affinity tools in the perf pre-reqs ()
 export AFFINITY=""
 
-bash ${1}/configs/DevOpsLiberty_Titans.sh ${1}
+bash ${TEST_RESROOT}/configs/DevOpsLiberty_Titans.sh ${TEST_RESROOT}
