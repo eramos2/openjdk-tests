@@ -22,7 +22,7 @@ echo "Current Dir: $(pwd)"
 export PATH=/usr/local/staf/bin:$PATH
 export LD_LIBRARY_PATH=/usr/local/staf/lib:$LD_LIBRARY_PATH
 
-
+echo "STREAM=${LIBERTY_BUILD_STREAM}"
 echo "JDK_VERSION=${JDK_VERSION}"
 echo "${MEASUREMENT_RUNS}"
 export JDK="j2sdk-image"
@@ -87,6 +87,7 @@ export APP_VERSION="${app}"
 export WLP_SKIP_MAXPERMSIZE="1"
 export ANT_HOME="/usr/share/ant"
 export MEASUREMENT_RUNS=${MEASUREMENT_RUNS}
+export LIBERTY_BUILD_STREAM=${LIBERTY_BUILD_STREAM}
 export LIBERTY_BUILD_REPO=${LIBERTY_BUILD_REPO}
 #Expects 'latest' or 'cl200720200614-1100'
 export LIBERTY_BUILD_LEVEL=${LIBERTY_BUILD_LEVEL}

@@ -44,7 +44,12 @@ fi
 
 #stream=$(echo $tradelite_build_path | cut -d/ -f4)
 #Need to add this parameter to jenkins
-stream=Xo
+if [ -z "$LIBERTY_BUILD_STREAM" ];
+then 
+  stream=Xo
+else
+  stream=${LIBERTY_BUILD_STREAM}
+fi
 
 common=devops_${stream}.cfg
 
