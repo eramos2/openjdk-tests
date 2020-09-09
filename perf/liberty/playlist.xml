@@ -42,4 +42,602 @@
 			<group>perf</group>
 		</groups>
 	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPAcmeAirMicro</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh acmeair-micro $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPAcmeAirMono</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh acmeair-mono $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPCDIBase</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh cdi-base $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPCDIFat</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh cdi-fat $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPCDIOneJarFat</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh cdi-one-jar-fat $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPDT7</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh dt7 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPDT8</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh dt8 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPHugeEJB</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh huge-ejb $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPJavaEE7</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh javaee7 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPJavaEE8</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh javaee8 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPJaxrsFat</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh jaxrs-fat $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPJenkins</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh jenkins $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPMicroProfile3</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh micro-profile-3 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPNoApp</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh no-app $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPNoFeat</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh no-feat $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPPetclinic</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh petclinic $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPPingperf</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh pingperf $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPSpring156</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh spring-1.5.6 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPSpring211</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh spring-2.1.1 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPTradelite7</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh tradelite7 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPTradelite8</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh tradelite8 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPWebprofile7</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh webProfile7 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPWebprofile8</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh webProfile8 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPAcmeAirMicro</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh acmeair-micro $(TEST_RESROOT) CL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPAcmeAirMono</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh acmeair-mono $(TEST_RESROOT) CL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPCDIBase</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh cdi-base $(TEST_RESROOT) CL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPCDIFat</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh cdi-fat $(TEST_RESROOT) CL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPCDIOneJarFat</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh cdi-one-jar-fat $(TEST_RESROOT) CL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPDT7</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh dt7 $(TEST_RESROOT) CL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPDT8</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh dt8 $(TEST_RESROOT) CL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPHugeEJB</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh huge-ejb $(TEST_RESROOT) CL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPJavaEE7</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh javaee7 $(TEST_RESROOT) CL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPJavaEE8</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh javaee8 $(TEST_RESROOT) CL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPJaxrsFat</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh jaxrs-fat $(TEST_RESROOT) CL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPJenkins</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh jenkins $(TEST_RESROOT) CL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPMicroProfile3</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh micro-profile-3 $(TEST_RESROOT) CL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPNoApp</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh no-app $(TEST_RESROOT) CL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPNoFeat</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh no-feat $(TEST_RESROOT) CL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPPetclinic</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh petclinic $(TEST_RESROOT) CL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPPingperf</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh pingperf $(TEST_RESROOT) CL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPSpring156</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh spring-1.5.6 $(TEST_RESROOT) CL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPSpring211</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh spring-2.1.1 $(TEST_RESROOT) CL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPTradelite7</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh tradelite7 $(TEST_RESROOT) CL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPTradelite8</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh tradelite8 $(TEST_RESROOT) CL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPWebprofile7</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh webProfile7 $(TEST_RESROOT) CL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPWebprofile8</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh webProfile8 $(TEST_RESROOT) CL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
 </playlist>
