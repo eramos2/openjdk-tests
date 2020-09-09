@@ -15,6 +15,34 @@
 <playlist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="../../TKG/playlist.xsd">
 	<test>
+		<testCaseName>liberty-dt7-startup</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)dt7_sufp.sh$(Q) $(TEST_RESROOT); \
+		${TEST_STATUS}
+		</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>special</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>liberty-dt7-throughput</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)dt7_throughput.sh$(Q) $(TEST_RESROOT); \
+		${TEST_STATUS}
+		</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>special</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
 		<testCaseName>OpenLibertySUFPAcmeAirMicro</testCaseName>
 		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh acmeair-micro $(TEST_RESROOT) OL; \
 			${TEST_STATUS}</command>
