@@ -273,7 +273,13 @@ getBinaryOpenjdk()
 				echo "curl error code: $download_exit_code"
 				echo "Failed to retrieve $file, exiting. This is what we received of the file and MD5 sum:"
 				ls -ld $file
-				md5sum $file
+				
+				if [[ "$OSTYPE" == "darwin"* ]]; then
+				    md5 $file
+				 else
+				    md5sum $file
+				fi
+						
 				exit 1
 			fi
 			set -e
@@ -329,11 +335,14 @@ getBinaryOpenjdk()
 				echo "unzip file: $jar_name ..."
 				if [[ $jar_name == *zip || $jar_name == *jar ]]; then
 					unzip -q $jar_name -d ./tmp
+				elif [[ $jar_name == *pax ]]; then
+					cd ./tmp
+					pax -p xam -rzf ../$jar_name
 				else
 					gzip -cd $jar_name | tar xof - -C ./tmp
 				fi
 
-				cd ./tmp
+				cd $SDKDIR/openjdkbinary/tmp
 				jar_dirs=`ls -d */`
 				jar_dir_array=(${jar_dirs//\\n/ })
 				len=${#jar_dir_array[@]}
@@ -545,7 +554,9 @@ fi
 _java=${TEST_JDK_HOME}/bin/java
 if [ -x ${_java} ]; then
 	echo "Run ${_java} -version"
+	echo "=JAVA VERSION OUTPUT BEGIN="
 	${_java} -version
+	echo "=JAVA VERSION OUTPUT END="
 else
 	echo "${TEST_JDK_HOME}/bin/java does not exist! Searching under TEST_JDK_HOME: ${TEST_JDK_HOME}..."
 	# Search javac as java may not be unique
@@ -562,7 +573,9 @@ else
 
 		java_dir=$(dirname "${_javac}")
 		echo "Run: ${java_dir}/java -version"
+		echo "=JAVA VERSION OUTPUT BEGIN="
 		${java_dir}/java -version
+		echo "=JAVA VERSION OUTPUT END="
 		TEST_JDK_HOME=${java_dir}/../
 		echo "TEST_JDK_HOME=${TEST_JDK_HOME}" > ${TESTDIR}/job.properties
 	else
