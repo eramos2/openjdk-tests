@@ -546,7 +546,7 @@ for i in `seq 1 $iters`; do
 	then
 		echo -e "Startup time: $sutime\nFirst Response: $resptime\nFootprint (kb)=$fp0\nCPU: $cp0\napp: $server"
     else
-		echo -e"Startup time: $sutime\nFirst Response: n/a\nFootprint (kb)=$fp0\nCPU: $cp0\napp: $server"
+		echo -e "Startup time: $sutime\nFirst Response: n/a\nFootprint (kb)=$fp0\nCPU: $cp0\napp: $server"
     fi
 #	echo -e "\t\t AppClassLoader.loadClass time: $acl"  | tee -a ${resFile}
 #	egrep 'product = |CWWKZ0001I|CWWKF0008I' ${curr}/usr/servers/${server}/logs/messages.log  > $timeLog
