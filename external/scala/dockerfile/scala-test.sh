@@ -12,8 +12,6 @@
 # limitations under the License.
 #
 
-source $(dirname "$0")/test_base_functions.sh
-
 if [ -d /java/jre/bin ];then
 	echo "Using mounted Java8"
 	export JAVA_BIN=/java/jre/bin
@@ -34,8 +32,7 @@ else
 	export JAVA_HOME="${java_root%/bin}"
 fi
 
-echo_setup
-
+java -version
 TEST_SUITE=$1
 export JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF8"
 #begin scala test

@@ -27,6 +27,9 @@
 		<groups>
 			<group>jck</group>
 		</groups>
+		<subsets>
+			<subset>11+</subset>
+		</subsets>
 	</test>
 	<test>
 		<testCaseName>jck-compiler-lang-CLSS</testCaseName>
@@ -41,6 +44,9 @@
 		<groups>
 			<group>jck</group>
 		</groups>
+		<subsets>
+			<subset>11+</subset>
+		</subsets>
 	</test>
 	<test>
 		<testCaseName>jck-compiler-lang-CONV</testCaseName>
@@ -55,6 +61,9 @@
 		<groups>
 			<group>jck</group>
 		</groups>
+		<subsets>
+			<subset>11+</subset>
+		</subsets>
 	</test>
 	<test>
 		<testCaseName>jck-compiler-lang-EXPR</testCaseName>
@@ -69,6 +78,9 @@
 		<groups>
 			<group>jck</group>
 		</groups>
+		<subsets>
+			<subset>11+</subset>
+		</subsets>
 	</test>
 	<test>
 		<testCaseName>jck-compiler-lang-INTF</testCaseName>
@@ -83,6 +95,9 @@
 		<groups>
 			<group>jck</group>
 		</groups>
+		<subsets>
+			<subset>11+</subset>
+		</subsets>
 	</test>
 	<test>
 		<testCaseName>jck-compiler-lang-LMBD</testCaseName>
@@ -97,6 +112,9 @@
 		<groups>
 			<group>jck</group>
 		</groups>
+		<subsets>
+			<subset>11+</subset>
+		</subsets>
 	</test>
 	<test>
 		<testCaseName>jck-compiler-lang-ARR</testCaseName>
@@ -111,6 +129,9 @@
 		<groups>
 			<group>jck</group>
 		</groups>
+		<subsets>
+			<subset>11+</subset>
+		</subsets>
 	</test>
 	<test>
 		<testCaseName>jck-compiler-lang-DASG</testCaseName>
@@ -125,6 +146,9 @@
 		<groups>
 			<group>jck</group>
 		</groups>
+		<subsets>
+			<subset>11+</subset>
+		</subsets>
 	</test>
 	<test>
 		<testCaseName>jck-compiler-lang-EXCP</testCaseName>
@@ -139,6 +163,9 @@
 		<groups>
 			<group>jck</group>
 		</groups>
+		<subsets>
+			<subset>11+</subset>
+		</subsets>
 	</test>
 	<test>
 		<testCaseName>jck-compiler-lang-EXEC</testCaseName>
@@ -153,6 +180,9 @@
 		<groups>
 			<group>jck</group>
 		</groups>
+		<subsets>
+			<subset>11+</subset>
+		</subsets>
 	</test>
 	<test>
 		<testCaseName>jck-compiler-lang-FP</testCaseName>
@@ -167,6 +197,9 @@
 		<groups>
 			<group>jck</group>
 		</groups>
+		<subsets>
+			<subset>11+</subset>
+		</subsets>
 	</test>
 	<test>
 		<testCaseName>jck-compiler-lang-ICLS</testCaseName>
@@ -181,6 +214,9 @@
 		<groups>
 			<group>jck</group>
 		</groups>
+		<subsets>
+			<subset>11+</subset>
+		</subsets>
 	</test>
 	<test>
 		<testCaseName>jck-compiler-lang-INFR</testCaseName>
@@ -195,6 +231,9 @@
 		<groups>
 			<group>jck</group>
 		</groups>
+		<subsets>
+			<subset>11+</subset>
+		</subsets>
 	</test>
 	<test>
 		<testCaseName>jck-compiler-lang-MOD</testCaseName>
@@ -210,7 +249,7 @@
 			<group>jck</group>
 		</groups>
 		<subsets>
-			<subset>9+</subset>
+			<subset>11+</subset>
 		</subsets>
 	</test>
 	<test>
@@ -226,6 +265,9 @@
 		<groups>
 			<group>jck</group>
 		</groups>
+		<subsets>
+			<subset>11+</subset>
+		</subsets>
 	</test>
 	<test>
 		<testCaseName>jck-compiler-lang-PKGS</testCaseName>
@@ -240,6 +282,9 @@
 		<groups>
 			<group>jck</group>
 		</groups>
+		<subsets>
+			<subset>11+</subset>
+		</subsets>
 	</test>
 	<test>
 		<testCaseName>jck-compiler-lang-THRD</testCaseName>
@@ -254,6 +299,9 @@
 		<groups>
 			<group>jck</group>
 		</groups>
+		<subsets>
+			<subset>11+</subset>
+		</subsets>
 	</test>
 	<test>
 		<testCaseName>jck-compiler-lang-TYPE</testCaseName>
@@ -268,6 +316,9 @@
 		<groups>
 			<group>jck</group>
 		</groups>
+		<subsets>
+			<subset>11+</subset>
+		</subsets>
 	</test>
 	<test>
 		<testCaseName>jck-compiler-lang-ANNOT</testCaseName>
@@ -282,6 +333,9 @@
 		<groups>
 			<group>jck</group>
 		</groups>
+		<subsets>
+			<subset>11+</subset>
+		</subsets>
 	</test>
 	<test>
 		<testCaseName>jck-compiler-lang-LEX</testCaseName>
@@ -296,6 +350,9 @@
 		<groups>
 			<group>jck</group>
 		</groups>
+		<subsets>
+			<subset>11+</subset>
+		</subsets>
 	</test>
 	<test>
 		<testCaseName>jck-compiler-lang-STMT</testCaseName>
@@ -310,5 +367,8 @@
 		<groups>
 			<group>jck</group>
 		</groups>
+		<subsets>
+			<subset>11+</subset>
+		</subsets>
 	</test>
 </playlist>

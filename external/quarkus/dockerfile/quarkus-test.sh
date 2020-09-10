@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source $(dirname "$0")/test_base_functions.sh
-
 # Set up Java to be used by the the quarkus-test
 
 if [ -d /java/jre/bin ];then
@@ -36,7 +34,7 @@ else
 	export JAVA_HOME="${java_root%/bin}"
 fi
 
-echo_setup
+java -version
 
 # See https://github.com/quarkusio/quarkus/blob/master/CONTRIBUTING.md#frequently-asked-questions
 # for advise to set MAVEN_OPTS to avoid https://cwiki.apache.org/confluence/display/MAVEN/OutOfMemoryError

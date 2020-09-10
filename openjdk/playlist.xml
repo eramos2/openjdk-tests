@@ -34,30 +34,6 @@
 		</groups>
 	</test>
 	<test>
-		<testCaseName>openj9_custom</testCaseName>
-		<variations>
-			<variation>NoOptions</variation>
-		</variations>   
-		<command>$(JAVA_COMMAND) -Xmx512m -jar $(Q)$(TEST_RESROOT)$(D)jtreg$(D)lib$(D)jtreg.jar$(Q) \
-	$(JTREG_BASIC_OPTIONS) $(CUSTOM_NATIVE_OPTIONS) -vmoptions:$(Q)-Xmx512m $(JVM_OPTIONS)$(Q) \
-	-timeoutHandler:jtreg.openj9.CoreDumpTimeoutHandler -timeoutHandlerDir:$(Q)$(LIB_DIR)$(D)openj9jtregtimeouthandler.jar$(Q) \
-	-w $(Q)$(REPORTDIR)$(D)work$(Q) \
-	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
-	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
-	$(Q)$(OPENJDK_DIR)$(D)$(JDK_CUSTOM_TARGET)$(Q); \
-	$(TEST_STATUS)</command>
-		<levels>
-			<level>extended</level>
-		</levels>
-		<groups>
-			<group>openjdk</group>
-		</groups>
-		<impls>
-			<impl>openj9</impl>
-			<impl>ibm</impl>
-		</impls>
-	</test>
-	<test>
 		<testCaseName>hotspot_all</testCaseName>
 		<command>$(JAVA_COMMAND) -Xmx512m -jar $(Q)$(TEST_RESROOT)$(D)jtreg$(D)lib$(D)jtreg.jar$(Q) \
 	$(JTREG_BASIC_OPTIONS) -vmoptions:$(Q)-Xmx512m $(JVM_OPTIONS)$(Q) \
@@ -87,8 +63,6 @@
 	-w $(Q)$(REPORTDIR)$(D)work$(Q) \
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
-	-exclude:$(Q)$(JTREG_HOTSPOT_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
 	$(Q)$(JTREG_HOTSPOT_TEST_DIR):hotspot_native_sanity$(Q); \
 	$(TEST_STATUS)</command>
 		<subsets>
@@ -108,8 +82,6 @@
 	-w $(Q)$(REPORTDIR)$(D)work$(Q) \
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
-	-exclude:$(Q)$(JTREG_HOTSPOT_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
 	$(Q)$(JTREG_HOTSPOT_TEST_DIR):hotspot_compiler$(Q); \
 	$(TEST_STATUS)</command>
 		<subsets>
@@ -129,8 +101,7 @@
 	-w $(Q)$(REPORTDIR)$(D)work$(Q) \
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
-	-exclude:$(Q)$(JTREG_HOTSPOT_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_HOTSPOT_TEST_DIR)$(D)runtime$(D)Nestmates$(Q); \
 	$(TEST_STATUS)</command>
 		<subsets>
@@ -150,7 +121,7 @@
 	-w $(Q)$(REPORTDIR)$(D)work$(Q) \
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_HOTSPOT_TEST_DIR):jre$(Q); \
 	$(TEST_STATUS)</command>
 		<subsets>
@@ -175,13 +146,13 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_awt$(Q); \
 	$(TEST_STATUS)</command>
 		<levels>
 			<level>extended</level>
 		</levels>
-		<platformRequirements>^os.osx,^os.zos</platformRequirements>
+		<platformRequirements>^os.osx,arch.x86</platformRequirements>
 		<groups>
 			<group>openjdk</group>
 		</groups>
@@ -194,7 +165,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_beans$(Q); \
 	$(TEST_STATUS)</command>
 		<levels>
@@ -212,7 +183,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_io$(Q); \
 	$(TEST_STATUS)</command>
 		<levels>
@@ -230,7 +201,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_lang$(Q); \
 	$(TEST_STATUS)</command>
 		<levels>
@@ -239,32 +210,6 @@
 		<groups>
 			<group>openjdk</group>
 		</groups>
-		<impls>
-			<impl>hotspot</impl>
-		</impls>
-	</test>
-	<test>
-		<testCaseName>jdk_lang_native_win</testCaseName>
-		<command>$(JAVA_COMMAND) -Xmx512m -jar $(Q)$(TEST_RESROOT)$(D)jtreg$(D)lib$(D)jtreg.jar$(Q) \
-	$(JTREG_BASIC_OPTIONS) $(JDK_NATIVE_OPTIONS) -vmoptions:$(Q)-Xmx512m $(JVM_OPTIONS)$(Q) \
-	-w $(Q)$(REPORTDIR)$(D)work$(Q) \
-	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
-	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
-	$(Q)$(OPENJDK_DIR)$(D)test$(D)jdk$(D)java$(D)lang$(D)ProcessBuilder$(D)checkHandles$(D)CheckHandles.java$(Q); \
-	$(TEST_STATUS)</command>
-		<subsets>
-			<subset>11</subset>
-		</subsets>
-		<levels>
-			<level>sanity</level>
-		</levels>
-		<types>
-			<type>native</type>
-		</types>
-		<groups>
-			<group>openjdk</group>
-		</groups>
-		<platformRequirements>os.win</platformRequirements>
 		<impls>
 			<impl>hotspot</impl>
 		</impls>
@@ -272,16 +217,15 @@
 	<test>
 		<testCaseName>jdk_lang_j9</testCaseName>
 		<variations>
-			<variation>-Xdump:system:none -Xdump:heap:none -Xdump:system:events=gpf+abort+traceassert+corruptcache -XX:-JITServerTechPreviewMessage</variation>
+			<variation>-Xdump:system:none -Xdump:heap:none -Xdump:system:events=gpf+abort+traceassert+corruptcache</variation>
 		</variations>   
 		<command>$(JAVA_COMMAND) -Xmx512m -jar $(Q)$(TEST_RESROOT)$(D)jtreg$(D)lib$(D)jtreg.jar$(Q) \
 	$(JTREG_BASIC_OPTIONS) $(JDK_NATIVE_OPTIONS) -vmoptions:$(Q)-Xmx512m $(JVM_OPTIONS)$(Q) \
-	-timeoutHandler:jtreg.openj9.CoreDumpTimeoutHandler -timeoutHandlerDir:$(Q)$(LIB_DIR)$(D)openj9jtregtimeouthandler.jar$(Q) \
 	-w $(Q)$(REPORTDIR)$(D)work$(Q) \
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_lang$(Q); \
 	$(TEST_STATUS)</command>
 		<levels>
@@ -292,90 +236,6 @@
 		</groups>
 		<impls>
 			<impl>openj9</impl>
-			<impl>ibm</impl>
-		</impls>
-	</test>
-	<test>
-		<testCaseName>jdk_lang_native_j9_win</testCaseName>
-		<variations>
-			<variation>-Xdump:system:none -Xdump:heap:none -Xdump:system:events=gpf+abort+traceassert+corruptcache -XX:-JITServerTechPreviewMessage</variation>
-		</variations>
-		<command>$(JAVA_COMMAND) -Xmx512m -jar $(Q)$(TEST_RESROOT)$(D)jtreg$(D)lib$(D)jtreg.jar$(Q) \
-	$(JTREG_BASIC_OPTIONS) $(JDK_NATIVE_OPTIONS) -vmoptions:$(Q)-Xmx512m $(JVM_OPTIONS)$(Q) \
-	-timeoutHandler:jtreg.openj9.CoreDumpTimeoutHandler -timeoutHandlerDir:$(Q)$(LIB_DIR)$(D)openj9jtregtimeouthandler.jar$(Q) \
-	-w $(Q)$(REPORTDIR)$(D)work$(Q) \
-	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
-	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
-	$(Q)$(OPENJDK_DIR)$(D)test$(D)jdk$(D)java$(D)lang$(D)ProcessBuilder$(D)checkHandles$(D)CheckHandles.java$(Q); \
-	$(TEST_STATUS)</command>
-		<subsets>
-			<subset>11</subset>
-		</subsets>
-		<levels>
-			<level>sanity</level>
-		</levels>
-		<types>
-			<type>native</type>
-		</types>
-		<groups>
-			<group>openjdk</group>
-		</groups>
-		<platformRequirements>os.win</platformRequirements>
-		<impls>
-			<impl>openj9</impl>
-			<impl>ibm</impl>
-		</impls>
-	</test>
-	<test>
-		<testCaseName>jdk_lang_ref_FinalizeOverride_j9</testCaseName>
-		<variations>
-			<variation>-Xjit:enableAggressiveLiveness -XX:-JITServerTechPreviewMessage</variation>
-		</variations>   
-		<command>$(JAVA_COMMAND) -Xmx512m -jar $(Q)$(TEST_RESROOT)$(D)jtreg$(D)lib$(D)jtreg.jar$(Q) \
-	$(JTREG_BASIC_OPTIONS) $(JDK_NATIVE_OPTIONS) -vmoptions:$(Q)-Xmx512m $(JVM_OPTIONS)$(Q) \
-	-w $(Q)$(REPORTDIR)$(D)work$(Q) \
-	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
-	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
-	$(Q)$(OPENJDK_DIR)$(D)test$(D)jdk$(D)java$(D)lang$(D)ref$(D)FinalizeOverride.java$(Q); \
-	$(TEST_STATUS)</command>
-		<subsets>
-			<subset>11+</subset>
-		</subsets>
-		<levels>
-			<level>special</level>
-		</levels>
-		<groups>
-			<group>openjdk</group>
-		</groups>
-		<impls>
-			<impl>openj9</impl>
-			<impl>ibm</impl>
-		</impls>
-	</test>
-	<test>
-		<testCaseName>jdk_util_zip_ZipFile_TestCleaner_j9</testCaseName>
-		<variations>
-			<variation>-Xjit:enableAggressiveLiveness -XX:-JITServerTechPreviewMessage</variation>
-		</variations>   
-		<command>$(JAVA_COMMAND) -Xmx512m -jar $(Q)$(TEST_RESROOT)$(D)jtreg$(D)lib$(D)jtreg.jar$(Q) \
-	$(JTREG_BASIC_OPTIONS) $(JDK_NATIVE_OPTIONS) -vmoptions:$(Q)-Xmx512m $(JVM_OPTIONS)$(Q) \
-	-w $(Q)$(REPORTDIR)$(D)work$(Q) \
-	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
-	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
-	$(Q)$(OPENJDK_DIR)$(D)test$(D)jdk$(D)java$(D)util$(D)zip$(D)ZipFile$(D)TestCleaner.java$(Q); \
-	$(TEST_STATUS)</command>
-		<subsets>
-			<subset>11+</subset>
-		</subsets>
-		<levels>
-			<level>special</level>
-		</levels>
-		<groups>
-			<group>openjdk</group>
-		</groups>
-		<impls>
-			<impl>openj9</impl>
-			<impl>ibm</impl>
 		</impls>
 	</test>
 	<test>
@@ -386,7 +246,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_math$(Q); \
 	$(TEST_STATUS)</command>
 		<levels>
@@ -406,12 +266,11 @@
 		</variations>   
 		<command>$(JAVA_COMMAND) -Xmx512m -jar $(Q)$(TEST_RESROOT)$(D)jtreg$(D)lib$(D)jtreg.jar$(Q) \
 	$(JTREG_BASIC_OPTIONS) -vmoptions:$(Q)-Xmx512m $(JVM_OPTIONS)$(Q) \
-	-timeoutHandler:jtreg.openj9.CoreDumpTimeoutHandler -timeoutHandlerDir:$(Q)$(LIB_DIR)$(D)openj9jtregtimeouthandler.jar$(Q) \
 	-w $(Q)$(REPORTDIR)$(D)work$(Q) \
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_math$(Q); \
 	$(TEST_STATUS)</command>
 		<levels>
@@ -422,7 +281,6 @@
 		</groups>
 		<impls>
 			<impl>openj9</impl>
-			<impl>ibm</impl>
 		</impls>
 	</test>
 	<test>
@@ -434,7 +292,7 @@
 	-compilejdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-jdk:$(Q)$(JRE_IMAGE)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_math$(Q); \
 	$(TEST_STATUS)</command>
 		<subsets>
@@ -457,7 +315,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_other$(Q); \
 	$(TEST_STATUS)</command>
 		<levels>
@@ -475,7 +333,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_net$(Q); \
 	$(TEST_STATUS)</command>
 		<levels>
@@ -493,7 +351,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_nio$(Q); \
 	$(TEST_STATUS)</command>
 		<levels>
@@ -511,7 +369,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_security1$(Q); \
 	$(TEST_STATUS)</command>
 		<levels>
@@ -529,7 +387,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_security2$(Q); \
 	$(TEST_STATUS)</command>
 		<levels>
@@ -547,7 +405,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_security3$(Q); \
 	$(TEST_STATUS)</command>
 		<levels>
@@ -565,7 +423,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_security4$(Q); \
 	$(TEST_STATUS)</command>
 		<levels>
@@ -583,7 +441,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_sound$(Q); \
 	$(TEST_STATUS)</command>
 		<levels>
@@ -602,13 +460,13 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_swing$(Q); \
 	$(TEST_STATUS)</command>
 		<levels>
 			<level>extended</level>
 		</levels>
-		<platformRequirements>^os.osx,^os.zos</platformRequirements>
+		<platformRequirements>^os.osx</platformRequirements>
 		<groups>
 			<group>openjdk</group>
 		</groups>
@@ -622,7 +480,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_text$(Q); \
 	$(TEST_STATUS)</command>
 		<levels>
@@ -640,7 +498,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_util$(Q); \
 	$(TEST_STATUS)</command>
 		<levels>
@@ -660,12 +518,11 @@
 		</variations>   
 		<command>$(JAVA_COMMAND) -Xmx512m -jar $(Q)$(TEST_RESROOT)$(D)jtreg$(D)lib$(D)jtreg.jar$(Q) \
 	$(JTREG_BASIC_OPTIONS) -vmoptions:$(Q)-Xmx512m $(JVM_OPTIONS)$(Q) \
-	-timeoutHandler:jtreg.openj9.CoreDumpTimeoutHandler -timeoutHandlerDir:$(Q)$(LIB_DIR)$(D)openj9jtregtimeouthandler.jar$(Q) \
 	-w $(Q)$(REPORTDIR)$(D)work$(Q) \
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_util$(Q); \
 	$(TEST_STATUS)</command>
 		<levels>
@@ -676,7 +533,6 @@
 		</groups>
 		<impls>
 			<impl>openj9</impl>
-			<impl>ibm</impl>
 		</impls>
 	</test>
 	<test>
@@ -687,7 +543,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_time$(Q); \
 	$(TEST_STATUS)</command>
 		<levels>
@@ -705,7 +561,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_management$(Q); \
 	$(TEST_STATUS)</command>
 		<levels>
@@ -723,7 +579,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_jmx$(Q); \
 	$(TEST_STATUS)</command>
 		<levels>
@@ -741,7 +597,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_rmi$(Q); \
 	$(TEST_STATUS)</command>
 		<levels>
@@ -759,7 +615,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_tools$(Q); \
 	$(TEST_STATUS)</command>
 		<levels>
@@ -778,7 +634,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_jdi$(Q); \
 	$(TEST_STATUS)</command>
 		<levels>
@@ -802,7 +658,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_jfr$(Q); \
 	$(TEST_STATUS)</command>
 		<impls>
@@ -823,7 +679,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_foreign$(Q); \
 	$(TEST_STATUS)</command>
 		<subsets>
@@ -837,28 +693,6 @@
 		</groups>
 	</test>
 	<test>
-		<testCaseName>jdk_foreign_native</testCaseName>
-		<command>$(JAVA_COMMAND) -Xmx512m -jar $(Q)$(TEST_RESROOT)$(D)jtreg$(D)lib$(D)jtreg.jar$(Q) \
-	$(JTREG_BASIC_OPTIONS) $(JDK_NATIVE_OPTIONS) -vmoptions:$(Q)-Xmx512m --add-modules jdk.incubator.foreign $(JVM_OPTIONS)$(Q) \
-	-w $(Q)$(REPORTDIR)$(D)work$(Q) \
-	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
-	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
-	$(Q)$(OPENJDK_DIR)$(D)test$(D)jdk$(D)java$(D)foreign$(D)TestNative.java$(Q); \
-	$(TEST_STATUS)</command>
-		<subsets>
-			<subset>14+</subset>
-		</subsets>
-		<levels>
-			<level>sanity</level>
-		</levels>
-		<types>
-			<type>native</type>
-		</types>
-		<groups>
-			<group>openjdk</group>
-		</groups>
-	</test>
-	<test>
 		<testCaseName>jdk_instrument</testCaseName>
 		<command>$(JAVA_COMMAND) -Xmx512m -jar $(Q)$(TEST_RESROOT)$(D)jtreg$(D)lib$(D)jtreg.jar$(Q) \
 	$(JTREG_BASIC_OPTIONS) -vmoptions:$(Q)-Xmx512m $(JVM_OPTIONS)$(Q) \
@@ -866,7 +700,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_instrument$(Q); \
 	$(TEST_STATUS)</command>
 		<subsets>
@@ -890,7 +724,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_svc_sanity$(Q); \
 	$(TEST_STATUS)</command>
 		<subsets>
@@ -915,7 +749,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_jdi$(Q); \
 	$(TEST_STATUS)</command>
 		<levels>
@@ -939,7 +773,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):build$(Q); \
 	$(TEST_STATUS)</command>
 		<subsets>
@@ -960,7 +794,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_imageio$(Q); \
 	$(TEST_STATUS)</command>
 		<subsets>
@@ -982,7 +816,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_client_sanity$(Q); \
 	$(TEST_STATUS)</command>
 		<subsets>
@@ -1003,7 +837,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_security_infra$(Q); \
 	$(TEST_STATUS)</command>
 		<subsets>
@@ -1024,7 +858,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_native_sanity$(Q); \
 	$(TEST_STATUS)</command>
 		<subsets>
@@ -1045,7 +879,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_2d$(Q); \
 	$(TEST_STATUS)</command>
 		<subsets>
@@ -1067,7 +901,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jfc_demo$(Q); \
 	$(TEST_STATUS)</command>
 		<subsets>
@@ -1088,7 +922,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR)/com/sun/crypto/provider/Cipher$(Q); \
 	$(TEST_STATUS)</command>
 		<subsets>
@@ -1109,7 +943,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR)/java/nio/Buffer$(Q); \
 	$(TEST_STATUS)</command>
 		<subsets>
@@ -1130,7 +964,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR)/sun/nio/cs/ISO8859x.java$(Q); \
 	$(TEST_STATUS)</command>
 		<subsets>
@@ -1151,7 +985,7 @@
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
-	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)ProblemList_$(JVM_VERSION).txt$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR)/tools/pack200$(Q); \
 	$(TEST_STATUS)</command>
 		<subsets>

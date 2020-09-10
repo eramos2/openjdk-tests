@@ -127,7 +127,8 @@
 			<impl>openj9</impl>
 			<impl>ibm</impl>
 		</impls>
-		<platformRequirements>bits.64,^arch.arm</platformRequirements>
+		<!-- concurrentScavenge is unsupported on aarch64; github.com/eclipse/openj9/issues/8762 -->
+		<platformRequirements>bits.64,^arch.arm,^arch.aarch64</platformRequirements>
 		<disabled>AdoptOpenJDK/openjdk-systemtest/issues/75</disabled>
 	</test>
 	
@@ -208,7 +209,7 @@
 			<variation>Mode612-OSRG</variation>
 			<!--Note: -Xint modes Mode108, Mode109, Mode550 should be run manually -->
 		</variations>
-		<command>$(SYSTEMTEST_CMD_TEMPLATE) -test=MauveMultiThreadTestTrc; \
+		<command>$(SYSTEMTEST_CMD_TEMPLATE) -test=MauveMultiThreadLoadTest; \
 	$(TEST_STATUS)</command>
 		<levels>
 			<level>special</level>
@@ -259,7 +260,7 @@
 			<variation>Mode612-OSRG</variation>
 			<!--Note: -Xint modes Mode108, Mode109, Mode550 should be run manually -->
 		</variations>
-		<command>$(SYSTEMTEST_CMD_TEMPLATE) -test=MauveSingleThreadTestTrc; \
+		<command>$(SYSTEMTEST_CMD_TEMPLATE) -test=MauveSingleThreadLoadTest; \
 	$(TEST_STATUS)</command>
 		<levels>
 			<level>special</level>

@@ -42,7 +42,8 @@ public class FormatterTest2 {
          formatter = new Formatter(fos);
       }
 
-      if ("".equals(System.getProperty("user.timezone",""))) {
+      if ("".equals(System.getProperty("user.timezone"))) {
+         Locale current_locale = Locale.getDefault();
          if (Locale.getDefault().equals(Locale.JAPAN)){
             TimeZone.setDefault(TimeZone.getTimeZone("Asia/Tokyo"));
          } else if (Locale.getDefault().equals(Locale.KOREA)){

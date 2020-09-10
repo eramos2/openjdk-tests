@@ -1,4 +1,4 @@
-# Sample system.properties file
+#!/usr/bin/perl
 ################################################################################
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,9 +13,24 @@
 # limitations under the License.
 ################################################################################
 
-# Keystore properties (client certificates)
-# Location
-#javax.net.ssl.keyStore=KEYSTORE_LOC_HERE
-#
-#The password to your keystore
-#javax.net.ssl.keyStorePassword=PASSWORD_HERE
+use Test::Simple tests => 1;
+use File::Compare;
+use FindBin;
+
+$OS=$^O; #OS name
+chomp($OS);
+$SYSENC=`locale charmap`;
+chomp($SYSENC);
+$lang = $ENV{LANG};
+$i = index($lang,".");
+if ($i == -1) {
+    $i = length($lang);
+}
+$lang = substr($lang, 0, $i);
+$FULLLANG = $OS."_".$lang.".".$SYSENC;
+$base = $FindBin::Bin."/";
+
+$exp = $base."expected/".$FULLLANG.".txt";
+print $exp;
+ok( compare("output.txt", $exp) == 0, "diff ".$exp);
+

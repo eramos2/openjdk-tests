@@ -12,8 +12,6 @@
 # limitations under the License.
 #
 
-source $(dirname "$0")/test_base_functions.sh
-
 #Set up Java to be used by the wildfly-test
 
 if [ -d /java/jre/bin ];then
@@ -36,8 +34,7 @@ else
 	export JAVA_HOME="${java_root%/bin}"
 fi
 
-echo_setup
-
+java -version
 # Replace the following with the initial command lines that trigger execution of your test
 cd /wildfly
 

@@ -11,7 +11,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-source $(dirname "$0")/test_base_functions.sh
 
 if [ -d /java/jre/bin ];then
 	echo "Using mounted Java8"
@@ -33,8 +32,7 @@ else
 	export JAVA_HOME="${java_root%/bin}"
 fi
 
-echo_setup
-
+java -version
 cd ${LUCENE_SOLR_HOME}/lucene-solr
 
 pwd

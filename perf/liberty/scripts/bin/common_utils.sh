@@ -99,12 +99,7 @@ checkAndSetCommonEnvVars()
 
     if [ -z "$JDK_OPTIONS" ]; then
         echo "JDK_OPTIONS not set"
-        #exit
-    fi
-   
-    if [ ! -z "$CPU_AFFINITY" ]; then
-    	export AFFINITY=${CPU_AFFINITY}
-    	echo "AFFINITY set to ${CPU_AFFINITY}"
+        exit
     fi
 
     #warn about no affinity, but continue anyway
@@ -118,16 +113,37 @@ checkAndSetCommonEnvVars()
                 ;;
             *)
                 echo "!!! WARNING !!! AFFINITY not set"
-                #usage
+                usage
                 #exit
                 ;;
         esac
     fi
     
     if [ ! -z "$PROFILING_TOOL" ]; then
-        . ${BENCHMARK_DIR}/resource/client_scripts/profile.sh
-        echo "Setting profiling options"
-        setProfilingOptions ${BENCHMARK_DIR}/tmp
+    
+	    if [ -z "$PROFILING_JAVA_OPTION" ]; then
+	        echo "Optional PROFILING_JAVA_OPTION not set."
+			
+			if [[ "${PROFILING_TOOL}" = jprof* ]]; then			  
+			  export PROFILE_TYPE=$(awk -F " " '{print $2}' <<< ${PROFILING_TOOL})
+			  echo "PROFILE_TYPE:${PROFILE_TYPE}"
+			  PROFILING_JAVA_OPTION="-agentlib:jprof=${PROFILE_TYPE},logpath=${BENCHMARK_DIR}/tmp"
+			elif [[ "${PROFILING_TOOL}" = perf* ]]; then
+		 	  PROFILING_JAVA_OPTION="-Xjit:perfTool"
+			fi   	        
+	        echo "PROFILING_JAVA_OPTION=${PROFILING_JAVA_OPTION}"
+	    else
+	    	echo "Optional PROFILING_JAVA_OPTION is set to ${PROFILING_JAVA_OPTION}"
+	        
+	        # If there are multiple logpaths, then the last one takes effect. 
+	        # We append this logpath so that we know where to copy the files from 
+	        # and use them for archiving so that they can be viewed later.
+	        if [[ "${PROFILING_TOOL}" = jprof* ]]; then
+		        echo "Appending ',logpath=${BENCHMARK_DIR}/tmp' to PROFILING_JAVA_OPTION"
+		        PROFILING_JAVA_OPTION=${PROFILING_JAVA_OPTION}+",logpath=${BENCHMARK_DIR}/tmp"
+		        echo "PROFILING_JAVA_OPTION:${PROFILING_JAVA_OPTION}"
+	        fi
+	    fi
     fi
 	
     if [ -z "$LAUNCH_SCRIPT" ]; then
@@ -171,7 +187,7 @@ checkAndSetCommonEnvVars()
 
     # Handle only dt3 for now
     if [ -z "$APP_VERSION" ]; then
-        if [[ "${SCENARIO}" = DayTrader* ]] && [[ ! "${SCENARIO}" = DayTrader7* ]]; then
+        if [[ "${SCENARIO}" = DayTrader* ]] && [[ ! "${SCENARIO}" = DayTrader7 ]]; then
             echo "Daytrader 3 Application Version not set. Setting to daytrader3.0.10.1-ee6-src"
             APP_VERSION="daytrader3.0.10.1-ee6-src"
         fi
@@ -1190,24 +1206,20 @@ copyResultsToRemoteMachine()
   # create results dir on the results machine (if exists, staf stil returns success)
   local FULL_REMOTE_DIR=${ROOT_RESULTS_DIR}/${SCENARIO}/${LIBERTY_HOST}/${JDK}/${RUN_DATE}/${RUN_ID}
 
-  STAF_CMD="STAF ${RESULTS_MACHINE} FS CREATE DIRECTORY ${FULL_REMOTE_DIR} FULLPATH"
-  SSH_CMD="ssh ${RESULTS_MACHINE_USER}@${RESULTS_MACHINE} mkdir -p ${FULL_REMOTE_DIR}"
-  LOCAL_CMD="mkdir -p ${FULL_REMOTE_DIR}"
-  runNetProtocolCmd -alwaysEcho
+  echoAndRunCmd "STAF ${RESULTS_MACHINE} FS CREATE DIRECTORY ${FULL_REMOTE_DIR} FULLPATH"
+  #ssh ${RESULTS_MACHINE_USER}@${RESULTS_MACHINE} "${FULL_REMOTE_DIR}"
+
 
   # copy the files to the results machine - while the staf command says copy directory, it copies the 
   #	files in the directory, not the directory itself, into the todirectory location
   
   if [ -f ${DIR}/results.zip ]; then
-      STAF_CMD="STAF local FS COPY FILE ${DIR}/results.zip TODIRECTORY ${FULL_REMOTE_DIR} TOMACHINE ${RESULTS_MACHINE}"
-      SSH_CMD="scp ${DIR}/results.zip ${RESULTS_MACHINE_USER}@${RESULTS_MACHINE}:${FULL_REMOTE_DIR}"
-      LOCAL_CMD="cp ${DIR}/results.zip ${FULL_REMOTE_DIR}"
-      runNetProtocolCmd -alwaysEcho
+      echoAndRunCmd "STAF local FS COPY FILE ${DIR}/results.zip TODIRECTORY ${FULL_REMOTE_DIR} TOMACHINE ${RESULTS_MACHINE}"
+      #scp ${DIR}/results.zip ${RESULTS_MACHINE_USER}@${RESULTS_MACHINE}:${FULL_REMOTE_DIR}
+
     elif [ -d $DIR ]; then
-      STAF_CMD="STAF local FS COPY DIRECTORY ${DIR} TODIRECTORY ${FULL_REMOTE_DIR} TOMACHINE ${RESULTS_MACHINE} RECURSE"
-      SSH_CMD="scp -r ${DIR} ${RESULTS_MACHINE_USER}@${RESULTS_MACHINE}:${FULL_REMOTE_DIR}"
-      LOCAL_CMD="cp -r ${DIR} ${FULL_REMOTE_DIR}"
-      runNetProtocolCmd -alwaysEcho
+      echoAndRunCmd "STAF local FS COPY DIRECTORY ${DIR} TODIRECTORY ${FULL_REMOTE_DIR} TOMACHINE ${RESULTS_MACHINE} RECURSE"
+      #scp -r ${DIR} ${RESULTS_MACHINE_USER}@${RESULTS_MACHINE}:${FULL_REMOTE_DIR}
   fi
 
   echo ""
@@ -1573,7 +1585,16 @@ getRunningServerPID()
     CYGWIN)
       local PS_VERSION=`ps --version|grep cygwin|awk {'print $3'}`
       echo "PS version is ${PS_VERSION}"
-      WINDOWS_PID=`ps -W | grep java | grep ${SERVER_PID} | grep -v grep | awk '{ print $4 }'`
+      #PS changed returning Cygwin PID & Windows PID on same line sometime between 1.1.1 and 1.7.32
+      if [ "$PS_VERSION" = "1.1.1" ]; then
+        WINDOWS_PID=`ps -W | grep java | grep ${SERVER_PID} | grep -v grep | awk '{ print $4 }'`
+      else
+        local WINDOWS_CMD=`ps -W | grep java | grep ${SERVER_PID}| grep -v grep | awk '{ print $8 }'`
+        #Get server command for Cygwin process (rather than assuming there's only one JVM running)
+        WINDOWS_CMD=`cygpath -w ${WINDOWS_CMD}|sed 's|\\\|\\\\\\\\|g'`
+        #Get the Windows path, and pad with extra \'s so grep can use it....
+        WINDOWS_PID=`ps -W | grep java|grep "${WINDOWS_CMD}" |awk {'print $4'}`
+      fi	
       echo "WINDOWS_PID=${WINDOWS_PID}"
       ;;
     *)

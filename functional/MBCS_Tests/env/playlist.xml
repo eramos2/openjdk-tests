@@ -88,6 +88,7 @@ limitations under the License.
 			<group>functional</group>
 		</groups>
 		<subsets>
+			<subset>8</subset>
 			<subset>11+</subset>
 		</subsets>
 	</test>
@@ -158,6 +159,7 @@ limitations under the License.
 			<group>functional</group>
 		</groups>
 		<subsets>
+			<subset>8</subset>
 			<subset>11+</subset>
 		</subsets>
 	</test>
@@ -200,6 +202,7 @@ limitations under the License.
 			<group>functional</group>
 		</groups>
 		<subsets>
+			<subset>8</subset>
 			<subset>11+</subset>
 		</subsets>
 	</test>
