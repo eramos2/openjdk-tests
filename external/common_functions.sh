@@ -20,7 +20,7 @@ supported_versions="8 9 10 11 12 13 14 15"
 supported_jvms="hotspot openj9"
 
 # Supported distros
-# Distros Note Included: windowsservercore-ltsc2016
+# Distros Not Included: windowsservercore-ltsc2016
 supported_os="alpine debian debianslim ubi ubi-minimal centos clefos ubuntu"
 
 # Supported packges
@@ -30,8 +30,7 @@ supported_packages="jdk jre"
 supported_builds="slim full"
 
 # Supported tests
-# Test Not Included: elasticsearch
-supported_tests="camel derby jenkins functional-test kafka lucene-solr openliberty-mp-tck payara-mp-tck quarkus quarkus_quickstarts scala system-test thorntail-mp-tck tomcat tomee wildfly wycheproof"
+supported_tests="camel derby elasticsearch jenkins functional-test kafka lucene-solr openliberty-mp-tck payara-mp-tck quarkus quarkus_quickstarts scala system-test thorntail-mp-tck tomcat tomee wildfly wycheproof"
 
 function check_version() {
     version=$1
@@ -207,6 +206,18 @@ function set_test_info() {
         ubi_minimal_packages="${ubi_packages}"
         ;;
     elasticsearch)
+        github_url="https://github.com/elastic/elasticsearch.git"
+        script="elasticsearch-test.sh"
+        tag_version="v7.6.2"
+        test_results="testResults"
+        debian_packages="git wget unzip"
+        debianslim_packages="${debian_packages}"
+        ubuntu_packages="${debian_packages}"
+        alpine_packages="git wget unzip"
+        centos_packages="git wget unzip"
+        clefos_packages="${centos_packages}"
+        ubi_packages="git wget unzip"
+        ubi_minimal_packages="${ubi_packages}"
         ;;
     functional-test)
         github_url="https://github.com/AdoptOpenJDK/openjdk-tests.git"
@@ -229,7 +240,7 @@ function set_test_info() {
         script="jenkins-test.sh"
         home_path=""
         test_results="testResults"
-        tag_version="jenkins-2.190.3"
+        tag_version="jenkins-2.235"
         debian_packages="git maven"
         debianslim_packages="${debian_packages}"
         ubuntu_packages="${debian_packages}"
@@ -243,7 +254,7 @@ function set_test_info() {
         github_url="https://github.com/apache/kafka.git"
         script="kafka-test.sh"
         home_path=""
-        tag_version="2.1.0"
+        tag_version="2.5.0"
         gradle_version="5.1"
         debian_packages="git wget unzip"
         debianslim_packages="${debian_packages}"
@@ -258,7 +269,7 @@ function set_test_info() {
         github_url="https://github.com/apache/lucene-solr.git"
         script="lucene-solr-test.sh"
         home_path="\${WORKDIR}"
-        tag_version="releases/lucene-solr/8.3.1"
+        tag_version="releases/lucene-solr/8.5.1"
         ant_version="1.10.6"
         ivy_version="2.5.0"
         debian_packages="git wget tar"
@@ -275,7 +286,7 @@ function set_test_info() {
         script="openliberty-mp-tck.sh"
         home_path="\${WORKDIR}"
         test_results="testResults"
-        tag_version="gm-19.0.0.12"
+        tag_version="gm-20.0.0.4"
         ant_version="1.10.6"
         debian_packages="git wget tar maven"
         debianslim_packages="${debian_packages}"
@@ -305,7 +316,22 @@ function set_test_info() {
         github_url="https://github.com/quarkusio/quarkus.git"
         script="quarkus-test.sh"
         test_results="testResults"
-        tag_version="1.3.0.Final"
+        tag_version="1.3.2.Final"
+        environment_variable="MODE=\"java\""
+        debian_packages="git wget"
+        debianslim_packages="${debian_packages}"
+        ubuntu_packages="${debian_packages}"
+        alpine_packages="git wget"
+        centos_packages="git wget"
+        clefos_packages="${centos_packages}"
+        ubi_packages="git wget"
+        ubi_minimal_packages="${ubi_packages}"
+        ;;
+    quarkus_openshift)
+        github_url="https://github.com/quarkus-qe/quarkus-openshift-test-suite.git"
+        script="test.sh"
+        test_results="testResults"
+        tag_version="1.3.2.Final"
         environment_variable="MODE=\"java\""
         debian_packages="git wget"
         debianslim_packages="${debian_packages}"
@@ -320,7 +346,7 @@ function set_test_info() {
         github_url="https://github.com/quarkusio/quarkus-quickstarts.git"
         script="test.sh"
         test_results="testResults"
-        tag_version="1.2.1.Final"
+        tag_version="1.3.2.Final"
         environment_variable="MODE=\"java\""
         debian_packages="git wget maven"
         debianslim_packages="${debian_packages}"
@@ -335,7 +361,7 @@ function set_test_info() {
         github_url="https://github.com/scala/scala.git"
         script="scala-test.sh"
         home_path=""
-        tag_version="v2.13.1"
+        tag_version="v2.13.2"
         sbt_version="1.2.8"
         debian_packages="git wget tar curl gpg gpg-agent"
         debianslim_packages="${debian_packages}"
@@ -381,7 +407,7 @@ function set_test_info() {
         github_url="https://github.com/apache/tomcat.git"
         script="tomcat-test.sh"
         home_path=""
-        tag_version="9.0.30"
+        tag_version="10.0.0-M5"
         ant_version="1.10.6"
         openssl_version="1.1.1d"
         debian_packages="git wget tar make gcc linux-libc-dev libc6-dev perl"
@@ -398,7 +424,7 @@ function set_test_info() {
         script="tomee-test.sh"
         home_path=""
         test_results="testResults"
-        tag_version="tomee-8.0.0"
+        tag_version="tomee-8.0.2"
         debian_packages="git maven"
         debianslim_packages="${debian_packages}"
         ubuntu_packages="${debian_packages}"
@@ -413,7 +439,7 @@ function set_test_info() {
         script="wildfly-test.sh"
         home_path=""
         test_results=""
-        tag_version="18.0.1.Final"
+        tag_version="19.1.0.Final"
         debian_packages="git maven"
         debianslim_packages="${debian_packages}"
         ubuntu_packages="${debian_packages}"

@@ -38,6 +38,9 @@ ifeq ($(CYGWIN),1)
 		| cut -d "=" -f 2-` / 1024 / 1024 \
 		)
 endif
+ifeq ($(OS),OS/390)
+	EXTRA_OPTIONS += -Dcom.ibm.tools.attach.enable=yes
+endif
 # Upstream OpenJDK, roughly, sets concurrency based on the
 # following: min(NPROCS/2, MEM_IN_GB/2).
 MEM := $(shell expr $(MEMORY_SIZE) / 2048)
@@ -45,6 +48,10 @@ CORE := $(shell expr $(NPROCS) / 2)
 CONC := $(CORE)
 ifeq ($(shell expr $(CORE) \> $(MEM)), 1)
 	CONC := $(MEM)
+endif
+# Can't determine cores on zOS, use a reasonable default
+ifeq ($(OS),OS/390)
+	CONC := 4
 endif
 JTREG_CONC ?= 0
 # Allow JTREG_CONC be set via parameter
@@ -126,4 +133,18 @@ ifneq ($(JDK_VERSION),8)
 			CUSTOM_NATIVE_OPTIONS := $(JDK_NATIVE_OPTIONS)
 		endif
 	endif
+endif
+
+PROBLEM_LIST_FILE:=ProblemList_openjdk$(JDK_VERSION).txt
+PROBLEM_LIST_DEFAULT:=ProblemList_openjdk11.txt
+
+# if JDK_IMPL is openj9 or ibm
+ifneq ($(filter openj9 ibm, $(JDK_IMPL)),)
+	PROBLEM_LIST_FILE:=ProblemList_openjdk$(JDK_VERSION)-openj9.txt
+	PROBLEM_LIST_DEFAULT:=ProblemList_openjdk11-openj9.txt
+endif
+
+# if cannot find the problem list file, set to default file
+ifeq (,$(wildcard $(PROBLEM_LIST_FILE)))
+	PROBLEM_LIST_FILE:=$(PROBLEM_LIST_DEFAULT)
 endif
