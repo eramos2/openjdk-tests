@@ -14,6 +14,6 @@
 # limitations under the License.
 #
 
-echo "***** Running Benchmark Script *****"
+echo "***** Running Benchmark Script Inside libety-docker*****"
 
 echo "Current Dir: $(pwd)"
