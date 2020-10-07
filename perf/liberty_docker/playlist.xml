@@ -15,7 +15,7 @@
 <playlist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="../../TKG/playlist.xsd">
 	<test>
-		<testCaseName>liberty-dt7-startup</testCaseName>
+		<testCaseName>liberty-docker-startup-test</testCaseName>
 		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)acmeair_docker_test.sh$(Q) $(TEST_RESROOT); \
 		${TEST_STATUS}
 		</command>
