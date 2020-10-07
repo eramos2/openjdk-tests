@@ -209,12 +209,14 @@ downloadDepencies
 # Set release and docker tag to pull
 echo "Clean Docker" 
 docker stop $(docker ps -a -q); docker rm $(docker ps -a -q)
-
+export BUILD=latest
+export BASE_TAG=java8-openj9
+export OPENLIBERTY_IMAGE=kernel
 echo "BUILD=${BUILD}"
 echo "IMAGE=${OPENLIBERTY_IMAGE}"
 echo "BASE_TAG=${BASE_TAG}"
 echo "Current directory=$(dirname $0)"
-$(dirname $0)/buildAll_wasperf.sh` ${BUILD} ${BASE_TAG}
+$(dirname $0)/buildAll_wasperf.sh ${BUILD} ${BASE_TAG}
 
 #########################
 
