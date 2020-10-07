@@ -261,7 +261,7 @@ $(dirname $0)/buildAll_wasperf.sh ${BUILD} ${BASE_TAG}
 
 ##########################
 
-populateDatabase
+#populateDatabase
 
 ##########################
 
