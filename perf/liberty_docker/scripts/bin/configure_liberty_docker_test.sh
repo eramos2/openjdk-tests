@@ -217,6 +217,22 @@ echo "IMAGE=${OPENLIBERTY_IMAGE}"
 echo "BASE_TAG=${BASE_TAG}"
 echo "Current directory=$(dirname $0)"
 $(dirname $0)/buildAll_wasperf.sh ${BUILD} ${BASE_TAG}
+#!/bin/bash
+getOldBuild()
+{
+  CID=`docker run -d openliberty/daily`
+
+  sleep 5
+
+  # Yikes this is ugly....
+  docker logs ${CID} 2>/dev/null | grep "Open Liberty" | awk '{print $5}' | awk '{gsub("/"," "); print $2}'  | awk '{gsub("\.", " "); print $4}' | awk '{print substr($1, 1, length($1)-1)}'
+  docker stop ${CID} > /dev/null
+}
+
+BUILD=`getOldBuild`
+echo "Found Build: ${BUILD}"
+
+
 
 #########################
 
