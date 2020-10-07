@@ -4,7 +4,7 @@
 # If this is a Travis build on master, images are tagged openliberty/daily:<image> and pushed to Docker Hub
 
 set -e
-cd ${DEST}/OL-docker-images/ci.docker.daily-master
+cd $(dirname $0)
 readonly usage="Usage: buildAll.sh"
 
 readonly NIGHTLY_URL="https://public.dhe.ibm.com/ibmdl/export/pub/software/openliberty/runtime/nightly/"
@@ -84,7 +84,7 @@ main () {
     cd ci.docker
     echo "****** Starting daily build from $(pwd)..."
 
-    ../build-wasperf.sh --version="${version}" --buildLabel="${buildLabel}" --fullDownloadUrl="${fullImageUrl}" --baseTag="${BASE_TAG}" --fileName="${FILE_NAME}"
+    ./build-wasperf.sh --version="${version}" --buildLabel="${buildLabel}" --fullDownloadUrl="${fullImageUrl}" --baseTag="${BASE_TAG}" --fileName="${FILE_NAME}"
     docker tag openliberty/daily:full-${BASE_TAG}  openliberty/daily:latest
 }
 ## builds the ibmjava base for ./build.sh script
