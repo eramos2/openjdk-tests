@@ -220,44 +220,44 @@ $(dirname $0)/buildAll_wasperf.sh ${BUILD} ${BASE_TAG}
 
 #########################
 
-unsetVars
-APP_URL="http://archive.apache.org/dist/db/derby/db-derby-10.10.1.1/db-derby-10.10.1.1-lib.zip"
-APP_ARCHIVE="$(basename ${APP_URL})"
-EXTRACT_ORIGINAL_NAME="db-derby-10.10.1.1-lib"
-EXTRACT_NEW_NAME=${EXTRACT_ORIGINAL_NAME}
-APP_DEST="${DEST}"
-downloadDepencies
+# unsetVars
+# APP_URL="http://archive.apache.org/dist/db/derby/db-derby-10.10.1.1/db-derby-10.10.1.1-lib.zip"
+# APP_ARCHIVE="$(basename ${APP_URL})"
+# EXTRACT_ORIGINAL_NAME="db-derby-10.10.1.1-lib"
+# EXTRACT_NEW_NAME=${EXTRACT_ORIGINAL_NAME}
+# APP_DEST="${DEST}"
+# downloadDepencies
 
-DERBY_FILE_LOCATION="${DEST}/libertyBinaries/${BM_VERSION}/usr/shared/resources/derby/"
-echoAndRunCmd "mkdir -p ${DERBY_FILE_LOCATION}"
-echoAndRunCmd "cp ${APP_DEST}/${EXTRACT_NEW_NAME}/lib/derby.jar ${DERBY_FILE_LOCATION}"
-
-##########################
-
-unsetVars
-APP_URL="https://github.com/WASdev/sample.daytrader7/archive/v1.2.zip"
-APP_ARCHIVE="$(basename ${APP_URL})"
-EXTRACT_ORIGINAL_NAME="sample.daytrader7-1.2"
-EXTRACT_NEW_NAME=${EXTRACT_ORIGINAL_NAME}
-APP_DEST="${DEST}"
-downloadDepencies
-
-JMX_FILE_LOCATION="${DEST}/scripts/resource/client_scripts"
-echoAndRunCmd "mkdir -p ${JMX_FILE_LOCATION}"
-echoAndRunCmd "cp ${APP_DEST}/${EXTRACT_NEW_NAME}/jmeter_files/daytrader7.jmx ${JMX_FILE_LOCATION}"
+# DERBY_FILE_LOCATION="${DEST}/libertyBinaries/${BM_VERSION}/usr/shared/resources/derby/"
+# echoAndRunCmd "mkdir -p ${DERBY_FILE_LOCATION}"
+# echoAndRunCmd "cp ${APP_DEST}/${EXTRACT_NEW_NAME}/lib/derby.jar ${DERBY_FILE_LOCATION}"
 
 ##########################
 
-unsetVars
-APP_URL="https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-3.3.zip"
-APP_ARCHIVE="$(basename ${APP_URL})"
-EXTRACT_ORIGINAL_NAME="apache-jmeter-3.3" 
-EXTRACT_NEW_NAME=${EXTRACT_ORIGINAL_NAME}
-APP_DEST="${DEST}/JMeter"
-downloadDepencies
+# unsetVars
+# APP_URL="https://github.com/WASdev/sample.daytrader7/archive/v1.2.zip"
+# APP_ARCHIVE="$(basename ${APP_URL})"
+# EXTRACT_ORIGINAL_NAME="sample.daytrader7-1.2"
+# EXTRACT_NEW_NAME=${EXTRACT_ORIGINAL_NAME}
+# APP_DEST="${DEST}"
+# downloadDepencies
 
-JMETER_LOCATION="${APP_DEST}/${EXTRACT_NEW_NAME}"
-downloadJmeterDependencies
+# JMX_FILE_LOCATION="${DEST}/scripts/resource/client_scripts"
+# echoAndRunCmd "mkdir -p ${JMX_FILE_LOCATION}"
+# echoAndRunCmd "cp ${APP_DEST}/${EXTRACT_NEW_NAME}/jmeter_files/daytrader7.jmx ${JMX_FILE_LOCATION}"
+
+##########################
+
+# unsetVars
+# APP_URL="https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-3.3.zip"
+# APP_ARCHIVE="$(basename ${APP_URL})"
+# EXTRACT_ORIGINAL_NAME="apache-jmeter-3.3" 
+# EXTRACT_NEW_NAME=${EXTRACT_ORIGINAL_NAME}
+# APP_DEST="${DEST}/JMeter"
+# downloadDepencies
+
+# JMETER_LOCATION="${APP_DEST}/${EXTRACT_NEW_NAME}"
+# downloadJmeterDependencies
 
 ##########################
 
