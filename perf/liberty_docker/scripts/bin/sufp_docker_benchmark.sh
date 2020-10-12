@@ -83,17 +83,13 @@ ROOT_RESULTS_DIR    - Absolute path of Liberty results directory on remote stora
 }
 
 echo "Inside sufp_docker_benchmark.sh"
-#TODO
-#WL- only works with latest cuurently
-#OL - only uses kernel image currently, may nee dto add full.
 
-# Set release and docker tag to pull
-# echo "Clean Docker" 
-# docker stop $(docker ps -a -q); docker rm $(docker ps -a -q)
+TAG=full
 
-# echo "BUILD=${BUILD}"
-# echo "IMAGE=${OPENLIBERTY_IMAGE}"
-# echo "BASE_TAG=${BASE_TAG}"
-# $(dirname $0)/buildAll_wasperf.sh` ${BUILD} ${BASE_TAG}
-# #fi
-# BUILD=`ssh ${APP_HOST} /opt/docker-scripts/getOLDBuildLevel.sh`
+echo "Found Liberty Release: ${RELEASE}"
+echo "Found Build: ${BUILD}"
+echo "JDK_LEVEL=${JDK_LEVEL}"
+echo "Found Java Build: ${JAVA_BUILD}"
+echo "Found Scenario: ${SCENARIO}"
+
+echo "Get Latest ${MP_RELEASE} code from github"

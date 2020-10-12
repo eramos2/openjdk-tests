@@ -59,6 +59,7 @@ export APP_VERSION="daytrader-ee7"
 export WLP_SKIP_MAXPERMSIZE="1"
 
 export MP_RELEASES=(microProfile-3.3)
+export MP_RELEASE=microProfile-3.3
 export APP_HOST=titans16
 export PORT=80
 export PROTOCOL=http
@@ -81,4 +82,4 @@ export DO_SUFT_TESTS=true
 #TODO: Need to soft-code these configs. Need to add various affinity tools in the perf pre-reqs ()
 export AFFINITY=""
 
-bash ${1}/scripts/bin/sufp_docker_benchmark.sh
+bash ${1}/scripts/bin/sufp_docker_benchmark.sh ${1}
