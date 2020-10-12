@@ -218,22 +218,46 @@ echo "BASE_TAG=${BASE_TAG}"
 echo "Current directory=$(dirname $0)"
 $(dirname $0)/buildAll_wasperf.sh ${BUILD} ${BASE_TAG}
 #!/bin/bash
-getOldBuild()
+getLibertyInfo()
 {
-  CID=`docker run -d openliberty/daily`
+  
 
   sleep 5
 
   # Yikes this is ugly....
-  docker logs ${CID} 2>/dev/null | grep "Open Liberty" | awk '{print $5}' | awk '{gsub("/"," "); print $2}'  | awk '{gsub("\\.", " "); print $4}' | awk '{print substr($1, 1, length($1)-1)}'
-  docker stop ${CID} > /dev/null
+  if [[ ${OPENLIBERTY} == "false" ]]
+  then
+    TAG=full
+    CID=`docker run -d websphere-liberty:${TAG}`
+    RELEASE=`docker logs ${CID} | grep "WebSphere Application Server" | awk '{print $6}' | awk '{gsub("/"," "); print $1}'`
+	docker stop ${CID} > /dev/null
+	CID=`docker run -d openliberty/daily`
+    sleep 5
+	BUILD=docker logs ${CID} | grep "WebSphere Application Server" | awk '{print $6}' | awk '{gsub("/"," "); print $2}'  | awk '{gsub("\.", " "); print $4}' | awk '{print substr($1, 1, length($1)-1)}'
+    docker stop ${CID} > /dev/null
+  else
+    CID=`docker run -d openliberty/daily`
+    RELEASE=`docker logs ${CID} 2>/dev/null | grep "Open Liberty" | awk '{print $5}' | awk '{gsub("/"," "); print $1}'`
+	BUILD=`docker logs ${CID} 2>/dev/null | grep "Open Liberty" | awk '{print $5}' | awk '{gsub("/"," "); print $2}'  | awk '{gsub("\\.", " "); print $4}' | awk '{print substr($1, 1, length($1)-1)}'`
+    docker exec ${CID} java -version 2>&1 | tr -d '\n'
+	docker stop ${CID} > /dev/null
+  fi
 }
+getLibertyInfo
+echo "Found Liberty Release: ${RELEASE}"
+echo "Found Build: ${BUILD}"
+echo "JDK_LEVEL=${JDK_LEVEL}"
+echo "Found Java Build: ${JAVA_BUILD}"
+echo "Found Scenario: ${SCENARIO}"
 
-BUILD=$( getOldBuild )
 echo "Found Build: ${BUILD}"
 
+##CREATE BUILD_RESULTS_DIR
+#DATE=$(date +%Y%m%d-%H%M%S)
+#BUILD_RESULTS_DIR=${OVERALL_RESULTS_DIR}/${BUILD}-${DATE}
+#mkdir -p ${BUILD_RESULTS_DIR}
 
-
+#echo "Results Dir: " ${BUILD_RESULTS_DIR}
 #########################
 
 # unsetVars
