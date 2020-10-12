@@ -229,8 +229,8 @@ getOldBuild()
   docker stop ${CID} > /dev/null
 }
 
-
-echo "Found Build: ${getOldBuild}"
+BUILD=$( getOldBuild )
+echo "Found Build: ${BUILD}"
 
 
 
