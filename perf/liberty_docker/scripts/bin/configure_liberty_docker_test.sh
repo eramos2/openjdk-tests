@@ -217,6 +217,7 @@ echo "IMAGE=${OPENLIBERTY_IMAGE}"
 echo "BASE_TAG=${BASE_TAG}"
 echo "Current directory=$(dirname $0)"
 $(dirname $0)/buildAll_wasperf.sh ${BUILD} ${BASE_TAG}
+OPENLIBERTY=true
 #!/bin/bash
 getLibertyInfo()
 {
@@ -233,7 +234,7 @@ getLibertyInfo()
 	docker stop ${CID} > /dev/null
 	CID=`docker run -d openliberty/daily`
     sleep 5
-	BUILD=docker logs ${CID} | grep "WebSphere Application Server" | awk '{print $6}' | awk '{gsub("/"," "); print $2}'  | awk '{gsub("\.", " "); print $4}' | awk '{print substr($1, 1, length($1)-1)}'
+	BUILD=docker logs ${CID} | grep "WebSphere Application Server" | awk '{print $6}' | awk '{gsub("/"," "); print $2}'  | awk '{gsub("\\.", " "); print $4}' | awk '{print substr($1, 1, length($1)-1)}'
     docker stop ${CID} > /dev/null
   else
     CID=`docker run -d openliberty/daily`
