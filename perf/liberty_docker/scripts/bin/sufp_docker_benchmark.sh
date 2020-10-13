@@ -173,6 +173,9 @@ then
   sleep 5
   echo "use Dockerfile to build image and run the container"
   cd ${DOCKER_AUTOMATED_GIT_DIR}/acmeair-authservice-java/
+  echo "Current working dir"
+  pwd
+  docker ps
   echo "Nuke Docker"
   docker stop $(docker ps -a -q); docker rm $(docker ps -a -q)
   
