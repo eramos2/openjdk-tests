@@ -31,6 +31,9 @@ echo "JDK=${JDK}"
 export JDK_DIR="${TEST_JDK_HOME}/.."
 echo "JDK_DIR=${JDK_DIR}"
 
+export LIBERTY_DOCKER_DIR=${TEST_JDK_HOME}/../../jvmtest/perf/liberty_docker
+echo "LIBERTY_DOCKER_DIR=${LIBERTY_DOCKER_DIR}"
+
 #TODO: Need to tune these options. Keeping them simple for now 
 export JDK_OPTIONS="-Xmx256m"
 export COLD="0"
@@ -82,4 +85,4 @@ export DO_SUFT_TESTS=true
 #TODO: Need to soft-code these configs. Need to add various affinity tools in the perf pre-reqs ()
 export AFFINITY=""
 
-bash ${1}/scripts/bin/sufp_docker_benchmark.sh ${1}
+bash ${1}/scripts/bin/sufp_docker_benchmark.sh
