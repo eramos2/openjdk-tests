@@ -175,6 +175,7 @@ then
   cd ${DOCKER_AUTOMATED_GIT_DIR}/acmeair-authservice-java/
   echo "Current working dir"
   pwd
+  ls
   docker ps
   echo "Nuke Docker"
   docker stop $(docker ps -a -q); docker rm $(docker ps -a -q)
