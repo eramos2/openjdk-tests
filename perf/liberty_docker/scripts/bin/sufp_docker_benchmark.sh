@@ -148,7 +148,7 @@ mvn clean package
 
 cd ..
 
-cp ${LIBERTY_DOCKER_DIR}/docker-compose-${MP_RELEASE}.yml ${DOCKER_AUTOMATED_GIT_DIR}/acmeair-mainservice-java/docker-compose.yml
+cp ${LIBERTY_DOCKER_DIR}/scripts/resource/docker-compose-${MP_RELEASE}.yml ${DOCKER_AUTOMATED_GIT_DIR}/acmeair-mainservice-java/docker-compose.yml
 
 # hack for now, may nee dto update java.security file occasionally
 if [[ "${2}" == *true* ]] 
@@ -163,4 +163,46 @@ then
   echo "COPY java.security /opt/ibm/java/jre/lib/security/java.security" >> acmeair-bookingservice-java/Dockerfile-daily
   echo "COPY java.security /opt/ibm/java/jre/lib/security/java.security" >> acmeair-customerservice-java/Dockerfile-daily
 
+fi
+
+if [[ ${DO_SUFT_TESTS} == "true" ]]
+then 
+  echo "Running SUFT Tests"
+  DOCKER_FILE=$(cat ${DOCKER_AUTOMATED_GIT_DIR}/acmeair-mainservice-java/docker-compose.yml | grep -A 2 acmeair-authservice-java | grep dockerfile | awk '{print $2}')
+  
+  sleep 5
+  echo "use Dockerfile to build image and run the container"
+  cd ${DOCKER_AUTOMATED_GIT_DIR}/acmeair-authservice-java/
+  echo "Nuke Docker"
+  docker stop $(docker ps -a -q); docker rm $(docker ps -a -q)
+  
+  for i in 1 2 3 4 5
+  do
+    docker build -t acmeair-authservice -f ${DOCKER_FILE} --no-cache .
+    docker run -d acmeair-authservice
+    CID=`docker ps | awk 'FNR == 2 {print}'| awk '{print $1}'`
+    sleep 30
+    echo "Get startup time results"
+
+    echo "--get stop time"
+    time1=`docker exec ${CID} cat /logs/messages.log | grep smarter  | awk '{gsub("\\\\["," "); print $0}' | awk '{print $1 " " $2}' | awk '{gsub(","," "); print $0 " UTC"}' | rev | awk '{sub(":","."); print $0}' | rev`
+    let stopMillis=`date "+%s%N" -d "$time1"`/1000000
+     
+    echo "--get docker log timestamp to get start time"
+    time2=`docker exec ${CID} cat /logs/messages.log | grep launched | awk '{gsub("\\\[", " "); print $0}'| awk '{print $1 " " $2}' | awk '{gsub(",",","); print $0 " UTC"}' | rev | awk '{sub(":","."); print $0}' | awk '{gsub(",",""); print $0}' | rev`
+    echo "time1: $time1 time2: $time2"  
+    let startMillis=`date "+%s%N" -d "$time2"`/1000000
+    
+    echo "--get startup time"
+    let startup=$((stopMillis - startMillis))
+    echo "Startup=${startup}"
+     
+    echo "Footprint=$(docker stats ${CID} --no-stream --format "table {{.MemUsage}}"| sed "1 d"| awk '{print substr($1, 1, length($1)-3)}')"
+
+    docker stop $CID
+    echo "Nuke Docker"
+    docker stop $(docker ps -a -q); docker rm $(docker ps -a -q)
+  done
+  echo "Clean Docker"
+  docker stop $(docker ps -a -q); docker rm $(docker ps -a -q)
 fi
