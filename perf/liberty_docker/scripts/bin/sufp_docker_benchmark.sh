@@ -189,10 +189,16 @@ then
     echo "Get startup time results"
 
     echo "--get stop time"
+    # normal
     time1=`docker exec ${CID} cat /logs/messages.log | grep smarter  | awk '{gsub("\\\\["," "); print $0}' | awk '{print $1 " " $2}' | awk '{gsub(","," "); print $0 " UTC"}' | rev | awk '{sub(":","."); print $0}' | rev`
+    if [[ $(echo $time1 | grep -c liberty_message) == 1 ]]
+    then
+      #json
+      time1=`docker exec ${CID} cat /logs/messages.log | grep smarter | awk -v k="text" '{n=split($0,a,","); for (i=1; i<=n; i++) print a[i]}' | grep ibm_datetime | awk '{gsub("\""," ");print $3}'`
+    fi
     let stopMillis=`date "+%s%N" -d "$time1"`/1000000
      
-    echo "--get docker log timestamp to get start time"
+    echo "--use docker log timestamp to get start time"
     time2=`docker exec ${CID} cat /logs/messages.log | grep launched | awk '{gsub("\\\[", " "); print $0}'| awk '{print $1 " " $2}' | awk '{gsub(",",","); print $0 " UTC"}' | rev | awk '{sub(":","."); print $0}' | awk '{gsub(",",""); print $0}' | rev`
     echo "time1: $time1 time2: $time2"  
     let startMillis=`date "+%s%N" -d "$time2"`/1000000
