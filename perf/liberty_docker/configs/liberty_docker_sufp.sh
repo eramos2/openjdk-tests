@@ -101,4 +101,4 @@ export DO_SUFT_TESTS=true
 #TODO: Need to soft-code these configs. Need to add various affinity tools in the perf pre-reqs ()
 export AFFINITY=""
 
-bash ${1}/scripts/bin/sufp_docker_benchmark_test.sh
+bash ${TEST_RESROOT}/scripts/bin/sufp_docker_benchmark_test.sh
