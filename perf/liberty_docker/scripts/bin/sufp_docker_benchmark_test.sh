@@ -105,8 +105,8 @@ pwd
 DOCKER_FILE="Dockerfile-daily"
 echo "Creating Dockerfile=${DOCKER_FILE} for SCENARIO=${SCENARIO}"
 echo "FROM openliberty/daily" >> ${DOCKER_FILE}
-echo "COPY --chown=1001:0 ${TEST_RESROOT}/${SCENARIO}/server.xml /config/server.xml" >> ${DOCKER_FILE} 
-echo "COPY --chown=1001:0 ${TEST_RESROOT}/${SCENARIO}/*.war /config/apps/" >> ${DOCKER_FILE}
+echo "COPY --chown=1001:0 ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/server.xml /config/server.xml" >> ${DOCKER_FILE} 
+echo "COPY --chown=1001:0 ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/*.war /config/apps/" >> ${DOCKER_FILE}
 
 echo "use following Dockerfile to build image and run the container"
 echo ${DOCKER_FILE}
