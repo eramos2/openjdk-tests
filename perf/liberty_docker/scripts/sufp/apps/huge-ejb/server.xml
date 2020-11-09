@@ -1,0 +1,19 @@
+<server>
+    <featureManager>
+        <feature>ejblite-3.2</feature>
+        <feature>servlet-3.1</feature>      
+    </featureManager>
+    
+    <!--
+        allow reuse of 'busy' ports for fast server recycling on linux (where ports remain 
+        blocked for up to 2 mins after server stops)
+        ${tradelite.http.port} set in bootstrap.properties
+    -->
+    
+    <application type="ear" id="BigEJB" name="EJB_500" location="/sufp/apps/huge-ejb/HugeEJBs_500.ear" />
+    <application type="ear" id="SmallServlet" name="Servlet_35MB" location="/sufp/apps/huge-ejb/ServletTestEAR_small.ear" />    
+    
+    <applicationMonitor dropinsEnabled="false" updateTrigger="mbean"/> <config updateTrigger="disabled"/>    
+    
+   
+</server>

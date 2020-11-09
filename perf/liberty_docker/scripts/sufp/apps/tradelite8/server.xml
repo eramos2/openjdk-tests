@@ -1,0 +1,35 @@
+<server>
+  <featureManager>
+    <feature>servlet-4.0</feature>
+    <feature>jsp-2.3</feature>
+    <feature>jndi-1.0</feature>
+    <feature>jdbc-4.2</feature>
+    <feature>websocket-1.1</feature>
+    <feature>ssl-1.0</feature>
+  </featureManager>
+        
+  <keyStore id="defaultKeyStore" password="yourPassword" />
+
+  <!--<logging traceSpecification="daytrader=fine"/>-->
+
+  <!-- allow reuse of 'busy' ports for fast server recycling on linux (where ports remain blocked for up to 2 mins after server stops) ${tradelite.http.port} set in bootstrap.properties --> 
+  <httpEndpoint host="*" httpPort="9080" httpsPort="9443" id="defaultHttpEndpoint"> 
+    <tcpOptions soReuseAddr="true"/> 
+    <httpOptions maxKeepAliveRequests="-1"/>
+  </httpEndpoint>
+
+  <webApplication id="tradelite8" location="/sufp/apps/tradelite8/tradelite8.war" name="tradelite8" context-root="tradelite"/>
+
+  <connectionManager agedTimeout="-1" connectionTimeout="0" id="conMgr1" maxIdleTime="-1" maxPoolSize="100" minPoolSize="100" purgePolicy="FailingConnectionOnly" reapTime="-1"/> 
+
+  <jdbcDriver id="DerbyEmbedded" libraryRef="DerbyLib"/>
+  <library filesetRef="DerbyFileset" id="DerbyLib"/>
+  <fileset dir="/sufp/apps/tradelite8/resources/DerbyLibs" id="DerbyFileset" includes="derby.jar"/>
+
+  <authData id="TradeDataSourceAuthData" password="db_password" user="db_username"/>
+  <authData id="TradeAdminAuthData" password="db_password" user="db_username"/>
+
+  <dataSource connectionManagerRef="conMgr1" id="DefaultDataSource" isolationLevel="TRANSACTION_READ_COMMITTED" jdbcDriverRef="DerbyEmbedded" jndiName="jdbc/TradeDataSource" statementCacheSize="60"> 
+    <properties.derby.embedded createDatabase="create" databaseName="/sufp/apps/tradelite8/resources/data/tradedb" password="db_password" user="db_username"/> 
+  </dataSource>
+</server>

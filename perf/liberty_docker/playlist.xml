@@ -15,9 +15,9 @@
 <playlist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="../../TKG/playlist.xsd">
 	<test>
-		<testCaseName>liberty-docker-startup-test</testCaseName>
-		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)acmeair_docker_test.sh$(Q) $(TEST_RESROOT); \
-		${TEST_STATUS}
+		<testCaseName>DockerOpenLibertySUFPAcmeAirMicro</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) acmeair-micro $(TEST_RESROOT) OL; \
+			${TEST_STATUS}
 		</command>
 		<!-- scripts are only tested on linux -->
 		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
@@ -29,10 +29,323 @@
 		</groups>
 	</test>
 	<test>
-		<testCaseName>liberty-docker-sufp</testCaseName>
-		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) cdi-fat $(TEST_RESROOT) OL; \
-		${TEST_STATUS}
+		<testCaseName>DockerOpenLibertySUFPAcmeAirMono</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) acmeair-mono $(TEST_RESROOT) OL; \
+			${TEST_STATUS}
 		</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>DockerOpenLibertySUFPCDIBase</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) cdi-base $(TEST_RESROOT) OL; \
+			${TEST_STATUS}
+		</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>DockerOpenLibertySUFPCDIFat</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) cdi-fat $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>DockerOpenLibertySUFPCDIOneJarFat</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) cdi-one-jar-fat $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>DockerOpenLibertySUFPDT7</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) dt7 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>DockerOpenLibertySUFPDT8</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) dt8 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>DockerOpenLibertySUFPHugeEJB</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) huge-ejb $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>DockerOpenLibertySUFPJavaEE7</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) javaee7 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>DockerOpenLibertySUFPJavaEE8</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) javaee8 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>DockerOpenLibertySUFPJaxrsFat</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) jaxrs-fat $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>DockerOpenLibertySUFPJenkins</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) jenkins $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>DockerOpenLibertySUFPMicroProfile3.0</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) micro-profile-3.0 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>DockerOpenLibertySUFPMicroProfile3.3</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) micro-profile-3.3 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>DockerOpenLibertySUFPMicroProfile4.0</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) micro-profile-4.0 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>DockerOpenLibertySUFPNoApp</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) no-app $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>DockerOpenLibertySUFPNoFeat</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) no-feat $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>DockerOpenLibertySUFPPetclinic</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) petclinic $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>DockerOpenLibertySUFPPingperf</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) pingperf $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>DockerOpenLibertySUFPSpring156</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) spring-1.5.6 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>DockerOpenLibertySUFPSpring211</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) spring-2.1.1 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>DockerOpenLibertySUFPTradelite7</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) tradelite7 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>DockerOpenLibertySUFPTradelite8</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) tradelite8 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>DockerOpenLibertySUFPWebprofile7</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) webProfile7 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>DockerOpenLibertySUFPWebprofile8</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) webProfile8 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>DockerOpenLibertySUFPWebprofile9</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) webProfile9 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
 		<!-- scripts are only tested on linux -->
 		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
 		<levels>
