@@ -1,0 +1,82 @@
+<server>
+  <featureManager>
+      <feature>jsp-2.2</feature>
+      <feature>jdbc-4.0</feature> 
+      <feature>websocket-1.1</feature> 
+<!--AddFeaturesSection-->
+  </featureManager>
+
+<!--
+   <executor coreThreads="4" maxThreads="4"/>
+-->
+<!-- allow reuse of 'busy' ports for fast server recycling on linux (where ports remain blocked for up to 2 mins after server stops) ${tradelite.http.port} set in bootstrap.properties --> 
+<httpEndpoint id="defaultHttpEndpoint" host="*" httpPort="9080" httpsPort="9443"> 
+<tcpOptions soReuseAddr="true" /> 
+<httpOptions maxKeepAliveRequests="-1" />
+</httpEndpoint>
+
+<iiopEndpoint id="defaultIiopEndpoint" iiopPort="2809" iiopsPort="2810"/>
+
+<application type="war" id="tradelite7" name="tradelite7" location="/sufp/apps/tradelite7/tradelite7.war" context-root="tradelite">
+<!--AppSecBindSection-->
+</application>
+
+<!--UserRepoSection-->
+
+<!--AuthCacheSection-->
+
+<!--KeyStoreSection-->
+
+<!--<transaction transactionLogDirectory="/ramdisk/tranlog"/>
+-->
+
+<applicationMonitor dropinsEnabled="false" updateTrigger="mbean"/> <config updateTrigger="disabled"/>
+
+<!--<executor name="LargeThreadPool" id="default" coreThreads="40" maxThreads="40" keepAlive="60s" stealPolicy="LOCAL" rejectedWorkPolicy="CALLER_RUNS" />
+-->
+
+
+<connectionManager id="conMgr1" agedTimeout="-1" connectionTimeout="5s" maxIdleTime="-1" maxPoolSize="60" minPoolSize="60" purgePolicy="FailingConnectionOnly" reapTime="-1"/>
+
+<jdbcDriver id="DB2JCC" libraryRef="DB2JCCLib"/> <library id="DB2JCCLib" filesetRef="DB2JCCFileset"/> <fileset id="DB2JCCFileset" dir="/opt/db2jars" includes="db2jcc4.jar"/>
+
+<authData id="TradeDataSourceAuthData" user="db2inst2" password="ibmdb2"/>
+<authData id="TradeAdminAuthData" user="db2inst2" password="ibmdb2"/>
+
+<dataSource jndiName="jdbc/TradeDataSource" id="DefaultDataSource" jdbcDriverRef="DB2JCC" connectionManagerRef="conMgr1" statementCacheSize="60" isolationLevel="TRANSACTION_READ_COMMITTED"> 
+<properties serverName="titans08" portNumber="50001" databaseName="trade7db" driverType="4" user="db2inst2" password="ibmdb2"/> 
+</dataSource>
+
+<messagingEngine id="defaultME">
+<queue id="TradeBrokerQueue" />
+<topicSpace id="TradeTopicSpace" />
+<fileStore path="/ramdisk/messageStore"/>
+</messagingEngine>
+
+<jmsQueueConnectionFactory jndiName="jms/TradeBrokerQCF" connectionManagerRef="ConMgr3">  
+<properties.wasJms />
+</jmsQueueConnectionFactory>
+<connectionManager id="ConMgr3" maxPoolSize="20"/>
+
+<jmsTopicConnectionFactory jndiName="jms/TradeStreamerTCF" connectionManagerRef="ConMgr4">
+<properties.wasJms />
+</jmsTopicConnectionFactory>
+<connectionManager id="ConMgr4" maxPoolSize="20"/>
+
+<jmsQueue id="TradeBrokerQueue" jndiName="jms/TradeBrokerQueue">
+<properties.wasJms queueName="TradeBrokerQueue" deliveryMode="NonPersistent" />
+</jmsQueue>
+
+<jmsTopic id="TradeStreamerTopic" jndiName="jms/TradeStreamerTopic">
+ <properties.wasJms topicSpace="TradeTopicSpace" deliveryMode="NonPersistent" />
+</jmsTopic>
+
+<jmsActivationSpec id="eis/TradeBrokerMDB" >
+<properties.wasJms destinationRef="TradeBrokerQueue" />
+</jmsActivationSpec>
+
+<jmsActivationSpec id="eis/TradeStreamerMDB" >
+<properties.wasJms destinationRef="TradeStreamerTopic" destinationType="javax.jms.Topic" />
+</jmsActivationSpec>
+
+</server>
