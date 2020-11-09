@@ -22,7 +22,7 @@ echo "Current Dir: $(pwd)"
 export PATH=/usr/local/staf/bin:$PATH
 export LD_LIBRARY_PATH=/usr/local/staf/lib:$LD_LIBRARY_PATH
 
-
+echo "MEASUREMENT_RUNS=${MEASUREMENT_RUNS}"
 echo "JDK_VERSION=${JDK_VERSION}"
 
 export JDK="j2sdk-image"
@@ -72,7 +72,7 @@ export ITERATIONS=1
 export JMETER_HOME=/opt/apache-jmeter-2.13
 export JMETER_THREADS=50
 export MEASUREMENT_DURATION=180
-export MEASUREMENT_RUNS=3
+export MEASUREMENT_RUNS=${MEASUREMENT_RUNS}
 export OVERALL_RESULTS_DIR=/opt/docker-results
 export BUILD=latest
 export BASE_TAG=java8-openj9

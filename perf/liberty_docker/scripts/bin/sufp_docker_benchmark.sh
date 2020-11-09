@@ -206,7 +206,7 @@ then
     echo "--get startup time"
     let startup=$((stopMillis - startMillis))
     echo "Startup=${startup}"
-     
+    echo "--get footprint"
     echo "Footprint=$(docker stats ${CID} --no-stream --format "table {{.MemUsage}}"| sed "1 d"| awk '{print substr($1, 1, length($1)-3)}')"
 
     docker stop $CID
