@@ -105,8 +105,8 @@ pwd
 DOCKER_FILE="Dockerfile-daily"
 echo "Creating Dockerfile=${DOCKER_FILE} for SCENARIO=${SCENARIO}"
 echo "FROM openliberty/daily" >> ${DOCKER_FILE}
-echo "COPY --chown=1001:0 ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/server.xml /config/server.xml" >> ${DOCKER_FILE} 
-echo "COPY --chown=1001:0 ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/*.war /config/apps/" >> ${DOCKER_FILE}
+echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/server.xml /config/server.xml" >> ${DOCKER_FILE} 
+echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/*.war /config/apps/" >> ${DOCKER_FILE}
 
 echo "use following Dockerfile to build the image and run the container"
 echo ${DOCKER_FILE}
@@ -121,7 +121,7 @@ docker stop $(docker ps -a -q); docker rm $(docker ps -a -q)
 for i in `seq 1 ${MEASUREMENT_RUNS}`
 do
   #docker build -t acmeair-authservice -f ${DOCKER_FILE} --no-cache .
-  docker build -t ${SCENARIO} -f ${DOCKER_FILE} --no-cache .
+  docker build -t ${SCENARIO} -f ${DOCKER_FILE} --no-cache ${TEST_RESROOT}
   #docker run -d acmeair-authservice
   docker run -d ${SCENARIO}
   CID=`docker ps | awk 'FNR == 2 {print}'| awk '{print $1}'`
