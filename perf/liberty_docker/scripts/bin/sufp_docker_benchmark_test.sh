@@ -107,7 +107,11 @@ DOCKER_FILE="Dockerfile-daily"
 echo "Creating Dockerfile=${DOCKER_FILE} for SCENARIO=${SCENARIO}"
 echo "FROM openliberty/daily" >> ${DOCKER_FILE}
 echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/server.xml /config/server.xml" >> ${DOCKER_FILE} 
+#Check if war file exist for copy
+if [[ `cat ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/*.war) | grep *.war` ]]
+then
 echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/*.war /config/apps/" >> ${DOCKER_FILE}
+fi
 
 #Edit server.xml to point to app location
 serverXML="scripts/sufp/apps/${SCENARIO}/server.xml"
