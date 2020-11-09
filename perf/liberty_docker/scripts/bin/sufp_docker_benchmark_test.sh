@@ -102,11 +102,20 @@ echo "Running SUFT Tests"
 echo "Current directory is:"
 pwd
 
+
 DOCKER_FILE="Dockerfile-daily"
 echo "Creating Dockerfile=${DOCKER_FILE} for SCENARIO=${SCENARIO}"
 echo "FROM openliberty/daily" >> ${DOCKER_FILE}
 echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/server.xml /config/server.xml" >> ${DOCKER_FILE} 
 echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/*.war /config/apps/" >> ${DOCKER_FILE}
+
+#Edit server.xml to point to app location
+serverXML="scripts/sufp/apps/${SCENARIO}/server.xml"
+sed -i "s|\"/sufp/apps/${SCENARIO}|\"/config/apps|g" ${TEST_RESROOT}/${serverXML}
+if [[ `echo ${SCENARIO} | grep spring ` ]] ; then
+	echo "RUN mkdir -p /config/dropins/spring" >> ${DOCKER_FILE}
+  echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/*.jar /config/dropins/spring" >> ${DOCKER_FILE}
+fi
 
 echo "use following Dockerfile to build the image and run the container"
 echo ${DOCKER_FILE}
