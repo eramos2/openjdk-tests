@@ -133,10 +133,12 @@ docker stop $(docker ps -a -q); docker rm $(docker ps -a -q)
   
 for i in `seq 1 ${MEASUREMENT_RUNS}`
 do
+  #convert scenario name to lowercase so it can be passed as the docker container tag 
+  scenarioTag=`echo "${SCENARIO}" | awk '{print tolower($0)}'`
   #docker build -t acmeair-authservice -f ${DOCKER_FILE} --no-cache .
-  docker build -t ${SCENARIO} -f ${DOCKER_FILE} --no-cache ${TEST_RESROOT}
+  docker build -t ${scenarioTag} -f ${DOCKER_FILE} --no-cache ${TEST_RESROOT}
   #docker run -d acmeair-authservice
-  docker run -d ${SCENARIO}
+  docker run -d ${scenarioTag}
   CID=`docker ps | awk 'FNR == 2 {print}'| awk '{print $1}'`
   sleep 30
   echo "Get startup time results"
