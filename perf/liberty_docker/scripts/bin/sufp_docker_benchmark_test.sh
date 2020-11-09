@@ -108,7 +108,7 @@ echo "FROM openliberty/daily" >> ${DOCKER_FILE}
 echo "COPY --chown=1001:0 ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/server.xml /config/server.xml" >> ${DOCKER_FILE} 
 echo "COPY --chown=1001:0 ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/*.war /config/apps/" >> ${DOCKER_FILE}
 
-echo "use following Dockerfile to build image and run the container"
+echo "use following Dockerfile to build the image and run the container"
 echo ${DOCKER_FILE}
 cat ${DOCKER_FILE}
 echo "Current working dir"
