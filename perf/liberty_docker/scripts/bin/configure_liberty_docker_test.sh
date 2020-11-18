@@ -73,6 +73,11 @@ populateDatabase()
 	fi
 }
 
+nukeDocker()
+{
+	docker stop $(docker ps -a -q); docker rm $(docker ps -a -q)
+}
+
 JMETER_DEPENDENCIES_URL=(
 	"https://github.com/maciejzaleski/JMeter-WebSocketSampler/releases/download/version-1.0.2/JMeterWebSocketSampler-1.0.2-SNAPSHOT.jar"
     "https://repo1.maven.org/maven2/org/eclipse/jetty/websocket/websocket-server/9.1.1.v20140108/websocket-server-9.1.1.v20140108.jar"
@@ -105,7 +110,7 @@ downloadJmeterDependencies()
 
 unsetVars()
 {	
-	unset APP_URL APP_ARCHIVE EXTRACT_ORIGINAL_NAME EXTRACT_NEW_NAME APP_DEST
+	unset APP_URL APP_ARCHIVE EXTRACT_ORIGINAL_NAME EXTRACT_NEW_NAME APP_DEST GITHUB_OAUTH_TOKEN
 }
 
 downloadDepencies()
@@ -134,7 +139,14 @@ downloadDepencies()
 			echo "${LIBERTY_DEP_CACHE_LOCATION}/${APP_ARCHIVE} exists in Cache. Hence, not downloading it."
 		else
 			echo "${LIBERTY_DEP_CACHE_LOCATION}/${APP_ARCHIVE} doesn't exist in Cache. Hence, downloading it."
-			CURL_CMD="curl -OLk ${APP_URL}" 
+			if [ -z "${GITHUB_OAUTH_TOKEN}" ]; then
+				echo "No authentication needed"
+				CURL_CMD="curl -OLk ${APP_URL}"
+			else 
+			    echo "Use GITHUB_OAUTH_TOKEN to authenticate"
+				CURL_CMD="curl -OLk -H \"Authorization: token ${GITHUB_OAUTH_TOKEN}\" ${APP_URL}"
+			fi
+			 
 	
 			echoAndRunCmd "${CURL_CMD}"		
 		fi
@@ -206,9 +218,43 @@ EXTRACT_NEW_NAME="ci.docker.daily-master"
 APP_DEST="${DEST}/OL-docker-images"
 downloadDepencies
 
+##########################
+
+unsetVars
+APP_URL="https://github.ibm.com/was-docker/daily-liberty-images/archive/master.zip"
+APP_ARCHIVE="$(basename ${APP_URL})"
+EXTRACT_ORIGINAL_NAME=${APP_ARCHIVE}
+EXTRACT_NEW_NAME="daily-liberty-images-master"
+APP_DEST="${DEST}/CL-docker-images"
+GITHUB_OAUTH_TOKEN=${GITHUB_OAUTH_TOKEN}
+downloadDepencies
+
+#TODO
+#WL- only works with latest cuurently
+#OL - only uses kernel image currently, may nee dto add full.
+##Websphere Liberty
+
+USERNAME=wasperf@us.ibm.com
+PASSWORD=UmVncmVzc2lvbjZQQHRyb2w=
+BUILD=latest
+BASE_TAG=java8-ibmjava
+
+OPENLIBERTY=false
+
+DO_THROUGHPUT_TESTS=true
+DO_SUFT_TESTS=true
+echo "Clean Docker" 
+nukeDocker
+echo "BUILD=${BUILD}"
+echo "IMAGE=${OPENLIBERTY_IMAGE}"
+echo "BASE_TAG=${BASE_TAG}"
+echo "Current directory=$(dirname $0)"
+$(dirname $0)/websphere-liberty/build-daily-images-wasperf.sh ${USERNAME} ${DECODED_PASSWORD} ${BUILD} ${BASE_TAG}
+
+### Open Liberty
 # Set release and docker tag to pull
 echo "Clean Docker" 
-docker stop $(docker ps -a -q); docker rm $(docker ps -a -q)
+nukeDocker
 export BUILD=latest
 export BASE_TAG=java8-openj9
 export OPENLIBERTY_IMAGE=kernel
@@ -216,9 +262,12 @@ echo "BUILD=${BUILD}"
 echo "IMAGE=${OPENLIBERTY_IMAGE}"
 echo "BASE_TAG=${BASE_TAG}"
 echo "Current directory=$(dirname $0)"
-$(dirname $0)/buildAll_wasperf.sh ${BUILD} ${BASE_TAG}
-OPENLIBERTY=true
-#!/bin/bash
+$(dirname $0)/open-liberty/buildAll_wasperf.sh ${BUILD} ${BASE_TAG}
+
+
+
+
+
 getLibertyInfo()
 {
   
@@ -226,32 +275,40 @@ getLibertyInfo()
   sleep 5
 
   # Yikes this is ugly....
-  if [[ ${OPENLIBERTY} == "false" ]]
-  then
+#   if [[ ${OPENLIBERTY} == "false" ]]
+#   then
     TAG=full
     CID=`docker run -d websphere-liberty:${TAG}`
     RELEASE=`docker logs ${CID} | grep "WebSphere Application Server" | awk '{print $6}' | awk '{gsub("/"," "); print $1}'`
 	docker stop ${CID} > /dev/null
-	CID=`docker run -d openliberty/daily`
+	CID=`docker run -d websphereliberty/daily`
     sleep 5
 	BUILD=docker logs ${CID} | grep "WebSphere Application Server" | awk '{print $6}' | awk '{gsub("/"," "); print $2}'  | awk '{gsub("\\.", " "); print $4}' | awk '{print substr($1, 1, length($1)-1)}'
     docker stop ${CID} > /dev/null
-  else
+	echo "Found Websphere Liberty Release: ${RELEASE}"
+	echo "Found Build: ${BUILD}"
+	echo "JDK_LEVEL=${JDK_LEVEL}"
+	echo "Found Java Build: ${JAVA_BUILD}"
+	echo "Found Scenario: ${SCENARIO}"
+	echo "Found Build: ${BUILD}"
+	nukeDocker
+#   else
     CID=`docker run -d openliberty/daily`
     RELEASE=`docker logs ${CID} 2>/dev/null | grep "Open Liberty" | awk '{print $5}' | awk '{gsub("/"," "); print $1}'`
 	BUILD=`docker logs ${CID} 2>/dev/null | grep "Open Liberty" | awk '{print $5}' | awk '{gsub("/"," "); print $2}'  | awk '{gsub("\\.", " "); print $4}' | awk '{print substr($1, 1, length($1)-1)}'`
     docker exec ${CID} java -version 2>&1 | tr -d '\n'
 	docker stop ${CID} > /dev/null
-  fi
+	echo "Found Open Liberty Release: ${RELEASE}"
+	echo "Found Build: ${BUILD}"
+	echo "JDK_LEVEL=${JDK_LEVEL}"
+	echo "Found Java Build: ${JAVA_BUILD}"
+	echo "Found Scenario: ${SCENARIO}"
+	echo "Found Build: ${BUILD}"
+	nukeDocker
+#   fi
 }
 getLibertyInfo
-echo "Found Liberty Release: ${RELEASE}"
-echo "Found Build: ${BUILD}"
-echo "JDK_LEVEL=${JDK_LEVEL}"
-echo "Found Java Build: ${JAVA_BUILD}"
-echo "Found Scenario: ${SCENARIO}"
 
-echo "Found Build: ${BUILD}"
 
 ##CREATE BUILD_RESULTS_DIR
 #DATE=$(date +%Y%m%d-%H%M%S)

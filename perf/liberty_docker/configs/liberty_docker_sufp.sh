@@ -44,7 +44,6 @@ echo "TEST_RESROOT=${TEST_RESROOT}"
 
 shift
 
-
 export LIBERTY_VERSION="${1}"
 echo "LIBERTY_VERSION=${LIBERTY_VERSION}"
 

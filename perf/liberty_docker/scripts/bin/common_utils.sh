@@ -1861,3 +1861,15 @@ libertyServerRunningCheck()
       echo "Liberty is still running"
     fi
 }
+
+#######################################################################################
+#	Docker UTILS
+#######################################################################################
+
+##
+## Stop all docker containers, and remove them
+nukeDocker()
+{
+  echo "Nuke Docker"
+  docker stop $(docker ps -a -q); docker rm $(docker ps -a -q)
+}
