@@ -109,7 +109,7 @@ pwd
 DOCKER_FILE="Dockerfile-daily"
 echo "Creating Dockerfile=${DOCKER_FILE} for SCENARIO=${SCENARIO}"
 ## Check if we are running liberty Websphere or Open Liberty Docker image
-if [ ${LIBERTY_VERSION} == "WL" ]; then
+if [[ "${LIBERTY_VERSION}" == "WL" ]]; then
   echo "FROM websphereliberty/daily" >> ${DOCKER_FILE}
 else
   echo "FROM openliberty/daily" >> ${DOCKER_FILE}
@@ -117,7 +117,7 @@ fi
 
 echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/server.xml /config/server.xml" >> ${DOCKER_FILE} 
 #Check if war file exist for copy
-if [[ `cat ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/*.war) | grep *.war` ]]
+if [[ `cat ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/*.war | grep *.war` ]]
 then
 echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/*.war /config/apps/" >> ${DOCKER_FILE}
 fi
