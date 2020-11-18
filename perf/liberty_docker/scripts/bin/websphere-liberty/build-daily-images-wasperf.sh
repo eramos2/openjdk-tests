@@ -57,7 +57,7 @@ main() {
   echo "****** Running build script in $(pwd) with:"
   echo "Build label: ${short_build_label}"
   echo "Build URL: ${liberty_url}"
-  ../build-wasperf.sh --username="${USERNAME}" --password="${PASSWORD}" --repository="${REPO}" \
+  ./build-wasperf.sh --username="${USERNAME}" --password="${PASSWORD}" --repository="${REPO}" \
               --version="${VERSION}" --buildLabel="${short_build_label}" --buildUrl="${liberty_url} --baseTag="${BASE_TAG} --fileName="${FILE_NAME}"
   #docker tag websphere-liberty-daily:full-${BASE_TAG} websphere-liberty:full
   docker tag websphere-liberty-daily:full-${BASE_TAG} websphereliberty/daily:latest
