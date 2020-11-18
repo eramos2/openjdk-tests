@@ -72,7 +72,7 @@ export RESULTS_DIR="libertyResults"
 export LIBERTY_HOST="$(hostname)"
 export LAUNCH_SCRIPT="server"
 export LIBERTY_BINARIES_DIR="$1/libertyBinaries"
-export LIBERTY_VERSION="openliberty-19.0.0.4"
+#export LIBERTY_VERSION="openliberty-19.0.0.4"
 export APP_VERSION="daytrader-ee7"
 export WLP_SKIP_MAXPERMSIZE="1"
 
