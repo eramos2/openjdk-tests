@@ -109,6 +109,7 @@ pwd
 DOCKER_FILE="Dockerfile-daily"
 echo "Creating Dockerfile=${DOCKER_FILE} for SCENARIO=${SCENARIO}"
 ## Check if we are running liberty Websphere or Open Liberty Docker image
+echo "LIBERTY_VERSION="${LIBERTY_VERSION}
 if [[ "${LIBERTY_VERSION}" == "WL" ]]; then
   echo "FROM websphereliberty/daily" >> ${DOCKER_FILE}
 else
