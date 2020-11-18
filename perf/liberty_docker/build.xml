@@ -20,6 +20,7 @@
 
 	<!-- set global properties for this build -->
 	<property name="DEST" value="${BUILD_ROOT}/perf/liberty_docker" />
+	<property name="GITHUB_OAUTH_TOKEN" value="${GITHUB_OAUTH_TOKEN}" />
 
 	<!--Properties for this particular build-->
 	<property name="SRC" location="." />
@@ -38,6 +39,7 @@
 		<exec executable="bash">
 			<env key="DEST" value="${DEST}"/>
 			<env key="LIBERTY_DEP_CACHE_LOCATION" value="${env.PERF_ROOT}"/>
+			<env key="GITHUB_OAUTH_TOKEN" value="${GITHUB_OAUTH_TOKEN}"/>
 		    <arg value="${DEST}/scripts/bin/configure_liberty_docker_test.sh"/>
 		</exec>							
 	</target>

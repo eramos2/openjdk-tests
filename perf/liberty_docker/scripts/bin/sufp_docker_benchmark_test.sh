@@ -82,6 +82,9 @@ ROOT_RESULTS_DIR    - Absolute path of Liberty results directory on remote stora
 "
 }
 
+ # Import the common utilities needed to run this benchmark
+. "$(dirname $0)"/common_utils.sh
+
 echo "Inside sufp_docker_benchmark_test.sh"
 
 TAG=full
@@ -105,7 +108,13 @@ pwd
 
 DOCKER_FILE="Dockerfile-daily"
 echo "Creating Dockerfile=${DOCKER_FILE} for SCENARIO=${SCENARIO}"
-echo "FROM openliberty/daily" >> ${DOCKER_FILE}
+## Check if we are running liberty Websphere or Open Liberty Docker image
+if [ ${LIBERTY_VERSION} == "WL" ]; then
+  echo "FROM websphereliberty/daily" >> ${DOCKER_FILE}
+else
+  echo "FROM openliberty/daily" >> ${DOCKER_FILE}
+fi
+
 echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/server.xml /config/server.xml" >> ${DOCKER_FILE} 
 #Check if war file exist for copy
 if [[ `cat ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/*.war) | grep *.war` ]]
@@ -128,8 +137,7 @@ echo "Current working dir"
 pwd
 ls
 docker ps
-echo "Nuke Docker"
-docker stop $(docker ps -a -q); docker rm $(docker ps -a -q)
+nukeDocker
   
 for i in `seq 1 ${MEASUREMENT_RUNS}`
 do
@@ -139,6 +147,7 @@ do
   docker build -t ${scenarioTag} -f ${DOCKER_FILE} --no-cache ${TEST_RESROOT}
   #docker run -d acmeair-authservice
   docker run -d ${scenarioTag}
+  #Get Container ID
   CID=`docker ps | awk 'FNR == 2 {print}'| awk '{print $1}'`
   sleep 30
   echo "Get startup time results"
@@ -165,10 +174,9 @@ do
   echo "Footprint=$(docker stats ${CID} --no-stream --format "table {{.MemUsage}}"| sed "1 d"| awk '{print substr($1, 1, length($1)-3)}')"
 
   docker stop $CID
-  echo "Nuke Docker"
-  docker stop $(docker ps -a -q); docker rm $(docker ps -a -q)
+  nukeDocker
 done
 
 echo "Clean Docker"
-docker stop $(docker ps -a -q); docker rm $(docker ps -a -q)
+nukeDocker
 
