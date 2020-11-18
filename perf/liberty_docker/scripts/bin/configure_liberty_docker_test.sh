@@ -110,7 +110,7 @@ downloadJmeterDependencies()
 
 unsetVars()
 {	
-	unset APP_URL APP_ARCHIVE EXTRACT_ORIGINAL_NAME EXTRACT_NEW_NAME APP_DEST GITHUB_OAUTH_TOKEN
+	unset APP_URL APP_ARCHIVE EXTRACT_ORIGINAL_NAME EXTRACT_NEW_NAME APP_DEST GIT_AUTH_NEEDED
 }
 
 downloadDepencies()
@@ -139,7 +139,7 @@ downloadDepencies()
 			echo "${LIBERTY_DEP_CACHE_LOCATION}/${APP_ARCHIVE} exists in Cache. Hence, not downloading it."
 		else
 			echo "${LIBERTY_DEP_CACHE_LOCATION}/${APP_ARCHIVE} doesn't exist in Cache. Hence, downloading it."
-			if [ -z "${GITHUB_OAUTH_TOKEN}" ]; then
+			if [ -z "${GIT_AUTH_NEEDED}" ]; then
 				echo "No authentication needed"
 				CURL_CMD="curl -OLk ${APP_URL}"
 			else 
@@ -226,8 +226,8 @@ APP_ARCHIVE="$(basename ${APP_URL})"
 EXTRACT_ORIGINAL_NAME=${APP_ARCHIVE}
 EXTRACT_NEW_NAME="daily-liberty-images-master"
 APP_DEST="${DEST}/CL-docker-images"
-echo "GITHUB_OAUTH_TOKEN=${GITHUB_OAUTH_TOKEN}"
-GITHUB_OAUTH_TOKEN=${GITHUB_OAUTH_TOKEN}
+#The actual token is passed through build.xml
+GIT_AUTH_NEEDED=true 
 downloadDepencies
 
 #TODO
