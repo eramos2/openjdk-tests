@@ -278,10 +278,12 @@ getLibertyInfo()
 #   if [[ ${OPENLIBERTY} == "false" ]]
 #   then
     TAG=full
-    CID=`docker run -d websphere-liberty:${TAG}`
+    CID=`docker run -d websphereliberty/daily:${TAG}`
     RELEASE=`docker logs ${CID} | grep "WebSphere Application Server" | awk '{print $6}' | awk '{gsub("/"," "); print $1}'`
 	docker stop ${CID} > /dev/null
+	#CID=`docker run -d websphereliberty/daily`
 	CID=`docker run -d websphereliberty/daily`
+	
     sleep 5
 	BUILD=docker logs ${CID} | grep "WebSphere Application Server" | awk '{print $6}' | awk '{gsub("/"," "); print $2}'  | awk '{gsub("\\.", " "); print $4}' | awk '{print substr($1, 1, length($1)-1)}'
     docker stop ${CID} > /dev/null
