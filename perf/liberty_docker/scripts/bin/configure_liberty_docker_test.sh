@@ -226,6 +226,7 @@ APP_ARCHIVE="$(basename ${APP_URL})"
 EXTRACT_ORIGINAL_NAME=${APP_ARCHIVE}
 EXTRACT_NEW_NAME="daily-liberty-images-master"
 APP_DEST="${DEST}/CL-docker-images"
+echo "GITHUB_OAUTH_TOKEN=${GITHUB_OAUTH_TOKEN}"
 GITHUB_OAUTH_TOKEN=${GITHUB_OAUTH_TOKEN}
 downloadDepencies
 
