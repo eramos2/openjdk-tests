@@ -82,7 +82,7 @@ main () {
     echo "****** Found latest build"
     printf "URL: %s \nLabel: %s \nVersion: %s\n" "${fullImageUrl}" "${buildLabel}" "${version}"
     #cd ci.docker
-    echo "****** Starting daily build from $(pwd)..."
+    echo "****** Starting OL daily build from $(pwd)..."
 
     ./build-wasperf.sh --version="${version}" --buildLabel="${buildLabel}" --fullDownloadUrl="${fullImageUrl}" --baseTag="${BASE_TAG}" --fileName="${FILE_NAME}"
     docker tag openliberty/daily:full-${BASE_TAG}  openliberty/daily:latest
