@@ -53,7 +53,7 @@ main() {
   local short_build_label=$(format_short_build_label "${full_build_label}")
   local liberty_url=$(format_liberty_url "${full_build_label}")
   #cd ci.docker
-
+  echo "Current directory=$(dirname $0)"
   echo "****** Running WL build script in $(pwd) with:"
   echo "Build label: ${short_build_label}"
   echo "Build URL: ${liberty_url}"
