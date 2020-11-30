@@ -236,7 +236,7 @@ downloadDepencies
 ##Websphere Liberty
 
 USERNAME=wasperf@us.ibm.com
-PASSWORD=UmVncmVzc2lvbjZQQHRyb2w=
+PASSWORD=UmVncmVzc2lvbjdQQHRyb2w=
 DECODED_PASSWORD=`echo ${PASSWORD} | base64 --decode`
 BUILD=latest
 BASE_TAG=java8-ibmjava
