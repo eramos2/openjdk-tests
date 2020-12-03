@@ -131,6 +131,7 @@ build_ibm_java() {
   ## Create directory if it doesn't already exist
   mkdir -p java
   wget https://raw.githubusercontent.com/ibmruntimes/ci.docker/master/ibmjava/8/jre/ubi/Dockerfile -O java/Dockerfile
+  cat java/Dockerfile
   echo "Do we get here in build-wasperf.sh?"
   ## replace references to user 1001 as we need to build as root
   sed -i.bak '/useradd -u 1001*/d' ./java/Dockerfile && sed -i.bak '/USER 1001/d' ./java/Dockerfile && rm java/Dockerfile.bak
