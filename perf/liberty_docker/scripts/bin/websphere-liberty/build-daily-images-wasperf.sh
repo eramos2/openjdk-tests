@@ -4,7 +4,7 @@ set -Eeo pipefail
 
 readonly REPO="websphere-liberty-daily"
 readonly VERSION="20.0.0.6"
-readonly DOWNLOAD_URL="https://libfsfe04.hursley.ibm.com/liberty/dev/Xo/release2"
+readonly DOWNLOAD_URL="https://libfsfe04.hursley.ibm.com/liberty/dev/Xo/release"
 #readonly DOWNLOAD_URL="https://public.dhe.ibm.com/ibmdl/export/pub/software/openliberty/runtime/nightly/"
 readonly USERNAME="$1"
 readonly PASSWORD="$2"
@@ -61,6 +61,8 @@ main() {
               --version="${VERSION}" --buildLabel="${short_build_label}" --buildUrl="${liberty_url} --baseTag="${BASE_TAG} --fileName="${FILE_NAME}"
   #docker tag websphere-liberty-daily:full-${BASE_TAG} websphere-liberty:full
   docker tag websphere-liberty-daily:full-${BASE_TAG} websphereliberty/daily:latest
+  echo "Finished main in build-daily-images-wasperf.sh"
+  pwd
 
 }
 ## @returns the last good build's label as a string
