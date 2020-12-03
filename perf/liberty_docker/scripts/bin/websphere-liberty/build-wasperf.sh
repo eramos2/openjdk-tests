@@ -124,6 +124,9 @@ build_liberty_with_tag() {
 build_ibm_java() {
   docker pull registry.access.redhat.com/ubi8/ubi
   ## pull Dockerfile from ibmjava
+  echo "Current working dir: in build-wasperf.sh"
+  pwd
+  ls
   mkdir java
   wget https://raw.githubusercontent.com/ibmruntimes/ci.docker/master/ibmjava/8/jre/ubi/Dockerfile -O java/Dockerfile
 
