@@ -148,6 +148,10 @@ build_latest_tag() {
     for i in "${!tag_exts_ubi[@]}"; do
         local docker_dir="${IMAGE_ROOT}/${tag}"
         local full_path="${docker_dir}/Dockerfile.${file_exts_ubi[$i]}"
+
+        echo $docker_dir
+        ls $docker_dir
+        echo $full_path
         if [[ -f "${full_path}" ]]; then
             local build_tag="${REPO}:full-${tag_exts_ubi[$i]}"
 
