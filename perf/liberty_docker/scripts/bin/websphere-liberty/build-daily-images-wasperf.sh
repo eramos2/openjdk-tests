@@ -11,9 +11,11 @@ readonly PASSWORD="$2"
 
 readonly BUILD="${3}"
 readonly BASE_TAG="${4}"
-
+echo "Settings inside build-daily-images-wasperf.sh"
 echo $USERNAME
 echo $PASSWORD
+echo $BUILD
+echo $BASE_TAG
 #echo $BUILD
 
 if [[ ${BASE_TAG} == *java8-openj9-ubi* ]]
