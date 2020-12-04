@@ -147,12 +147,14 @@ build_latest_tag() {
     local file_exts_ubi=($fileName)
     local tag_exts_ubi=($baseTag)
     echo "Do we get here2: in build-wasperf.sh"
+    echo $fileName
+    echo $baseTag
     for i in "${!tag_exts_ubi[@]}"; do
         local docker_dir="${IMAGE_ROOT}/${tag}"
         local full_path="${docker_dir}/Dockerfile.${file_exts_ubi[$i]}"
         echo "Inside for loop build_latest_tag"
         echo $docker_dir
-        ls $docker_dir
+        //==#ls $docker_dir
         echo $full_path
         if [[ -f "${full_path}" ]]; then
             local build_tag="${REPO}:full-${tag_exts_ubi[$i]}"
