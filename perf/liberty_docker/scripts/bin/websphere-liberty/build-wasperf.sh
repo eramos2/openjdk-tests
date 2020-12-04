@@ -50,8 +50,10 @@ main() {
 
   ## build tags, expand this as requirements change
   local tags=(kernel)
-
+  echo "before going in to for loop for tags"
+  echo "${tags}"
   for tag in "${tags[@]}"; do
+    echo "this is a tag: $tag"
     build_latest_tag $tag
   done
 }
@@ -144,11 +146,11 @@ build_latest_tag() {
     # set image information arrays
     local file_exts_ubi=($fileName)
     local tag_exts_ubi=($baseTag)
-
+    echo "Do we get here2: in build-wasperf.sh"
     for i in "${!tag_exts_ubi[@]}"; do
         local docker_dir="${IMAGE_ROOT}/${tag}"
         local full_path="${docker_dir}/Dockerfile.${file_exts_ubi[$i]}"
-
+        echo "Inside for loop build_latest_tag"
         echo $docker_dir
         ls $docker_dir
         echo $full_path
