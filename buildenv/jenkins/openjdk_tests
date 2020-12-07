@@ -105,6 +105,14 @@ def PLATFORM_MAP = [
         'LABEL' : 'ci.role.test&&hw.arch.x86&&sw.os.windows',
     ],
     'x86-64_linux' : [
+        'SPEC' : 'linux_x86-64_mxdptrs',
+        'LABEL' : 'ci.role.test&&hw.arch.x86&&sw.os.linux',
+    ],
+    'x86-64_linux12131' : [
+        'SPEC' : 'linux_x86-64_cmprssptrs',
+        'LABEL' : 'ci.role.test&&hw.arch.x86&&sw.os.linux',
+    ],
+    'x86-64_linux_xl' : [
         'SPEC' : 'linux_x86-64',
         'LABEL' : 'ci.role.test&&hw.arch.x86&&sw.os.linux',
         'DynamicAgents' : ['azure', 'fyre']
