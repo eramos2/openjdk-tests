@@ -231,6 +231,8 @@ APP_DEST="${DEST}/CL-docker-images"
 #The actual token is passed through build.xml
 GIT_AUTH_NEEDED=true 
 downloadDepencies
+echo "git token"
+echo ${GITHUB_OAUTH_TOKEN}
 rm -rf ${LIBERTY_DEP_CACHE_LOCATION}/master.zip
 ##########################
 unsetVars
