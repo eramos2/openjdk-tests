@@ -128,8 +128,8 @@ build_ibm_java() {
   ## pull Dockerfile from ibmjava
   echo "Current working dir: in build-wasperf.sh"
   pwd
-  ls java
-  cat java/Dockerfile
+  #ls java
+  #cat java/Dockerfile
   ## Create directory if it doesn't already exist
   mkdir -p java
   wget https://raw.githubusercontent.com/ibmruntimes/ci.docker/master/ibmjava/8/jre/ubi/Dockerfile -O java/Dockerfile
