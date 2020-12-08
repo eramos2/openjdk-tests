@@ -237,7 +237,7 @@ APP_ARCHIVE="$(basename ${APP_URL})"
 EXTRACT_ORIGINAL_NAME=${APP_ARCHIVE}
 EXTRACT_NEW_NAME="ci.docker"
 APP_DEST="${DEST}/CL-docker-images"
-CI_DOCKER="${DEST}/CL-docker-images/ci.docker"
+CI_DOCKER="${DEST}/CL-docker-images"
 downloadDepencies
 
 #TODO

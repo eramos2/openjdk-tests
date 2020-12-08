@@ -17,6 +17,7 @@ echo $USERNAME
 echo $PASSWORD
 echo $BUILD
 echo $BASE_TAG
+echo $CI_DOCKER
 #echo $BUILD
 
 if [[ ${BASE_TAG} == *java8-openj9-ubi* ]]
@@ -56,6 +57,8 @@ main() {
   local short_build_label=$(format_short_build_label "${full_build_label}")
   local liberty_url=$(format_liberty_url "${full_build_label}")
   echo "cd to ${CI_DOCKER}"
+  pwd
+  ls ${CI_DOCKER}
   cd $CI_DOCKER
   pwd
   ls
