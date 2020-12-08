@@ -150,14 +150,17 @@ downloadDepencies()
 			    echo "Use GITHUB_OAUTH_TOKEN to authenticate - $GITHUB_OAUTH_TOKEN"
 				echo $GITHUB_OAUTH_TOKEN
 				echo  '$GITHUB_OAUTH_TOKEN' | base64
-				CURL_CMD="curl -OLk -H 'Authorization: token $GITHUB_OAUTH_TOKEN' ${APP_URL}"
+				CURL_CMD="curl -OLk -v -H 'Authorization: token $GITHUB_OAUTH_TOKEN' ${APP_URL}"
 				CURL_CMD="eval \"$CURL_CMD\""
 				echo $CURL_CMD >> $LIBERTY_DEP_CACHE_LOCATION/down.txt
 				echo "This is the command ${CURL_CMD}"
 			fi
 			 
 	
-			echoAndRunCmd "${CURL_CMD}"		
+			echoAndRunCmd "${CURL_CMD}"
+			echo "benchmarks ls: "
+			pwd
+			ls $LIBERTY_DEP_CACHE_LOCATION		
 		fi
 		
 		if [ "${APP_ARCHIVE}" != "${EXTRACT_NEW_NAME}" ]; then
@@ -166,7 +169,9 @@ downloadDepencies()
 			
 			if [ "${EXTRACT_NEW_NAME}" != "${EXTRACT_ORIGINAL_NAME}" ]; then
 				echo "EXTRACT_NEW_NAME (${EXTRACT_NEW_NAME}) is not equal to EXTRACT_ORIGINAL_NAME (${EXTRACT_ORIGINAL_NAME}). Hence, need to rename the directory."
+				ls ${APP_DEST}
 				echoAndRunCmd "mv ${APP_DEST}/${EXTRACT_ORIGINAL_NAME} ${APP_DEST}/${EXTRACT_NEW_NAME}"
+				ls ${APP_DEST}
 			else
 				echo "EXTRACT_NEW_NAME is equal to EXTRACT_ORIGINAL_NAME (${EXTRACT_ORIGINAL_NAME}). Hence, no need to rename directory."	
 			fi
