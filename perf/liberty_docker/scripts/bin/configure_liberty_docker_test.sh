@@ -143,9 +143,9 @@ downloadDepencies()
 				echo "No authentication needed"
 				CURL_CMD="curl -OLk ${APP_URL}"
 			else 
-			    echo "Use GITHUB_OAUTH_TOKEN to authenticate - ${GITHUB_OAUTH_TOKEN}"
-				echo ${GITHUB_OAUTH_TOKEN}
-				CURL_CMD="curl -OLk -H 'Authorization: token ${GITHUB_OAUTH_TOKEN}' ${APP_URL}"
+			    echo "Use GITHUB_OAUTH_TOKEN to authenticate - $GITHUB_OAUTH_TOKEN"
+				echo $GITHUB_OAUTH_TOKEN
+				CURL_CMD="curl -OLk -H 'Authorization: token $GITHUB_OAUTH_TOKEN' ${APP_URL}"
 				echo ${CURL_CMD}
 			fi
 			 
