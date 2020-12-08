@@ -48,8 +48,8 @@ checkAndSetEnvVars()
 	echo "DEST=${DEST}"
 	echo "LIBERTY_DEP_CACHE_LOCATION=${LIBERTY_DEP_CACHE_LOCATION}"	
 	echo "git token"
-    echo ${GITHUB_OAUTH_TOKEN}
-	echo  "${GITHUB_OAUTH_TOKEN}" | base64
+    echo ${GIT_TOKEN}
+	echo  "${GIT_TOKEN}" | base64
 	printenv
 }
 
@@ -147,10 +147,10 @@ downloadDepencies()
 				echo "No authentication needed"
 				CURL_CMD="curl -OLk ${APP_URL}"
 			else 
-			    echo "Use GITHUB_OAUTH_TOKEN to authenticate - $GITHUB_OAUTH_TOKEN"
-				echo $GITHUB_OAUTH_TOKEN
-				echo  '$GITHUB_OAUTH_TOKEN' | base64
-				CURL_CMD="curl -OLk -v -H 'Authorization: token $GITHUB_OAUTH_TOKEN' ${APP_URL}"
+			    echo "Use GIT_TOKEN to authenticate - $GIT_TOKEN"
+				echo $GIT_TOKEN
+				echo  '$GIT_TOKEN' | base64
+				CURL_CMD="curl -OLk -v -H 'Authorization: token $GIT_TOKEN' ${APP_URL}"
 				CURL_CMD="eval \"$CURL_CMD\""
 				echo $CURL_CMD >> $LIBERTY_DEP_CACHE_LOCATION/down.txt
 				echo "This is the command ${CURL_CMD}"
@@ -236,7 +236,7 @@ rm -rf ${LIBERTY_DEP_CACHE_LOCATION}/master.zip
 
 unsetVars
 echo "git token"
-echo ${GITHUB_OAUTH_TOKEN}
+echo ${GIT_TOKEN}
 APP_URL="https://github.ibm.com/was-docker/daily-liberty-images/archive/master.zip"
 APP_ARCHIVE="$(basename ${APP_URL})"
 EXTRACT_ORIGINAL_NAME=${APP_ARCHIVE}
@@ -246,7 +246,7 @@ APP_DEST="${DEST}/CL-docker-images"
 GIT_AUTH_NEEDED=true 
 downloadDepencies
 echo "git token"
-echo ${GITHUB_OAUTH_TOKEN}
+echo ${GIT_TOKEN}
 ls $APP_DEST
 cp ${LIBERTY_DEP_CACHE_LOCATION}/master.zip ${LIBERTY_DEP_CACHE_LOCATION}/master-copy.zip
 ##########################
