@@ -47,6 +47,8 @@ checkAndSetEnvVars()
    
 	echo "DEST=${DEST}"
 	echo "LIBERTY_DEP_CACHE_LOCATION=${LIBERTY_DEP_CACHE_LOCATION}"	
+	echo "git token"
+    echo ${GITHUB_OAUTH_TOKEN}
 	printenv
 }
 
@@ -146,8 +148,8 @@ downloadDepencies()
 			else 
 			    echo "Use GITHUB_OAUTH_TOKEN to authenticate - $GITHUB_OAUTH_TOKEN"
 				echo $GITHUB_OAUTH_TOKEN
-				CURL_CMD="curl -OLk -H 'Authorization: token $GITHUB_OAUTH_TOKEN' ${APP_URL}"
-				echo ${CURL_CMD}
+				CURL_CMD="curl -OLk -H \"Authorization: token $GITHUB_OAUTH_TOKEN\" ${APP_URL}"
+				echo "This is the command ${CURL_CMD}"
 			fi
 			 
 	
@@ -224,6 +226,8 @@ rm -rf ${LIBERTY_DEP_CACHE_LOCATION}/master.zip
 ##########################
 
 unsetVars
+echo "git token"
+echo ${GITHUB_OAUTH_TOKEN}
 APP_URL="https://github.ibm.com/was-docker/daily-liberty-images/archive/master.zip"
 APP_ARCHIVE="$(basename ${APP_URL})"
 EXTRACT_ORIGINAL_NAME=${APP_ARCHIVE}
@@ -249,7 +253,7 @@ echo "ls WL-docker-images"
 ls ${DEST}/WL-docker-images
 ls ${DEST}/CL-docker-images
 ls ${DEST}/OL-docker-images
-mv ${DEST}/WL-docker-images/ci.docker ${DEST}/CL-docker-images/
+# mv ${DEST}/WL-docker-images/ci.docker* ${DEST}/CL-docker-images/
 #TODO
 #WL- only works with latest cuurently
 #OL - only uses kernel image currently, may nee dto add full.
