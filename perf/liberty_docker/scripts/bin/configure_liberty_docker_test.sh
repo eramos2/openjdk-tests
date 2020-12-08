@@ -240,7 +240,7 @@ downloadDepencies
 echo "git token"
 echo ${GITHUB_OAUTH_TOKEN}
 ls $APP_DEST
-rm -rf ${LIBERTY_DEP_CACHE_LOCATION}/master.zip
+cp ${LIBERTY_DEP_CACHE_LOCATION}/master.zip ${LIBERTY_DEP_CACHE_LOCATION}/master-copy.zip
 ##########################
 unsetVars
 APP_URL="https://github.com/WASdev/ci.docker/archive/master.zip"
