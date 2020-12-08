@@ -47,6 +47,7 @@ checkAndSetEnvVars()
    
 	echo "DEST=${DEST}"
 	echo "LIBERTY_DEP_CACHE_LOCATION=${LIBERTY_DEP_CACHE_LOCATION}"	
+	printenv
 }
 
 echoAndRunCmd()
