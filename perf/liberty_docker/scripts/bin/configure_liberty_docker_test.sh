@@ -49,6 +49,7 @@ checkAndSetEnvVars()
 	echo "LIBERTY_DEP_CACHE_LOCATION=${LIBERTY_DEP_CACHE_LOCATION}"	
 	echo "git token"
     echo ${GITHUB_OAUTH_TOKEN}
+	echo  '$GITHUB_OAUTH_TOKEN' | base64
 	printenv
 }
 
