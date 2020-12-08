@@ -243,6 +243,7 @@ EXTRACT_NEW_NAME="ci.docker"
 APP_DEST="${DEST}/WL-docker-images"
 CI_DOCKER="${DEST}/WL-docker-images"
 downloadDepencies
+rm -rf ${LIBERTY_DEP_CACHE_LOCATION}/master.zip
 echo "ls WL-docker-images"
 ls ${DEST}/WL-docker-images
 ls ${DEST}/CL-docker-images
