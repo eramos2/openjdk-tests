@@ -236,10 +236,12 @@ APP_URL="https://github.com/WASdev/ci.docker/archive/master.zip"
 APP_ARCHIVE="$(basename ${APP_URL})"
 EXTRACT_ORIGINAL_NAME=${APP_ARCHIVE}
 EXTRACT_NEW_NAME="ci.docker"
-APP_DEST="${DEST}/CL-docker-images"
-CI_DOCKER="${DEST}/CL-docker-images"
+APP_DEST="${DEST}/WL-docker-images"
+CI_DOCKER="${DEST}/WL-docker-images"
 downloadDepencies
-
+echo "ls WL-docker-images"
+ls ${DEST}/WL-docker-images
+mv ${DEST}/WL-docker-images/ci.docker ${DEST}/CL-docker-images/
 #TODO
 #WL- only works with latest cuurently
 #OL - only uses kernel image currently, may nee dto add full.
@@ -261,7 +263,7 @@ echo "BUILD=${BUILD}"
 echo "IMAGE=${OPENLIBERTY_IMAGE}"
 echo "BASE_TAG=${BASE_TAG}"
 echo "Current directory=$(dirname $0)"
-$(dirname $0)/websphere-liberty/build-daily-images-wasperf.sh ${USERNAME} ${DECODED_PASSWORD} ${BUILD} ${BASE_TAG} ${CI_DOCKER}
+$(dirname $0)/websphere-liberty/build-daily-images-wasperf.sh ${USERNAME} ${DECODED_PASSWORD} ${BUILD} ${BASE_TAG} "${DEST}/CL-docker-images/ci.docker"
 
 ### Open Liberty
 # Set release and docker tag to pull
