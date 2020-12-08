@@ -148,8 +148,9 @@ downloadDepencies()
 			else 
 			    echo "Use GITHUB_OAUTH_TOKEN to authenticate - $GITHUB_OAUTH_TOKEN"
 				echo $GITHUB_OAUTH_TOKEN
-				CURL_CMD="curl -OLk -H \"Authorization: token $GITHUB_OAUTH_TOKEN\" ${APP_URL}"
-				CURL_CMD="eval $CURL_CMD"
+				CURL_CMD="curl -OLk -H 'Authorization: token $GITHUB_OAUTH_TOKEN' ${APP_URL}"
+				CURL_CMD="eval \"$CURL_CMD\""
+				echo $CURL_CMD >> $LIBERTY_DEP_CACHE_LOCATION/down.txt
 				echo "This is the command ${CURL_CMD}"
 			fi
 			 
