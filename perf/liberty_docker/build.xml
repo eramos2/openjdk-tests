@@ -39,7 +39,7 @@
 		<exec executable="bash">
 			<env key="DEST" value="${DEST}"/>
 			<env key="LIBERTY_DEP_CACHE_LOCATION" value="${env.PERF_ROOT}"/>
-			<env key="GITHUB_OAUTH_TOKEN" value="${env.GITHUB_OAUTH_TOKEN}"/>
+			<!-- <env key="GITHUB_OAUTH_TOKEN" value="${env.GITHUB_OAUTH_TOKEN}"/> -->
 		    <arg value="${DEST}/scripts/bin/configure_liberty_docker_test.sh"/>
 		</exec>							
 	</target>
