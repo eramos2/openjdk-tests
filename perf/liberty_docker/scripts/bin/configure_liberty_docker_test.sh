@@ -217,7 +217,7 @@ EXTRACT_ORIGINAL_NAME=${APP_ARCHIVE}
 EXTRACT_NEW_NAME="ci.docker.daily-master"
 APP_DEST="${DEST}/OL-docker-images"
 downloadDepencies
-
+rm -rf ${LIBERTY_DEP_CACHE_LOCATION}/master.zip
 ##########################
 
 unsetVars
@@ -229,7 +229,7 @@ APP_DEST="${DEST}/CL-docker-images"
 #The actual token is passed through build.xml
 GIT_AUTH_NEEDED=true 
 downloadDepencies
-
+rm -rf ${LIBERTY_DEP_CACHE_LOCATION}/master.zip
 ##########################
 unsetVars
 APP_URL="https://github.com/WASdev/ci.docker/archive/master.zip"
@@ -241,6 +241,8 @@ CI_DOCKER="${DEST}/WL-docker-images"
 downloadDepencies
 echo "ls WL-docker-images"
 ls ${DEST}/WL-docker-images
+ls ${DEST}/CL-docker-images
+ls ${DEST}/OL-docker-images
 mv ${DEST}/WL-docker-images/ci.docker ${DEST}/CL-docker-images/
 #TODO
 #WL- only works with latest cuurently
