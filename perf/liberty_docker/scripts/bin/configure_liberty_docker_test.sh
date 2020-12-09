@@ -155,6 +155,7 @@ downloadDepencies()
 				#echo $CURL_CMD >> $LIBERTY_DEP_CACHE_LOCATION/down.txt
 				echo "This is the command ${CURL_CMD}"
 				curl --help
+				which curl
 				ls $LIBERTY_DEP_CACHE_LOCATION
 			fi
 			 
