@@ -150,7 +150,8 @@ downloadDepencies()
 			    echo "Use GIT_TOKEN to authenticate - $GIT_TOKEN"
 				echo $GIT_TOKEN
 				echo  '$GIT_TOKEN' | base64
-				CURL_CMD="curl -OL -H \"Authorization: token ${GIT_TOKEN}\" ${APP_URL}"
+				PARTIAL_CURL_CMD="curl -OL -H \"Authorization: token ${GIT_TOKEN}\" \"${APP_URL}\""
+				CURL_CMD="eval $PARTIAL_CURL_CMD"
 				#CURL_CMD="eval \"$CURL_CMD\""
 				#echo $CURL_CMD >> $LIBERTY_DEP_CACHE_LOCATION/down.txt
 				echo "This is the command ${CURL_CMD}"
