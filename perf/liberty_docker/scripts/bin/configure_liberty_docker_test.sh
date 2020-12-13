@@ -247,7 +247,7 @@ echo "ls WL-docker-images"
 #ls ${DEST}/WL-docker-images
 #ls ${DEST}/CL-docker-images
 #ls ${DEST}/OL-docker-images
-mv ${DEST}/WL-docker-images/ci.docker* ${DEST}/CL-docker-images/
+mv ${DEST}/CL-docker-images/ci.docker* ${DEST}/WL-docker-images/
 #TODO
 #WL- only works with latest cuurently
 #OL - only uses kernel image currently, may nee dto add full.
