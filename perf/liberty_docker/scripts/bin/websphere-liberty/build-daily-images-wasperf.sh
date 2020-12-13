@@ -59,7 +59,7 @@ main() {
   echo "cd to ${CI_DOCKER}"
   pwd
   ls ${CI_DOCKER}
-  cd $CI_DOCKER-master
+  cd $CI_DOCKER
   pwd
   ls
   #APP_DEST=/root/workspace/Test_openjdk8_j9_extended.perf_x86-64_linux_liberty-docker-sufp@2/openjdk-tests/TKG/../../jvmtest/perf/liberty_docker/CL-docker-images
