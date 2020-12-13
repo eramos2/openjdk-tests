@@ -46,10 +46,7 @@ checkAndSetEnvVars()
     fi
    
 	echo "DEST=${DEST}"
-	echo "LIBERTY_DEP_CACHE_LOCATION=${LIBERTY_DEP_CACHE_LOCATION}"	
-	echo "git token"
-    echo ${GIT_TOKEN}
-	echo  "${GIT_TOKEN}" | base64
+	echo "LIBERTY_DEP_CACHE_LOCATION=${LIBERTY_DEP_CACHE_LOCATION}"
 	printenv
 }
 
@@ -148,23 +145,11 @@ downloadDepencies()
 				CURL_CMD="curl -OLk ${APP_URL}"
 			else 
 			    echo "Use GIT_TOKEN to authenticate - $GIT_TOKEN"
-				#echo $GIT_TOKEN
-				#echo  '$GIT_TOKEN' | base64
 				PARTIAL_CURL_CMD="curl -OL -H \"Authorization: token ${GIT_TOKEN}\" \"${APP_URL}\""
 				CURL_CMD="eval $PARTIAL_CURL_CMD"
-				#CURL_CMD="eval \"$CURL_CMD\""
-				#echo $CURL_CMD >> $LIBERTY_DEP_CACHE_LOCATION/down.txt
-				#echo "This is the command ${CURL_CMD}"
-				#curl --help
-				#which curl
-				#ls $LIBERTY_DEP_CACHE_LOCATION
 			fi
-			 
 
-			echoAndRunCmd "${CURL_CMD}"
-			#echo "benchmarks ls: "
-			#pwd
-			#ls $LIBERTY_DEP_CACHE_LOCATION		
+			echoAndRunCmd "${CURL_CMD}"	
 		fi
 		
 		if [ "${APP_ARCHIVE}" != "${EXTRACT_NEW_NAME}" ]; then
@@ -173,9 +158,7 @@ downloadDepencies()
 			
 			if [ "${EXTRACT_NEW_NAME}" != "${EXTRACT_ORIGINAL_NAME}" ]; then
 				echo "EXTRACT_NEW_NAME (${EXTRACT_NEW_NAME}) is not equal to EXTRACT_ORIGINAL_NAME (${EXTRACT_ORIGINAL_NAME}). Hence, need to rename the directory."
-				#ls ${APP_DEST}
 				echoAndRunCmd "mv ${APP_DEST}/${EXTRACT_ORIGINAL_NAME} ${APP_DEST}/${EXTRACT_NEW_NAME}"
-				#ls ${APP_DEST}
 			else
 				echo "EXTRACT_NEW_NAME is equal to EXTRACT_ORIGINAL_NAME (${EXTRACT_ORIGINAL_NAME}). Hence, no need to rename directory."	
 			fi
@@ -249,9 +232,6 @@ APP_DEST="${DEST}/CL-docker-images"
 #The actual token is passed through build.xml
 GIT_AUTH_NEEDED=true 
 downloadDepencies
-#echo "git token"
-#echo ${GIT_TOKEN}
-#ls $APP_DEST
 mv ${LIBERTY_DEP_CACHE_LOCATION}/master.zip ${LIBERTY_DEP_CACHE_LOCATION}/master-copy.zip
 ##########################
 unsetVars
@@ -264,10 +244,10 @@ CI_DOCKER="${DEST}/WL-docker-images"
 downloadDepencies
 rm -rf ${LIBERTY_DEP_CACHE_LOCATION}/master.zip
 echo "ls WL-docker-images"
-ls ${DEST}/WL-docker-images
-ls ${DEST}/CL-docker-images
-ls ${DEST}/OL-docker-images
-# mv ${DEST}/WL-docker-images/ci.docker* ${DEST}/CL-docker-images/
+#ls ${DEST}/WL-docker-images
+#ls ${DEST}/CL-docker-images
+#ls ${DEST}/OL-docker-images
+mv ${DEST}/WL-docker-images/ci.docker* ${DEST}/CL-docker-images/
 #TODO
 #WL- only works with latest cuurently
 #OL - only uses kernel image currently, may nee dto add full.
