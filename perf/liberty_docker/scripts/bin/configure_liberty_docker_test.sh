@@ -215,7 +215,17 @@ unsetVars
 APP_URL="https://github.com/OpenLiberty/ci.docker.daily/archive/master.zip"
 APP_ARCHIVE="$(basename ${APP_URL})"
 EXTRACT_ORIGINAL_NAME=${APP_ARCHIVE}
-EXTRACT_NEW_NAME="ci.docker.daily-master"
+EXTRACT_NEW_NAME="ci.docker.daily"
+APP_DEST="${DEST}/OL-docker-images"
+downloadDepencies
+rm -rf ${LIBERTY_DEP_CACHE_LOCATION}/master.zip
+##########################
+
+unsetVars
+APP_URL="https://github.com/OpenLiberty/ci.docker/archive/master.zip"
+APP_ARCHIVE="$(basename ${APP_URL})"
+EXTRACT_ORIGINAL_NAME=${APP_ARCHIVE}
+EXTRACT_NEW_NAME="ci.docker"
 APP_DEST="${DEST}/OL-docker-images"
 downloadDepencies
 rm -rf ${LIBERTY_DEP_CACHE_LOCATION}/master.zip
@@ -227,13 +237,15 @@ echo ${GIT_TOKEN}
 APP_URL="https://github.ibm.com/was-docker/daily-liberty-images/archive/master.zip"
 APP_ARCHIVE="$(basename ${APP_URL})"
 EXTRACT_ORIGINAL_NAME=${APP_ARCHIVE}
-EXTRACT_NEW_NAME="daily-liberty-images-master"
-APP_DEST="${DEST}/CL-docker-images"
+EXTRACT_NEW_NAME="daily-liberty-images"
+APP_DEST="${DEST}/WL-docker-images"
 #The actual token is passed through build.xml
 GIT_AUTH_NEEDED=true 
 downloadDepencies
-mv ${LIBERTY_DEP_CACHE_LOCATION}/master.zip ${LIBERTY_DEP_CACHE_LOCATION}/master-copy.zip
+rm -rf ${LIBERTY_DEP_CACHE_LOCATION}/master.zip
+
 ##########################
+
 unsetVars
 APP_URL="https://github.com/WASdev/ci.docker/archive/master.zip"
 APP_ARCHIVE="$(basename ${APP_URL})"
@@ -243,11 +255,14 @@ APP_DEST="${DEST}/WL-docker-images"
 CI_DOCKER="${DEST}/WL-docker-images"
 downloadDepencies
 rm -rf ${LIBERTY_DEP_CACHE_LOCATION}/master.zip
+
+##########################
+
 echo "ls WL-docker-images"
-#ls ${DEST}/WL-docker-images
+ls ${DEST}/WL-docker-images
 #ls ${DEST}/CL-docker-images
-#ls ${DEST}/OL-docker-images
-mv ${DEST}/CL-docker-images/ci.docker* ${DEST}/WL-docker-images/
+ls ${DEST}/OL-docker-images
+#mv ${DEST}/CL-docker-images/ci.docker* ${DEST}/WL-docker-images/
 #TODO
 #WL- only works with latest cuurently
 #OL - only uses kernel image currently, may nee dto add full.
@@ -271,6 +286,7 @@ echo "BASE_TAG=${BASE_TAG}"
 echo "Current directory=$(dirname $0)"
 $(dirname $0)/websphere-liberty/build-daily-images-wasperf.sh ${USERNAME} ${DECODED_PASSWORD} ${BUILD} ${BASE_TAG} "${DEST}/WL-docker-images/ci.docker-master"
 
+OPENLIBERTY=true
 ### Open Liberty
 # Set release and docker tag to pull
 echo "Clean Docker" 
