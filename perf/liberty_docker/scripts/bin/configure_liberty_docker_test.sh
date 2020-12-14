@@ -298,7 +298,7 @@ echo "BUILD=${BUILD}"
 echo "IMAGE=${OPENLIBERTY_IMAGE}"
 echo "BASE_TAG=${BASE_TAG}"
 echo "Current directory=$(dirname $0)"
-$(dirname $0)/open-liberty/buildAll_wasperf.sh ${BUILD} ${BASE_TAG}
+$(dirname $0)/open-liberty/buildAll_wasperf.sh ${BUILD} ${BASE_TAG} "${DEST}/OL-docker-images/ci.docker"
 
 
 
@@ -314,7 +314,8 @@ getLibertyInfo()
 #   if [[ ${OPENLIBERTY} == "false" ]]
 #   then
     TAG=full
-    CID=`docker run -d websphereliberty/daily:${TAG}`
+    #CID=`docker run -d websphereliberty/daily:${TAG}`
+	CID=`docker run -d websphereliberty/daily`
     RELEASE=`docker logs ${CID} | grep "WebSphere Application Server" | awk '{print $6}' | awk '{gsub("/"," "); print $1}'`
 	docker stop ${CID} > /dev/null
 	#CID=`docker run -d websphereliberty/daily`

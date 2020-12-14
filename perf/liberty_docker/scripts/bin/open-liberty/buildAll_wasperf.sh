@@ -11,6 +11,7 @@ readonly NIGHTLY_URL="https://public.dhe.ibm.com/ibmdl/export/pub/software/openl
 
 readonly BUILD=${1}
 readonly BASE_TAG=${2}
+readonly CI_DOCKER=${3}
 
 if [[ ${BASE_TAG} == *java8-openj9-ubi* ]]
 then
@@ -83,7 +84,12 @@ main () {
     printf "URL: %s \nLabel: %s \nVersion: %s\n" "${fullImageUrl}" "${buildLabel}" "${version}"
     #cd ci.docker
     echo "****** Starting OL daily build from $(pwd)..."
-
+    echo "cd to ${CI_DOCKER}"
+    pwd
+    ls ${CI_DOCKER}
+    cd $CI_DOCKER
+    pwd
+    ls
     ./build-wasperf.sh --version="${version}" --buildLabel="${buildLabel}" --fullDownloadUrl="${fullImageUrl}" --baseTag="${BASE_TAG}" --fileName="${FILE_NAME}"
     docker tag openliberty/daily:full-${BASE_TAG}  openliberty/daily:latest
 }
