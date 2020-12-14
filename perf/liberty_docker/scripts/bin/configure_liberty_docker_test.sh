@@ -284,7 +284,7 @@ echo "BUILD=${BUILD}"
 echo "IMAGE=${OPENLIBERTY_IMAGE}"
 echo "BASE_TAG=${BASE_TAG}"
 echo "Current directory=$(dirname $0)"
-$(dirname $0)/websphere-liberty/build-daily-images-wasperf.sh ${USERNAME} ${DECODED_PASSWORD} ${BUILD} ${BASE_TAG} "${DEST}/WL-docker-images/ci.docker"
+$(dirname $0)/websphere-liberty/build-daily-images-wasperf.sh ${USERNAME} ${DECODED_PASSWORD} ${BUILD} ${BASE_TAG} "${DEST}/WL-docker-images/ci.docker-master"
 
 OPENLIBERTY=true
 ### Open Liberty
@@ -298,7 +298,7 @@ echo "BUILD=${BUILD}"
 echo "IMAGE=${OPENLIBERTY_IMAGE}"
 echo "BASE_TAG=${BASE_TAG}"
 echo "Current directory=$(dirname $0)"
-$(dirname $0)/open-liberty/buildAll_wasperf.sh ${BUILD} ${BASE_TAG} "${DEST}/OL-docker-images/ci.docker"
+$(dirname $0)/open-liberty/buildAll_wasperf.sh ${BUILD} ${BASE_TAG} "${DEST}/OL-docker-images/ci.docker-master"
 
 
 
