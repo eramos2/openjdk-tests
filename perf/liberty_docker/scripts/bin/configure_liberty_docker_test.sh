@@ -320,7 +320,7 @@ getLibertyInfo()
 	CID=`docker run -d websphereliberty/daily`
 	
     sleep 5
-	BUILD=docker logs ${CID} | grep "WebSphere Application Server" | awk '{print $6}' | awk '{gsub("/"," "); print $2}'  | awk '{gsub("\\.", " "); print $4}' | awk '{print substr($1, 1, length($1)-1)}'
+	BUILD=`docker logs ${CID} | grep "WebSphere Application Server" | awk '{print $6}' | awk '{gsub("/"," "); print $2}'  | awk '{gsub("\\.", " "); print $4}' | awk '{print substr($1, 1, length($1)-1)}'`
     docker stop ${CID} > /dev/null
 	echo "Found Websphere Liberty Release: ${RELEASE}"
 	echo "Found Build: ${BUILD}"
