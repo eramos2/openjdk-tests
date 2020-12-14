@@ -74,14 +74,20 @@ build_latest_tag() {
     # set image information arrays
     local file_exts_ubi=($fileName)
     local tag_exts_ubi=($baseTag)
-
+    echo "Before going in build-wasperf.sh for OL"
+    echo $fileName
+    echo $baseTag
     for i in "${!tag_exts_ubi[@]}"; do
         local docker_dir="${IMAGE_ROOT}/${version}/${tag}"
         local full_path="${docker_dir}/Dockerfile.${file_exts_ubi[$i]}"
         if [[ -f "${full_path}" ]]; then
             local build_image="${REPO}:${tag_label}-${tag_exts_ubi[$i]}"
-
+        
             echo "****** Building image ${build_image}..."
+            echo $docker_dir
+            echo $full_path
+            echo $buildLabel
+            echo $fullDownloadUrl
             docker build --no-cache=true -t "${build_image}" -f "${full_path}" --build-arg LIBERTY_VERSION=${version} --build-arg LIBERTY_BUILD_LABEL=${buildLabel} --build-arg LIBERTY_SHA=${fullDownloadSha} --build-arg LIBERTY_DOWNLOAD_URL=${fullDownloadUrl} "${docker_dir}"
             handle_results $? "${build_image}"
         else
