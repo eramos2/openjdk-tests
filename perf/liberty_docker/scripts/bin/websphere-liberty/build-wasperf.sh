@@ -47,7 +47,7 @@ main() {
 
   ## build necessary base image for one of the ubi images
   build_ibm_java
-
+  
   ## build tags, expand this as requirements change
   local tags=(kernel)
   echo "before going in to for loop for tags"
@@ -114,6 +114,10 @@ build_liberty_with_tag() {
   local image="$1"; shift
   local docker_dir="$1"; shift
   local file_name="$1"
+  echo "inside build_liberty_with_tag"
+  echo $image
+  echo $docker_dir
+  echo $file_name
   ## build using the custom download url and wget flags
   docker build --no-cache=true -t "${image}" \
     --build-arg LIBERTY_URL="${LIBERTY_URL}" \
