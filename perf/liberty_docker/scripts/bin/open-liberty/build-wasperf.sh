@@ -56,7 +56,10 @@ main () {
         echo "$DOCKERPWD" | docker login -u "$DOCKERID" --password-stdin
     fi
 
-    local tags=(kernel)
+
+    #local tags=(kernel)
+    #Had to change name so it matches with what is on the repo
+    local tags=(kernel-slim)
 
     for tag in "${tags[@]}"; do
       build_latest_tag $tag
@@ -80,12 +83,12 @@ build_latest_tag() {
     for i in "${!tag_exts_ubi[@]}"; do
         local docker_dir="${IMAGE_ROOT}/${version}/${tag}"
         local full_path="${docker_dir}/Dockerfile.${file_exts_ubi[$i]}"
+        echo "Before building image"
+        echo $docker_dir
+        echo $full_path
         if [[ -f "${full_path}" ]]; then
             local build_image="${REPO}:${tag_label}-${tag_exts_ubi[$i]}"
-        
             echo "****** Building image ${build_image}..."
-            echo $docker_dir
-            echo $full_path
             echo $buildLabel
             echo $fullDownloadUrl
             docker build --no-cache=true -t "${build_image}" -f "${full_path}" --build-arg LIBERTY_VERSION=${version} --build-arg LIBERTY_BUILD_LABEL=${buildLabel} --build-arg LIBERTY_SHA=${fullDownloadSha} --build-arg LIBERTY_DOWNLOAD_URL=${fullDownloadUrl} "${docker_dir}"
