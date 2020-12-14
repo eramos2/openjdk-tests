@@ -12,6 +12,13 @@ readonly PASSWORD="$2"
 readonly BUILD="${3}"
 readonly BASE_TAG="${4}"
 readonly CI_DOCKER="${5}"
+echo "Settings inside build-daily-images-wasperf.sh"
+echo $USERNAME
+echo $PASSWORD
+echo $BUILD
+echo $BASE_TAG
+echo $CI_DOCKER
+#echo $BUILD
 
 if [[ ${BASE_TAG} == *java8-openj9-ubi* ]]
 then
@@ -49,7 +56,8 @@ main() {
   ## Removes everything up to the % symbol
   local short_build_label=$(format_short_build_label "${full_build_label}")
   local liberty_url=$(format_liberty_url "${full_build_label}")
-
+  echo "cd to ${CI_DOCKER}"
+  cd $CI_DOCKER
   #APP_DEST=/root/workspace/Test_openjdk8_j9_extended.perf_x86-64_linux_liberty-docker-sufp@2/openjdk-tests/TKG/../../jvmtest/perf/liberty_docker/CL-docker-images
   #Current directory=/root/workspace/Test_openjdk8_j9_extended.perf_x86-64_linux_liberty-docker-sufp@2/openjdk-tests/TKG/../../jvmtest/perf/liberty_docker/scripts/bin/websphere-liberty
   echo "Current directory=$(dirname $0)"
