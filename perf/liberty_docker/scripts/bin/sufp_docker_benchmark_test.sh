@@ -172,7 +172,7 @@ do
   let startup=$((stopMillis - startMillis))
   echo "Startup time: ${startup}"
   echo "--get footprint"
-  echo "Footprint (kb)=$(docker stats ${CID} --no-stream --format "table {{.MemUsage}}"| sed "1 d"| awk '{print substr($1, 1, length($1)-3)}')"
+  echo "Footprint (mb)=$(docker stats ${CID} --no-stream --format "table {{.MemUsage}}"| sed "1 d"| awk '{print substr($1, 1, length($1)-3)}')"
 
   docker stop $CID
   nukeDocker
