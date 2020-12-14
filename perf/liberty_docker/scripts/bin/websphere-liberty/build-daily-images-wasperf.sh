@@ -12,13 +12,6 @@ readonly PASSWORD="$2"
 readonly BUILD="${3}"
 readonly BASE_TAG="${4}"
 readonly CI_DOCKER="${5}"
-echo "Settings inside build-daily-images-wasperf.sh"
-echo $USERNAME
-echo $PASSWORD
-echo $BUILD
-echo $BASE_TAG
-echo $CI_DOCKER
-#echo $BUILD
 
 if [[ ${BASE_TAG} == *java8-openj9-ubi* ]]
 then
@@ -56,12 +49,7 @@ main() {
   ## Removes everything up to the % symbol
   local short_build_label=$(format_short_build_label "${full_build_label}")
   local liberty_url=$(format_liberty_url "${full_build_label}")
-  echo "cd to ${CI_DOCKER}"
-  pwd
-  ls ${CI_DOCKER}
-  cd $CI_DOCKER
-  pwd
-  ls
+
   #APP_DEST=/root/workspace/Test_openjdk8_j9_extended.perf_x86-64_linux_liberty-docker-sufp@2/openjdk-tests/TKG/../../jvmtest/perf/liberty_docker/CL-docker-images
   #Current directory=/root/workspace/Test_openjdk8_j9_extended.perf_x86-64_linux_liberty-docker-sufp@2/openjdk-tests/TKG/../../jvmtest/perf/liberty_docker/scripts/bin/websphere-liberty
   echo "Current directory=$(dirname $0)"
@@ -72,9 +60,6 @@ main() {
               --version="${VERSION}" --buildLabel="${short_build_label}" --buildUrl="${liberty_url} --baseTag="${BASE_TAG} --fileName="${FILE_NAME}"
   #docker tag websphere-liberty-daily:full-${BASE_TAG} websphere-liberty:full
   docker tag websphere-liberty-daily:full-${BASE_TAG} websphereliberty/daily:latest
-  echo "Finished main in build-daily-images-wasperf.sh"
-  pwd
-
 }
 ## @returns the last good build's label as a string
 get_full_build_label() {

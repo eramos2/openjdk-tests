@@ -90,7 +90,7 @@ main () {
     cd $CI_DOCKER
     pwd
     ls
-    ./build-wasperf.sh --version="${version}" --buildLabel="${buildLabel}" --fullDownloadUrl="${fullImageUrl}" --baseTag="${BASE_TAG}" --fileName="${FILE_NAME}"
+    $(dirname $0)/build-wasperf.sh --version="${version}" --buildLabel="${buildLabel}" --fullDownloadUrl="${fullImageUrl}" --baseTag="${BASE_TAG}" --fileName="${FILE_NAME}"
     docker tag openliberty/daily:full-${BASE_TAG}  openliberty/daily:latest
 }
 ## builds the ibmjava base for ./build.sh script

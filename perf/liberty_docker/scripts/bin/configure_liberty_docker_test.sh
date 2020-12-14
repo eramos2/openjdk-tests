@@ -232,8 +232,6 @@ rm -rf ${LIBERTY_DEP_CACHE_LOCATION}/master.zip
 ##########################
 
 unsetVars
-echo "git token"
-echo ${GIT_TOKEN}
 APP_URL="https://github.ibm.com/was-docker/daily-liberty-images/archive/master.zip"
 APP_ARCHIVE="$(basename ${APP_URL})"
 EXTRACT_ORIGINAL_NAME=${APP_ARCHIVE}
@@ -258,10 +256,10 @@ rm -rf ${LIBERTY_DEP_CACHE_LOCATION}/master.zip
 
 ##########################
 
-echo "ls WL-docker-images"
-ls ${DEST}/WL-docker-images
+#echo "ls WL-docker-images"
+#ls ${DEST}/WL-docker-images
 #ls ${DEST}/CL-docker-images
-ls ${DEST}/OL-docker-images
+#ls ${DEST}/OL-docker-images
 #mv ${DEST}/CL-docker-images/ci.docker* ${DEST}/WL-docker-images/
 #TODO
 #WL- only works with latest cuurently
