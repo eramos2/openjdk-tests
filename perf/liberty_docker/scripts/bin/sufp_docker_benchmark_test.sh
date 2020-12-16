@@ -178,6 +178,5 @@ do
   nukeDocker
 done
 
-echo "Clean Docker"
-nukeDocker
+
 
