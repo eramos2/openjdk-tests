@@ -269,7 +269,8 @@ rm -rf ${LIBERTY_DEP_CACHE_LOCATION}/master.zip
 USERNAME=wasperf@us.ibm.com
 PASSWORD=UmVncmVzc2lvbjdQQHRyb2w=
 DECODED_PASSWORD=`echo ${PASSWORD} | base64 --decode`
-BUILD=latest
+#BUILD=latest
+BUILD=$LIBERTY_BUILD_LEVEL
 BASE_TAG=java8-ibmjava
 
 OPENLIBERTY=false
@@ -278,25 +279,26 @@ DO_THROUGHPUT_TESTS=true
 DO_SUFT_TESTS=true
 echo "Clean Docker" 
 nukeDocker
-echo "BUILD=${BUILD}"
+echo "BUILD=${LIBERTY_BUILD_LEVEL}"
 echo "IMAGE=${OPENLIBERTY_IMAGE}"
 echo "BASE_TAG=${BASE_TAG}"
 echo "Current directory=$(dirname $0)"
-$(dirname $0)/websphere-liberty/build-daily-images-wasperf.sh ${USERNAME} ${DECODED_PASSWORD} ${BUILD} ${BASE_TAG} "${DEST}/WL-docker-images/ci.docker-master"
+$(dirname $0)/websphere-liberty/build-daily-images-wasperf.sh ${USERNAME} ${DECODED_PASSWORD} ${LIBERTY_BUILD_LEVEL} ${BASE_TAG} "${DEST}/WL-docker-images/ci.docker-master"
 
 OPENLIBERTY=true
 ### Open Liberty
 # Set release and docker tag to pull
 echo "Clean Docker" 
 nukeDocker
-export BUILD=latest
+#export BUILD=latest
+export Build=$LIBERTY_BUILD_LEVEL
 export BASE_TAG=java8-openj9
 export OPENLIBERTY_IMAGE=kernel
-echo "BUILD=${BUILD}"
+echo "BUILD=${LIBERTY_BUILD_LEVEL}"
 echo "IMAGE=${OPENLIBERTY_IMAGE}"
 echo "BASE_TAG=${BASE_TAG}"
 echo "Current directory=$(dirname $0)"
-$(dirname $0)/open-liberty/buildAll_wasperf.sh ${BUILD} ${BASE_TAG} "${DEST}/OL-docker-images/ci.docker-master"
+$(dirname $0)/open-liberty/buildAll_wasperf.sh ${LIBERTY_BUILD_LEVEL} ${BASE_TAG} "${DEST}/OL-docker-images/ci.docker-master"
 
 
 
