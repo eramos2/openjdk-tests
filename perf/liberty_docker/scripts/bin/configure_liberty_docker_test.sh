@@ -317,32 +317,31 @@ getLibertyInfo()
     #CID=`docker run -d websphereliberty/daily:${TAG}`
 	CID=`docker run -d websphereliberty/daily`
     RELEASE=`docker logs ${CID} | grep "WebSphere Application Server" | awk '{print $6}' | awk '{gsub("/"," "); print $1}'`
-	docker stop ${CID} > /dev/null
+	#docker stop ${CID} > /dev/null
 	#CID=`docker run -d websphereliberty/daily`
-	CID=`docker run -d websphereliberty/daily`
-	
-    sleep 5
-	BUILD=`docker logs ${CID} | grep "WebSphere Application Server" | awk '{print $6}' | awk '{gsub("/"," "); print $2}'  | awk '{gsub("\\.", " "); print $4}' | awk '{print substr($1, 1, length($1)-1)}'`
-    docker stop ${CID} > /dev/null
+	#CID=`docker run -d websphereliberty/daily`
+	BUILD=`docker logs ${CID} | grep "WebSphere Application Server" | awk '{print $6}' | awk '{gsub("/"," "); print $2}'  | awk '{gsub("\\\.", " "); print $4}' | awk '{print substr($1, 1, length($1)-1)}'`
+    JDK_LEVEL=`docker exec ${CID} java -version 2>&1 | tr -d '\n'`
 	echo "Found Websphere Liberty Release: ${RELEASE}"
 	echo "Found Build: ${BUILD}"
 	echo "JDK_LEVEL=${JDK_LEVEL}"
 	echo "Found Java Build: ${JAVA_BUILD}"
 	echo "Found Scenario: ${SCENARIO}"
-	echo "Found Build: ${BUILD}"
+	docker stop ${CID} > /dev/null
+	sleep 5
 	nukeDocker
 #   else
     CID=`docker run -d openliberty/daily`
     RELEASE=`docker logs ${CID} 2>/dev/null | grep "Open Liberty" | awk '{print $5}' | awk '{gsub("/"," "); print $1}'`
-	BUILD=`docker logs ${CID} 2>/dev/null | grep "Open Liberty" | awk '{print $5}' | awk '{gsub("/"," "); print $2}'  | awk '{gsub("\\.", " "); print $4}' | awk '{print substr($1, 1, length($1)-1)}'`
-    docker exec ${CID} java -version 2>&1 | tr -d '\n'
-	docker stop ${CID} > /dev/null
+	BUILD=`docker logs ${CID} 2>/dev/null | grep "Open Liberty" | awk '{print $5}' | awk '{gsub("/"," "); print $2}'  | awk '{gsub("\\\.", " "); print $4}' | awk '{print substr($1, 1, length($1)-1)}'`
+	JDK_LEVEL=`docker exec ${CID} java -version 2>&1 | tr -d '\n'`
 	echo "Found Open Liberty Release: ${RELEASE}"
 	echo "Found Build: ${BUILD}"
 	echo "JDK_LEVEL=${JDK_LEVEL}"
 	echo "Found Java Build: ${JAVA_BUILD}"
 	echo "Found Scenario: ${SCENARIO}"
-	echo "Found Build: ${BUILD}"
+	docker stop ${CID} > /dev/null
+	sleep 5
 	nukeDocker
 #   fi
 }
