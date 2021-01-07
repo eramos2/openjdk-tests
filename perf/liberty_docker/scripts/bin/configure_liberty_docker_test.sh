@@ -327,8 +327,8 @@ getLibertyInfo()
 	echo "Found Websphere Liberty Release: ${RELEASE}"
 	echo "Found Build: ${BUILD}"
 	echo "JDK_LEVEL=${JDK_LEVEL}"
-	echo "Found Java Build: ${JAVA_BUILD}"
-	echo "Found Scenario: ${SCENARIO}"
+	#echo "Found Java Build: ${JAVA_BUILD}"
+	#echo "Found Scenario: ${SCENARIO}"
 	docker stop ${CID} > /dev/null
 	sleep 5
 	nukeDocker
@@ -342,8 +342,8 @@ getLibertyInfo()
 	echo "Found Open Liberty Release: ${RELEASE}"
 	echo "Found Build: ${BUILD}"
 	echo "JDK_LEVEL=${JDK_LEVEL}"
-	echo "Found Java Build: ${JAVA_BUILD}"
-	echo "Found Scenario: ${SCENARIO}"
+	#echo "Found Java Build: ${JAVA_BUILD}"
+	#echo "Found Scenario: ${SCENARIO}"
 	docker stop ${CID} > /dev/null
 	sleep 5
 	nukeDocker
