@@ -89,13 +89,9 @@ echo "Inside sufp_docker_benchmark_test.sh"
 
 TAG=full
 
-echo "Found Liberty Release: ${RELEASE}"
-echo "Found Build: ${BUILD}"
-echo "JDK_LEVEL=${JDK_LEVEL}"
-echo "Found Java Build: ${JAVA_BUILD}"
+
+
 echo "Found Scenario: ${SCENARIO}"
-
-
 
 
 
@@ -139,6 +135,10 @@ pwd
 ls
 docker ps
 nukeDocker
+
+
+
+
   
 for i in `seq 1 ${MEASUREMENT_RUNS}`
 do
@@ -151,6 +151,17 @@ do
   #Get Container ID
   CID=`docker ps | awk 'FNR == 2 {print}'| awk '{print $1}'`
   sleep 30
+
+if [[ $i == 1 ]]
+then
+  RELEASE_CUR=`docker logs ${CID} 2>/dev/null | grep "Open Liberty" | awk '{print $5}' | awk '{gsub("/"," "); print $1}'`
+	BUILD_CUR=`docker logs ${CID} 2>/dev/null | grep "Open Liberty" | awk '{print $5}' | awk '{gsub("/"," "); print $2}'  | awk '{gsub("\\\.", " "); print $4}' | awk '{print substr($1, 1, length($1)-1)}'`
+	JDK_LEVEL_CUR=`docker exec ${CID} java -version 2>&1 | tr -d '\n'`
+	echo "Found Open Liberty Release: ${RELEASE_CUR}"
+	echo "Found Build: ${BUILD_CUR}"
+	echo "JDK_LEVEL=${JDK_LEVEL_CUR}"
+fi
+
   echo "Get startup time results"
 
   echo "--get stop time"
