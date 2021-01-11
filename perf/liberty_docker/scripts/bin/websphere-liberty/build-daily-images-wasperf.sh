@@ -4,7 +4,8 @@ set -Eeo pipefail
 
 readonly REPO="websphere-liberty-daily"
 readonly VERSION="20.0.0.6"
-readonly DOWNLOAD_URL="https://libfsfe04.hursley.ibm.com/liberty/dev/Xo/release"
+#readonly DOWNLOAD_URL="https://libfsfe04.hursley.ibm.com/liberty/dev/Xo/release"
+readonly DOWNLOAD_URL_ARRAY=("https://libfsfe04.hursley.ibm.com/liberty/dev/Xo/release" "https://libfsfe04.hursley.ibm.com/liberty/dev/Xo/release2")
 #readonly DOWNLOAD_URL="https://public.dhe.ibm.com/ibmdl/export/pub/software/openliberty/runtime/nightly/"
 readonly USERNAME="$1"
 readonly PASSWORD="$2"
@@ -44,13 +45,32 @@ main() {
   fi
 
   echo "****** Querying for last successful build..."
-  local full_build_label=$(get_full_build_label)
+  local full_build_label
+  for DOWNLOAD_URL in ${DOWNLOAD_URL_ARRAY[@]}; 
+  do
   
-  if [[ $full_build_label == "" ]]
-  then
-    echo "${BUILD} not found"
-    exit
-  fi
+    full_build_label=$(get_full_build_label)
+    if [[ $full_build_label == "" ]]
+    then
+      echo "${BUILD} not found in ${DOWNLOAD_URL}"
+      local lastURL=((${#DOWNLOAD_URL_ARRAY[@]} - 1))
+      #Check if build is not in any of the download url's
+      if [[ ${DOWNLOAD_URL} == ${distro[${lastURL}]} ]];
+      then
+        exit
+      else
+        continue
+      fi
+    fi
+  done
+
+  #local full_build_label=$(get_full_build_label)
+  
+  #if [[ $full_build_label == "" ]]
+  #then
+  #  echo "${BUILD} not found"
+  #  exit
+  #fi
 
   echo "****** Full Build Label: ${full_build_label}"
   ## Removes everything up to the % symbol
