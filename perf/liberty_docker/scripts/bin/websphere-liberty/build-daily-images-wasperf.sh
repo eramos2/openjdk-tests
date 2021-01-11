@@ -62,6 +62,9 @@ main() {
       else
         continue
       fi
+    else
+      echo "${BUILD} found in ${DOWNLOAD_URL}"
+      break
     fi
   done
 
