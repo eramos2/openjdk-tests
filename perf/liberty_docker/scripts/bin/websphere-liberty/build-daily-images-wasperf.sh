@@ -54,8 +54,9 @@ main() {
     then
       echo "${BUILD} not found in ${DOWNLOAD_URL}"
       local lastURL=((${#DOWNLOAD_URL_ARRAY[@]} - 1))
+      echo inside the for loop $lastURL 
       #Check if build is not in any of the download url's
-      if [[ ${DOWNLOAD_URL} == ${distro[${lastURL}]} ]];
+      if [[ ${DOWNLOAD_URL} == ${DOWNLOAD_URL_ARRAY[${lastURL}]} ]];
       then
         exit
       else
