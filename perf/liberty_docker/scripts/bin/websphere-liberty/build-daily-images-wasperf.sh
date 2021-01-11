@@ -45,7 +45,7 @@ main() {
   fi
 
   echo "****** Querying for last successful build..."
-  local full_build_label
+  local full_build_label=""
   for DOWNLOAD_URL in ${DOWNLOAD_URL_ARRAY[@]}; 
   do
   
