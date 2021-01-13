@@ -119,7 +119,7 @@
 		</groups>
 	</test>
 	<test>
-		<testCaseName>OpenLibertySUFPJakaraEE9.0</testCaseName>
+		<testCaseName>OpenLibertySUFPJakartaEE9.0</testCaseName>
 		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh jakartaee-9.0 $(TEST_RESROOT) OL; \
 			${TEST_STATUS}</command>
 		<!-- scripts are only tested on linux -->
