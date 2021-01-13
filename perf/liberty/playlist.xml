@@ -119,6 +119,19 @@
 		</groups>
 	</test>
 	<test>
+		<testCaseName>OpenLibertySUFPJakaraEE9.0</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh jakartaee-9.0 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
 		<testCaseName>OpenLibertySUFPJavaEE7</testCaseName>
 		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh javaee7 $(TEST_RESROOT) OL; \
 			${TEST_STATUS}</command>
@@ -446,6 +459,19 @@
 	<test>
 		<testCaseName>WebsphereLibertySUFPHugeEJB</testCaseName>
 		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh huge-ejb $(TEST_RESROOT) CL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPJakartaEE9.0</testCaseName>
+		<command>$(TEST_RESROOT)/../../../openjdk-tests/perf/liberty/configs/benchmark_sufp.sh jakartaee-9.0 $(TEST_RESROOT) CL; \
 			${TEST_STATUS}</command>
 		<!-- scripts are only tested on linux -->
 		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
