@@ -163,10 +163,10 @@ echo "OS=${OS}"
 ARCH=$(uname -m)
 echo "ARCH=${ARCH}"
 
-if [ "${OS}" = "Linux" ] && [ "${ARCH}" = "x86_64" ]; then
-	echo "Configuring Liberty since OS=${OS} and ARCH=${ARCH}, which is the only platform tested so far."
+if [ "${OS}" != "Darwin" ] && [ "${ARCH}" != "aarch64" ]; then
+	echo "Configuring Liberty since it's a tested platform: OS=${OS} and ARCH=${ARCH}"
 else
-	echo "Exiting without configuring Liberty since OS=${OS} and ARCH=${ARCH}. Linux x86_64 is the only platform tested so far."
+	echo "Exiting without configuring Liberty since it's an untested platform: OS=${OS} and ARCH=${ARCH}"
 	exit	
 fi
 	
@@ -178,10 +178,11 @@ echoAndRunCmd "mkdir -p ${DEST} ${LIBERTY_DEP_CACHE_LOCATION}"
 ##########################
 
 unsetVars
-APP_URL="https://public.dhe.ibm.com/ibmdl/export/pub/software/openliberty/runtime/release/2019-04-19_0642/openliberty-19.0.0.4.zip"
+#Note: We need to use "All GA Features" package as "Web Profile 8" package doesn't have all the features required for DayTrader7.
+APP_URL="https://public.dhe.ibm.com/ibmdl/export/pub/software/openliberty/runtime/release/2020-09-15_1100/openliberty-20.0.0.10.zip"
 APP_ARCHIVE="$(basename ${APP_URL})"
 EXTRACT_ORIGINAL_NAME="wlp"
-EXTRACT_NEW_NAME="openliberty-19.0.0.4"
+EXTRACT_NEW_NAME="openliberty-20.0.0.10"
 APP_DEST="${DEST}/libertyBinaries"
 downloadDepencies
 

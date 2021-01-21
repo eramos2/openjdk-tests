@@ -24,41 +24,55 @@
 	<property name="DEST" value="${BUILD_ROOT}/openjdk" />
 	<property name="src" location="." />
 	<property environment="env" />
+	<property name="LIB" value="tohandler_simple"/>
+	<import file="${TEST_ROOT}/TKG/scripts/getDependencies.xml"/>
 
 	<target name="getJtreg">
 		<mkdir dir="${DEST}"/>
 		<if>
+			<or>
+				<matches pattern="^[89]{1}$" string="${JDK_VERSION}"/>
+				<matches pattern="^[1][01234]" string="${JDK_VERSION}"/>
+			</or>
+			<then>
+				<property name="jtregTar" value="jtreg-4.2.0-tip.tar"/>
+			</then>
+			<else>
+				<property name="jtregTar" value="jtreg-5.1-b01.tar"/>
+			</else>
+		</if>
+		<if>
 			<not>
-				<available file="jtreg-4.2.0-tip.tar" />
+				<available file="${jtregTar}" />
 			</not>
 			<then>
 				<if> <available file="custom_jtreg.tar.gz"/>
 					<then>
 						<echo message="Using custom_jtreg.tar.gz"/>
-							<copy file="custom_jtreg.tar.gz" tofile="jtreg-4.2.0-tip.tar.gz"/>
+							<copy file="custom_jtreg.tar.gz" tofile="${jtregTar}.gz"/>
 					</then>
 				<else>
-					<echo message="Getting Jtreg from https://ci.adoptopenjdk.net/job/jtreg/lastSuccessfulBuild/artifact/jtreg-4.2.0-tip.tar.gz"/>
+					<echo message="Getting Jtreg from https://ci.adoptopenjdk.net/job/jtreg/lastSuccessfulBuild/artifact/${jtregTar}.gz"/>
 					<exec executable="curl" failonerror="true">
-						<arg line="--retry 5 -OLJSks https://ci.adoptopenjdk.net/job/jtreg/lastSuccessfulBuild/artifact/jtreg-4.2.0-tip.tar.gz" />
+						<arg line="--retry 5 -OLJSks https://ci.adoptopenjdk.net/job/jtreg/lastSuccessfulBuild/artifact/${jtregTar}.gz" />
 					</exec>
 				</else>
 				</if>
 				<exec executable="gzip" failonerror="true">
-					<arg line="-d jtreg-4.2.0-tip.tar.gz" />
-				</exec>
+					<arg line="-d ${jtregTar}.gz" />				</exec>
 			</then>
 		</if>
 		<if>
 			<contains string="${SPEC}" substring="zos" />
 			<then>
 				<exec executable="tar" failonerror="true">
-					<arg line="xfo jtreg-4.2.0-tip.tar -C ${DEST}" />
+					<arg line="xfo ${jtregTar} -C ${DEST}" />
 				</exec>
 			</then>
 		<else>
-			<exec executable="tar" failonerror="true">
-				<arg line="xf jtreg-4.2.0-tip.tar -C ${DEST}" />
+			<exec executable="sh" failonerror="true">
+				<arg line="-c 'cat ${jtregTar} | (cd ${DEST} &amp;&amp; tar xof -)'" />
+
 			</exec>
 		</else>
 		</if>
@@ -72,7 +86,7 @@
 			<contains string="${SPEC}" substring="win" />
 			<then>
 				<exec executable="git" failonerror="false">
-					<arg line="config --system core.longpaths true" />
+					<arg line="config --global core.longpaths true" />
 				</exec>
 			</then>
 		</if>
@@ -104,7 +118,7 @@
 						<exec executable="git" failonerror="true">
 							<arg line="clone -q -b ${env.JDK_BRANCH} ${JDK_REPO_SPECIFIC} openjdktemp" />
 						</exec>
-						<exec executable="git" failonerror="true" dir="openjdk-jdk">
+						<exec executable="git" failonerror="true" dir="openjdktemp">
 							<arg line="checkout ${env.OPENJDK_SHA}" />
 						</exec>
 					</then>
@@ -193,45 +207,33 @@
 					</else>
 				</if>
 				<if>
-					<isset property="env.RELEASE_TAG"/>
+					<contains string="${JDK_IMPL}" substring="hotspot"/>
 					<then>
-						<echo message="git clone --depth 1 -q -b ${env.RELEASE_TAG} ${regressionRepo}" />
-						<exec executable="git" failonerror="true">
-							<arg line="clone --depth 1 -q -b ${env.RELEASE_TAG} ${regressionRepo}" />
-						</exec>
-						<move file="${jdkName}" tofile="openjdk-jdk"/>
+						<!-- AdoptOpenJDK nighlty is using dev branch and default branch is master-->
+						<property name="defaultBranch" value="-b dev"/>
 					</then>
 					<else>
-						<if>
-							<contains string="${JDK_IMPL}" substring="hotspot"/>
-							<then>
-								<!-- AdoptOpenJDK nighlty is using dev branch and default branch is master-->
-								<property name="defaultBranch" value="-b dev"/>
-							</then>
-							<else>
-								<property name="defaultBranch" value=""/>
-							</else>
-						</if>
-						<if>
-							<isset property="env.OPENJDK_SHA"/>
-							<then>
-								<echo message="git clone -q ${defaultBranch} ${regressionRepo}" />
-								<exec executable="git" failonerror="true">
-									<arg line="clone -q ${defaultBranch} ${regressionRepo}" />
-								</exec>
-								<move file="${jdkName}" tofile="openjdk-jdk"/>
-								<exec executable="git" failonerror="true" dir="openjdk-jdk">
-									<arg line="checkout ${env.OPENJDK_SHA}" />
-								</exec>
-							</then>
-							<else>
-								<echo message="git clone --depth 1 -q ${defaultBranch} ${regressionRepo}" />
-								<exec executable="git" failonerror="true">
-									<arg line="clone --depth 1 -q ${defaultBranch} ${regressionRepo}" />
-								</exec>
-								<move file="${jdkName}" tofile="openjdk-jdk"/>
-							</else>
-						</if>
+						<property name="defaultBranch" value=""/>
+					</else>
+				</if>
+				<if>
+					<isset property="env.OPENJDK_SHA"/>
+					<then>
+						<echo message="git clone -q ${defaultBranch} ${regressionRepo}" />
+						<exec executable="git" failonerror="true">
+							<arg line="clone -q ${defaultBranch} ${regressionRepo}" />
+						</exec>
+						<move file="${jdkName}" tofile="openjdk-jdk"/>
+						<exec executable="git" failonerror="true" dir="openjdk-jdk">
+							<arg line="checkout ${env.OPENJDK_SHA}" />
+						</exec>
+					</then>
+					<else>
+						<echo message="git clone --depth 1 -q ${defaultBranch} ${regressionRepo}" />
+						<exec executable="git" failonerror="true">
+							<arg line="clone --depth 1 -q ${defaultBranch} ${regressionRepo}" />
+						</exec>
+						<move file="${jdkName}" tofile="openjdk-jdk"/>
 					</else>
 				</if>
 			</else>
@@ -244,8 +246,20 @@
 			<available file="openjdk-jdk" type="dir"/>
 		</condition>
 	</target>
+
+	<target name="getDependentLibsCheck" >
+		<if>
+			<or>
+				<equals arg1="${JDK_IMPL}" arg2="ibm"  />
+				<equals arg1="${JDK_IMPL}" arg2="openj9" />
+			</or>
+			<then>
+				<antcall target="getDependentLibs"/>
+			</then>
+		</if>
+	</target>
 	
-	<target name="dist" depends="getJtreg, getOpenjdk" description="generate the distribution">
+	<target name="dist" depends="getDependentLibsCheck, getJtreg, getOpenjdk" description="generate the distribution">
 		<copy todir="${DEST}">
 			<fileset dir="${src}" includes="*.xml,ProblemList*.txt,*.mk"/>
 		</copy>

@@ -18,6 +18,13 @@
  * A template that defines a test job.
  */
 
+def getBaseJDKImpl(JDK_IMPL) {
+	if (JDK_IMPL == "hotspot" || JDK_IMPL == "sap" || JDK_IMPL == "corretto" || JDK_IMPL == "dragonwell") {
+		return "hotspot"
+	}
+	return JDK_IMPL
+}
+
 if (!binding.hasVariable('JDK_IMPL')) JDK_IMPL = "openj9"
 if (!binding.hasVariable('ARTIFACTORY_SERVER')) ARTIFACTORY_SERVER = ""
 if (!binding.hasVariable('ARTIFACTORY_REPO')) ARTIFACTORY_REPO = ""
@@ -88,6 +95,7 @@ if (binding.hasVariable('ARCH_OS_LIST')) {
 }
 
 JDK_IMPL_SN = JDK_IMPL
+JDK_IMPL_BASE = getBaseJDKImpl(JDK_IMPL)
 if (JDK_IMPL == "openj9") {
 	JDK_IMPL_SN = "j9"
 } else if (JDK_IMPL == "hotspot") {
@@ -151,7 +159,7 @@ ARCH_OS_LIST.each { ARCH_OS ->
 							stringParam('JDK_REPO', "", "JDK git repo. Please use ssh for zos.")
 							stringParam('JDK_BRANCH', "", "JDK branch")
 							stringParam('JDK_VERSION', "${JDK_VERSION}", "JDK version. i.e., 8, 11")
-							stringParam('JDK_IMPL', JDK_IMPL, "JDK implementation, e.g. hotspot, openj9, sap")
+							stringParam('JDK_IMPL', JDK_IMPL_BASE, "JDK Base implementation, e.g. hotspot, openj9")
 							stringParam('PLATFORM', "${ARCH_OS}", "Platform to be tested")
 							stringParam('BUILD_LIST', "${ACTUAL_BUILD_LIST}", "Specific test directory to compile, set blank for all projects to be compiled")
 							stringParam('TARGET', "${ACTUAL_TARGET}", "Test TARGET to execute")
@@ -166,6 +174,7 @@ ARCH_OS_LIST.each { ARCH_OS ->
 							stringParam('JVM_OPTIONS', "", "Use this to replace the test original command line options")
 							stringParam('ITERATIONS',"1", "Number of times to repeat execution of test target")
 							stringParam('LABEL', "", "Jenkins node label to run on. Leave this blank for the default value specified in PLATFORM_MAP. Set to node name to run on a particular machine.")
+							stringParam('ACTIVE_NODE_TIMEOUT', "", "Number of minutes we will wait for a label-matching node to become active.")
 							stringParam('LABEL_ADDITION', "", "Additional label(s) to append to LABEL. Usually when you want to add a label to the default value.")
 							booleanParam('DOCKER_REQUIRED', DOCKER_REQUIRED, "Is docker required?")
 							stringParam('DOCKERIMAGE_TAG', DOCKERIMAGE_TAG, "Docker image tag")
@@ -177,7 +186,7 @@ ARCH_OS_LIST.each { ARCH_OS ->
 							stringParam('ARTIFACTORY_REPO', ARTIFACTORY_REPO, "Optional. It should be used with ARTIFACTORY_SERVER")
 							stringParam('ARTIFACTORY_ROOT_DIR', ARTIFACTORY_ROOT_DIR, "Optional. It should be used with ARTIFACTORY_SERVER and ARTIFACTORY_REPO. Default is to set root dir to be the same as the current Jenkins domain")
 							booleanParam('PERSONAL_BUILD', false, "Is this a personal build?")
-							choiceParam('PARALLEL', ['None', 'Dynamic', 'Subdir', 'Iteration'], "Optional. Parallel mode")
+							choiceParam('PARALLEL', ['None', 'Dynamic', 'Subdir', 'NodesByIterations'], "Optional. Parallel mode")
 							stringParam('NUM_MACHINES', "", "Optional. Number of machines to run in parallel. Need to be used with PARALLEL=Dynamic")
 							stringParam('USER_CREDENTIALS_ID', "", "Optional. User credential ID")
 							stringParam('VENDOR_TEST_REPOS', "", "Optional. Addtional test repos")
@@ -189,7 +198,6 @@ ARCH_OS_LIST.each { ARCH_OS ->
 							booleanParam('AUTO_DETECT', AUTO_DETECT.toBoolean(), "Optional. Default is to enable AUTO_DETECT")
 							stringParam('TIME_LIMIT', TIME_LIMIT, "time limit")
 							stringParam('OPENJDK_SHA', "", "OpenJDK SHA from which to run tests")
-							stringParam('RELEASE_TAG', "", "SCM tag from which to run tests")
 							stringParam('TKG_OWNER_BRANCH', "AdoptOpenJDK:master", "TestKitGen git [owner]:[branch]. Default is AdoptOpenJDK:master")
 							stringParam('TKG_SHA', "", "TKG sha")
 							stringParam('UPSTREAM_TEST_JOB_NAME', "", "Auto-populated. Upstream test job name. It will be used together with PARALLEL=Dynamic")

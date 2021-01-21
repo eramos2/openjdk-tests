@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!--
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -41,6 +41,9 @@
 	</test>
 	<test>
 		<testCaseName>quarkus_native_test</testCaseName>
+		<disabled>
+			<comment>https://github.com/AdoptOpenJDK/openjdk-build/issues/767</comment>
+		</disabled>
 		<command> $(TEST_ROOT)$(D)external$(D)external.sh --run --tag ${DOCKERIMAGE_TAG} --version ${JDK_VERSION} --impl ${JDK_IMPL} --dir quarkus --reportdst $(REPORTDIR) --docker_args "$(EXTRA_DOCKER_ARGS)"; \
 		$(TEST_STATUS); \
 		$(TEST_ROOT)$(D)external$(D)external.sh --clean --tag ${DOCKERIMAGE_TAG} --version ${JDK_VERSION} --impl ${JDK_IMPL} --dir quarkus
@@ -51,6 +54,5 @@
 		<groups>
 			<group>external</group>
 		</groups>
-		<disabled>https://github.com/AdoptOpenJDK/openjdk-build/issues/767</disabled>
 	</test>
 </playlist>

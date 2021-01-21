@@ -319,6 +319,7 @@ function setServerDBAffinities() {
 	echo "DB will be using node: DB_NODE=${DB_NODE}"
 	echo "DB affinity command is: DB_AFFINITY_CMD=${DB_AFFINITY_CMD}"
 
+	affinity_tool_install_check
 	echo "##### Setting Affinities: Done"
 }
 
@@ -378,7 +379,7 @@ function get_node_count() {
 }
 
 function get_os() {
-	echo $(uname)
+	echo "$__AFFINITY_UNAME"
 }
 
 # i.e. x86, x86_64
@@ -592,7 +593,7 @@ function __init_cpus_aix() {
 	# add the nodes to an array
 	__AFFINITY_NUMA_NODE_ARR=()
 	for (( i=0; i<$__AFFINITY_NUMA_NODES; i++ )); do
-		local numa_node=$(lssrad -vs $i | tail -n 1 | awk '{print $4}')
+		local numa_node=$(lssrad -vs $i | tail -1 | awk '{print $4}')
 		__AFFINITY_NUMA_NODE_ARR+=($numa_node)
 	done
 
@@ -600,7 +601,7 @@ function __init_cpus_aix() {
 	local phys_cpus_count=$(lsdev -Cc processor | grep Available | wc -l)
 
 	# get total number of cpus
-	local cpu_max=$(bindprocessor -q | tr ' ' '\n' | tail -n 1)
+	local cpu_max=$(bindprocessor -q | tr ' ' '\n' | tail -1)
 	__AFFINITY_CPUS=$(expr $cpu_max + 1)
 
 	# get threads per core
@@ -1380,11 +1381,11 @@ function get_cpus() {
 
 # Checks whether the affinity tool is intalled/supported
 # If the tool is not installed/supported, it unsets all the affinity variables
-# This helps in avoiding errors while running some java command with affinity when affinity is missing
+# This helps in avoiding errors while running some java command with affinity when affinity tool is missing
 
 function affinity_tool_install_check() {
 
-	${SERVER_AFFINITY_CMD} > /dev/null 2>&1
+	${SERVER_AFFINITY_CMD} java -version > /dev/null 2>&1
 	if [ $? -eq 0 ]; then
 	    echo "Affinity tool is intalled/supported."
 	else
@@ -1422,7 +1423,7 @@ function generate_cpu_set_command() {
 
 	local PLATFORM=$(get_platform)
 	case "$PLATFORM" in
-		Linux-s390)
+		Linux-s390x)
 			echo "taskset -c $__ARG_CPU_BIND"
 			;;
 		Linux-*)

@@ -22,6 +22,16 @@ def makeTest(testParam) {
 }
 
 def setupEnv() {
+	env.JOBSTARTTIME = sh(script: 'LC_TIME=C date +"%a, %d %b %Y %T %z"', returnStdout: true).trim()
+
+	// Check what existing java processes are running
+        echo "PROCESSCATCH: Java processes which are currently on the machine:"
+	if (PLATFORM.contains("windows")) {
+		sh(script:'powershell -c "Get-Process java | select id,processname,starttime"', returnStatus:true)
+	} else {
+		sh(script:'ps -fu '+"${env.USER}"+' | grep java | egrep -v "remoting.jar|agent.jar|grep"', returnStatus: true)
+	}
+
 	if ( params.JDK_VERSION ) {
 		env.ORIGIN_JDK_VERSION = params.JDK_VERSION
 		env.JDK_VERSION = params.JDK_VERSION.equalsIgnoreCase("next") ? "" : params.JDK_VERSION
@@ -62,7 +72,6 @@ def setupEnv() {
 	env.EXTRA_OPTIONS = params.EXTRA_OPTIONS ? params.EXTRA_OPTIONS : ""
 	env.EXTRA_DOCKER_ARGS = params.EXTRA_DOCKER_ARGS ? params.EXTRA_DOCKER_ARGS : ""
 	env.OPENJDK_SHA = params.OPENJDK_SHA ? params.OPENJDK_SHA : ""
-	env.RELEASE_TAG = params.RELEASE_TAG ? params.RELEASE_TAG : ""
 	env.TEST_FLAG = params.TEST_FLAG ? params.TEST_FLAG : ''
 	env.KEEP_REPORTDIR = params.KEEP_REPORTDIR ? params.KEEP_REPORTDIR : ''
 	SDK_RESOURCE = params.SDK_RESOURCE ? params.SDK_RESOURCE : "upstream"
@@ -115,17 +124,18 @@ def setupEnv() {
 def setupParallelEnv() {
 	stage('setupParallelEnv') {
 		timestamps{
+			def maxChildJobNum = 25
 			def testSubDirs = []
 			int childJobNum = 1
 			def UPSTREAM_TEST_JOB_NAME = ""
 			def UPSTREAM_TEST_JOB_NUMBER = ""
 
-			if (params.PARALLEL == "Iteration") {
-				childJobNum = ITERATIONS
+			if (params.PARALLEL == "NodesByIterations") {
+				childJobNum = params.NUM_MACHINES ? params.NUM_MACHINES.toInteger() : 1
 				// limit childJobNum
 				if (childJobNum > 20) {
-					echo "Due to the limited machines, ITERATIONS can only be set up to 20. Current ITERATIONS is ${ITERATIONS}."
-					echo "Reset ITERATIONS to 20..." 
+					echo "Due to the limited machines, NUM_MACHINES can only be set up to 20. Current NUM_MACHINES is ${NUM_MACHINES}."
+					echo "Reset NUM_MACHINES to 20..." 
 					childJobNum = 20
 				}
 			} else if (params.PARALLEL == "Dynamic") {
@@ -173,7 +183,7 @@ def setupParallelEnv() {
 						NUM_LIST = properties.NUM_LIST.toInteger()
 					}
 				}
-				if (!params.NUM_MACHINES && params.TEST_TIME && NUM_LIST > getHalfSlaves()) {
+				if (!params.NUM_MACHINES && params.TEST_TIME && NUM_LIST > getMachineLimit()) {
 					assert false : "Build failed. TEST_TIME (${params.TEST_TIME} minutes) is not possible as there are not enough slave machines. Please provide a larger TEST_TIME."
 				} else if ( NUM_LIST > 0) {
 					childJobNum = NUM_LIST
@@ -182,8 +192,6 @@ def setupParallelEnv() {
 						archiveArtifacts artifacts: 'parallelList.mk', fingerprint: true, allowEmptyArchive: false
 					}
 
-					UPSTREAM_TEST_JOB_NAME = JOB_NAME
-					UPSTREAM_TEST_JOB_NUMBER = BUILD_NUMBER
 				} else {
 					assert false : "Build failed because cannot find NUM_LIST in parallelList.mk file."
 				}
@@ -201,10 +209,12 @@ def setupParallelEnv() {
 				}
 				
 				childJobNum = testSubDirs.size()
-				if ( childJobNum > 20) {
-					assert false : "Build failed becuase childJobNum: ${childJobNum} > 20."
+				if ( childJobNum > maxChildJobNum) {
+					assert false : "Build failed becuase childJobNum: ${childJobNum} > ${maxChildJobNum}."
 				}
 			}
+			UPSTREAM_TEST_JOB_NAME = JOB_NAME
+			UPSTREAM_TEST_JOB_NUMBER = BUILD_NUMBER
 			echo "[PARALLEL: ${params.PARALLEL}] childJobNum is ${childJobNum}, creating jobs and running them in parallel..."
 			parallel_tests = [:]
 			create_jobs = [:]
@@ -213,9 +223,8 @@ def setupParallelEnv() {
 				def buildListName = env.BUILD_LIST
 				def childTest = ""
 				def childTarget = TARGET
-				if (params.PARALLEL == "Iteration") {
+				if (params.PARALLEL == "NodesByIterations") {
 					childTest = "iteration_${i}"
-					
 				} else if (params.PARALLEL == "Dynamic") {
 					childTest = "testList_${i}"
 					childTarget = "-f parallelList.mk ${childTest}"
@@ -233,10 +242,8 @@ def setupParallelEnv() {
 				def childParams = []
 				// loop through all the params and change the parameters if needed
 				params.each { param ->
-					// set ITERATIONS, PARALLEL, NUM_MACHINES and TEST_TIME to default values
-					if (param.key == "ITERATIONS") {
-						childParams << string(name: param.key, value: "1")
-					} else if (param.key == "BUILD_LIST") {
+					// set PARALLEL, NUM_MACHINES and TEST_TIME to default values
+					if (param.key == "BUILD_LIST") {
 						childParams << string(name: param.key, value: "${buildListName}")
 					} else if (param.key == "TARGET") {
 						childParams << string(name: param.key, value: "${childTarget}")
@@ -264,7 +271,7 @@ def setupParallelEnv() {
 				childParams << string(name: 'RUNTIME_NAME', value: childTest)
 
 				parallel_tests[childTest] = {
-					build job: TEST_JOB_NAME, parameters: childParams
+					build job: TEST_JOB_NAME, parameters: childParams, propagate: false
 				}
 			}
 			parallel create_jobs
@@ -277,10 +284,10 @@ def setupParallelEnv() {
 
 // Returns num
 // num = params.NUM_MACHINES. If it is not provided, the default value is 1
-// num cannot be greater than slave machines / 2
+// num cannot be greater than machines limit
 def getNumMachines(){
 	int num = params.NUM_MACHINES ? params.NUM_MACHINES.toInteger() : 1
-	int limit = getHalfSlaves()
+	int limit = getMachineLimit()
 	if (num > limit) {
 		echo "Number of machines cannot be greater than ${limit}. Set num to ${limit}"
 		num = limit
@@ -288,12 +295,12 @@ def getNumMachines(){
 	return num
 }
 
-def getHalfSlaves(){
+def getMachineLimit(){
 	def slaves = nodesByLabel(LABEL).size()
 	if (slaves == 1) {
 		return slaves
 	}
-	return slaves / 2
+	return (int)(slaves * 3 / 4)
 }
 
 def createJob( TEST_JOB_NAME, ARCH_OS ) {
@@ -553,7 +560,8 @@ def runTest( ) {
 					makeTest("${RUNTEST_CMD}")
 				}
 				else if (env.SPEC.startsWith('linux')) {
-					wrap([$class: 'Xvfb', autoDisplayName: true]) {
+					// Add an additional 10 second timeout due to issue: https://github.com/AdoptOpenJDK/openjdk-build/issues/2368#issuecomment-756683888
+					wrap([$class: 'Xvfb', autoDisplayName: true, timeout:10]) {
 						def DISPLAY = sh (
 							script: 'ps -f  | grep \'[X]vfb\' | awk \'{print \$9}\'',
 							returnStdout: true
@@ -687,6 +695,9 @@ def testBuild() {
 				}
 			}
 		} finally {
+			// Terminate any left over java processes
+			terminateJavaProcesses()
+
 			if (!params.KEEP_WORKSPACE) {
 				// cleanWs() does not work in some cases, so set opts below
 				cleanWs notFailBuild: true, disableDeferredWipeout: true, deleteDirs: true
@@ -701,6 +712,52 @@ def testBuild() {
 			}	
 		}
 	}
+}
+
+def terminateJavaProcesses() {
+	// Attempt up to 30 times or until no more Java processes spawn...
+	for(int i=0; i<30; i++) {
+		echo 'terminateJavaProcesses iteration: '+(i+1)
+
+		// Terminate Java processes
+		if (PLATFORM.contains("windows")) {
+			// Windows code based on https://github.com/AdoptOpenJDK/openjdk-infrastructure/issues/1669#issuecomment-727863096
+			echo "PROCESSCATCH: Showing java processes - one will be the jenkins agent - removing any of these created since ${env.JOBSTARTTIME}:"
+			sh(script:'powershell -c "Get-Process java | select id,processname,starttime"', returnStatus:true)
+
+			def C=sh(script:'powershell -c "(Get-Process java | select id,processname,starttime | where {\\$_.StartTime -gt (Get-Date -Date \\"'+"${env.JOBSTARTTIME}"+'\\")} | measure).count" | tr -d \\\\r', returnStdout:true)
+			echo "Number of java processes = ${C}"
+			if (!C.trim().equals("0")) {
+			    echo "PROCESSCATCH: Attempting to stop the following processes:"
+			    sh(script:'powershell -c "Get-Process java | select id,processname,starttime | where {\\$_.StartTime -gt (Get-Date -Date \\"'+"${env.JOBSTARTTIME}"+'\\")}"', returnStatus:true)
+			    def sh_rc=sh(script:'powershell -c "Get-Process java | select id,processname,starttime | where {\\$_.StartTime -gt (Get-Date -Date \\"'+"${env.JOBSTARTTIME}"+'\\")} | stop-process"', returnStatus:true)
+			    echo "stop-process rc = ${sh_rc}"
+			} else {
+			    // No more spawned, we are done...
+			    break
+                        }
+		} else {
+			// Non-Windows code from https://ci.adoptopenjdk.net/job/SXA-processCheck
+			echo "PROCESSCATCH: Checking for any leftover java processes on the machine"
+			def sh_rc=sh(script:'ps -fu '+"${env.USER}"+' | grep java | egrep -v "remoting.jar|agent.jar|grep"', returnStatus: true)
+			if (sh_rc == 0) {
+			    echo "PROCESSCATCH: There are rogue processes still on the machine as per the list above"
+			    // TODO: We could kill them, but SXA-processCheck covers this in the adoptopenjdk jenkins
+			    // And this is likely to be replaced as part of https://github.com/AdoptOpenJDK/TKG/issues/45
+			}
+			break
+		}
+
+		// Pause between iterations in case of spawning processes
+		sleep(2)
+        }
+
+        echo "PROCESSCATCH: Removed processes - here is what is remaining:"
+        if (PLATFORM.contains("windows")) {
+		sh(script:'powershell -c "Get-Process java | select id,processname,starttime"', returnStatus:true)
+        } else {
+		sh(script:'ps -fu '+"${env.USER}"+' | grep java | egrep -v "remoting.jar|agent.jar|grep"', returnStatus:true)
+        }
 }
 
 def getJDKImpl(jvm_version) {
@@ -803,22 +860,59 @@ def run_parallel_tests() {
 	if (params.PARALLEL && params.PARALLEL != "None") {
 		stage ("Parallel Tests") {
 			def childJobs = parallel parallel_tests
-			node("$LABEL") {	
+			if (params.ACTIVE_NODE_TIMEOUT && params.ACTIVE_NODE_TIMEOUT.isInteger()) {
+				waitForANodeToBecomeActive("$LABEL", params.ACTIVE_NODE_TIMEOUT)
+			} else {
+				waitForANodeToBecomeActive("$LABEL", "0")
+			}
+			node("$LABEL") {
+				def buildResult = ""	
 				childJobs.each {
 					cjob ->
 					def jobInvocation = cjob.value.getRawBuild()
 					def buildId = jobInvocation.getNumber()
 					def name = cjob.value.getProjectName()
+					def childResult = cjob.value.getCurrentResult()
 					try {
+						echo "${name} #${buildId} completed with status ${childResult}"
 						copyArtifacts (projectName: "${name}", selector: specific("${buildId}"), filter: "**/TestTargetResult.tap", target:"${name}/${buildId}")
+						step([$class: "TapPublisher", testResults: "${name}/${buildId}/**/TestTargetResult.tap", outputTapToConsole: false, failIfNoResults: false])
 					} catch (Exception e) {
 						echo "Cannot copy TestTargetResult.tap from ${name} with buildid ${buildId} . Skipping copyArtifacts..."
+						buildResult = childResult
 					}
 				}
-				step([$class: "TapPublisher", testResults: "**/TestTargetResult.tap", outputTapToConsole: false, failIfNoResults: false])
+				if (buildResult) {
+					echo "set build status to ${buildResult}"
+					currentBuild.result = buildResult
+				}
 			}	
 		}
 	}
+}
+
+def waitForANodeToBecomeActive(def label, String activeNodeTimeoutString) {
+    def nodes = nodesByLabel(label).size()
+    if (nodes < 1) {
+        // If no active node matches the label, we see if there's a timeout value set.
+        // If there is, we wait and check again periodically. If not, we fail immediately.
+
+        int activeNodeTimeout = activeNodeTimeoutString as Integer
+
+        echo "Cannot find an active node matching this label: " + label
+        echo "Will now wait until " + activeNodeTimeoutString + " minutes (ACTIVE_NODE_TIMEOUT) has passed, re-checking periodically."
+
+        while (activeNodeTimeout > 0) {
+            sleep(60 * 1000) // 1 minute sleep
+            activeNodeTimeout--
+            if (nodesByLabel(LABEL).size() > 0) {
+                echo "A node matching the aforementioned label has become active."
+                return
+            }
+        }
+
+        assert false : "Timed out waiting for a machine that matches the LABEL: " + LABEL + " to become active."
+    }
 }
 
 def getGitRepoBranch(ownerBranch, defaultOwnerBranch, repo) {

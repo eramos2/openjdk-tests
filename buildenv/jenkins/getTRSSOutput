@@ -88,4 +88,5 @@ def getTRSSOutput() {
 	}
 }
 
+
 return this
