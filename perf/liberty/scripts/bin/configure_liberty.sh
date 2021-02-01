@@ -106,7 +106,7 @@ downloadJmeterDependencies()
 
 unsetVars()
 {	
-	unset APP_URL APP_ARCHIVE EXTRACT_ORIGINAL_NAME EXTRACT_NEW_NAME APP_DEST
+	unset APP_URL APP_ARCHIVE EXTRACT_ORIGINAL_NAME EXTRACT_NEW_NAME APP_DEST AUTH_NEEDED AUTH_TOKEN AUTH_USERNAME AUTH_PASSWORD 
 }
 
 downloadDepencies()
@@ -135,7 +135,17 @@ downloadDepencies()
 			echo "${LIBERTY_DEP_CACHE_LOCATION}/${APP_ARCHIVE} exists in Cache. Hence, not downloading it."
 		else
 			echo "${LIBERTY_DEP_CACHE_LOCATION}/${APP_ARCHIVE} doesn't exist in Cache. Hence, downloading it."
-			CURL_CMD="curl -OLk ${APP_URL}" 
+			if [ -z "${AUTH_NEEDED}" ]; then
+				echo "No authentication needed"
+				CURL_CMD="curl -OLk ${APP_URL}"
+			elif [ -z "${AUTH_TOKEN}" ]; then
+				echo "Use AUTH_USERNAME AND AUTH_PASSWORD to authenticate - ${AUTH_USERNAME}:${AUTH_PASSWORD}"
+				CURL_CMD="curl -OL ${AUTH_USERNAME}:${AUTH_PASSWORD} ${APP_URL}"
+			else 
+			    echo "Use AUTH_TOKEN to authenticate - ${AUTH_TOKEN}"
+				PARTIAL_CURL_CMD="curl -OL -H \"Authorization: token ${AUTH_TOKEN}\" \"${APP_URL}\""
+				CURL_CMD="eval $PARTIAL_CURL_CMD"
+			fi 
 	
 			echoAndRunCmd "${CURL_CMD}"		
 		fi
@@ -158,6 +168,84 @@ downloadDepencies()
 	fi 	
 }
 
+getLibertyLatestBuildLabel()
+{
+	printf '%s\n' "
+.--------------------------
+| Get Latest Build Label URL and set LIBERTYFS_BUILD_URL
+"
+
+	# Get build label from last.good.build.label Ex -> "cl210120201123-1900-_uucZEC21EeuXe4FTUa5Giw"
+	local LATEST_LABEL_RELEASE=`curl -u ${AUTH_USERNAME}:${AUTH_PASSWORD} ${LIBERTYFS_URL}/release/last.good.build.label`
+	local LATEST_LABEL_RELEASE2=`curl -u ${AUTH_USERNAME}:${AUTH_PASSWORD} ${LIBERTYFS_URL}/release2/last.good.build.label`
+
+	# Get the latest build label from release or release2
+	if [[ "${LATEST_LABEL_RELEASE}" > "${LATEST_LABEL_RELEASE2}" ]]; then
+    	echo "${LATEST_LABEL_RELEASE} greater than ${LATEST_LABEL_RELEASE2} - using ${LIBERTYFS_URL}/release/${LATEST_LABEL_RELEASE} URL"
+		LIBERTYFS_BUILD_URL="${LIBERTYFS_URL}/release/${LIBERTYFS_LATEST_RELEASE}"
+	else
+    	echo "${LATEST_LABEL_RELEASE2} greater than ${LATEST_LABEL_RELEASE} - using ${LIBERTYFS_URL}/release2/${LATEST_LABEL_RELEASE2} URL"
+		LIBERTYFS_BUILD_URL="${LIBERTYFS_URL}/release2/${LATEST_LABEL_RELEASE2}"
+	fi
+
+	if [[ -z ${LIBERTYFS_BUILD_URL} ]]; then
+		echo "Exiting without configuring Liberty since a latest build was not found in ${LIBERTYFS_URL}/release or ${LIBERTYFS_URL}/release2"
+		exit
+	fi
+
+}
+
+searchLibertyBuild()
+{
+	printf '%s\n' "
+.--------------------------
+| Search for the given Liberty BUILD on libertyfs release/release2 and set LIBERTYFS_BUILD_URL
+"
+
+	# Search for a build match on release or release2. Match looks like example bellow:
+	# <tr><td valign="top"><img src="/icons/folder.gif" alt="[DIR]"></td><td><a href="cl210220210121-1100-_hXbe0FvPEeuM3vrL9EeJlQ/">cl210220210121-1100-_hXbe0FvPEeuM3vrL9EeJlQ/</a></td><td align="right">2021-01-26 10:24  </td><td align="right">  - </td><td>&nbsp;</td></tr>
+	local BUILD_LABEL_RELEASE=`curl -u ${AUTH_USERNAME}:${AUTH_PASSWORD} ${LIBERTYFS_URL}/release | grep "${BUILD}"`
+	local BUILD_LABEL_RELEASE2=`curl -u ${AUTH_USERNAME}:${AUTH_PASSWORD} ${LIBERTYFS_URL}/release2/ | grep "${BUILD}"`
+	local BUILD_LABEL
+	if [[ ! -z "${BUILD_LABEL_RELEASE}" ]]; then
+		echo "Found ${BUILD} in ${LIBERTYFS_URL}/release"
+		echo "${BUILD_LABEL_RELEASE}"
+	    BUILD_LABEL=`echo ${BUILD_LABEL_RELEASE} | grep -oE "${BUILD}.*/\"" | sed 's/\/"//'`
+		LIBERTYFS_BUILD_URL="${LIBERTYFS_URL}/release/${BUILD_LABEL}"
+	elif [[ ! -z "${BUILD_LABEL_RELEASE2}" ]]; then
+		echo "Found ${BUILD} in ${LIBERTYFS_URL}/release2"
+		echo "${BUILD_LABEL_RELEASE2}"
+	    BUILD_LABEL=`echo ${BUILD_LABEL_RELEASE2} | grep -oE "${BUILD}.*/\"" | sed 's/\/"//'`
+		LIBERTYFS_BUILD_URL="${LIBERTYFS_URL}/release2/${BUILD_LABEL}"
+	else
+		echo "Exiting without configuring Liberty since ${BUILD} was not found in ${LIBERTYFS_URL}/release or ${LIBERTYFS_URL}/release2"
+		exit
+	fi
+
+}
+
+getLibertyBuildDetails()
+{
+	printf '%s\n' "
+.--------------------------
+| Gather Liberty Build Details (Build Label, Websphere and Open Liberty Builds URL)
+"
+
+	# Get Liberty Latest Good Build 
+	
+ 	LIBERTY_BUILD_LABEL=`curl -u ${AUTH_USERNAME}:${AUTH_PASSWORD} ${LIBERTYFS_URL}/last.good.build.label`
+ 	
+	for i in "${JMETER_DEPENDENCIES_URL[@]}"; do
+
+		DEP_NAME=${i}
+		CURL_CMD="curl -OLks ${DEP_NAME}"
+		
+		echoAndRunCmd "${CURL_CMD}"
+
+    done
+
+}
+
 OS=$(uname)
 echo "OS=${OS}"
 ARCH=$(uname -m)
@@ -174,75 +262,48 @@ checkAndSetEnvVars
 
 echoAndRunCmd "mkdir -p ${DEST} ${LIBERTY_DEP_CACHE_LOCATION}"
 
+# REPO - https://libertyfs.hursley.ibm.com/liberty/dev/Xo/release/cl210220210125-1100-_GAq8QF70Eeu-m6gcHvZdzA or https://libertyfs.hursley.ibm.com/liberty/dev/Xo/release2/
+# https://libertyfs.hursley.ibm.com/liberty/dev/Xo/release/last.good.build.html or https://libertyfs.hursley.ibm.com/liberty/dev/Xo/release2/last.good.build.html
+# CHECK IF LATEST BUILD IS DESIRED
+if [[ "${BUILD}" == "latest" ]]; then
+	getLibertyLatestBuildLabel
+	# Get the build from LIBERTYFS_BUILD_URL so we can use it for WL_ZIP - https://libertyfs.hursley.ibm.com/liberty/dev/Xo/release/cl210220210125-1100-_GAq8QF70Eeu-m6gcHvZdzA -> cl210220210125-1100
+	BUILD=`echo ${LIBERTYFS_BUILD_URL} | sed 's/^.*\///' | sed 's/-_.*//'`
+else
+	searchLibertyBuild
+fi
+
+# Download WL and OL from LIBERTYFS_BUILD_URL - Ex: https://libertyfs.hursley.ibm.com/liberty/dev/Xo/release/cl210220210125-1100-_GAq8QF70Eeu-m6gcHvZdzA
+# To download OL https://libertyfs.hursley.ibm.com/liberty/dev/Xo/release/[BUILD LABEL]/fe/cl210220210125-1100.47.linux/linux/zipper/externals/installables/ and search for openliberty-all there 
+FE_OL_URL=`curl -u ${AUTH_USERNAME}:${AUTH_PASSWORD} ${LIBERTYFS_BUILD_URL}/fe | grep -oE "href=\"cl200920200820-0913.*\.linux/\"" | sed 's/\/"//' | sed 's/href="//'`
+INSTALLABLES_OL_URL="${PARTIAL_OL_URL}/linux/zipper/externals/installables/"
+OL_ZIP=`echo ${INSTALLABLES_OL_URL} | grep -oE "openliberty-all.*.zip\"" | sed 's/"//'`
+# To download WL search for wlp-[build].zip file https://libertyfs.hursley.ibm.com/liberty/dev/Xo/release/[BUILD LABEL]/wlp-[build].zip
+WL_ZIP=`echo "${LIBERTYFS_BUILD_URL}" | grep -oE "wlp-${BUILD}\.zip\"" | sed 's/"//'`
 
 ##########################
 
 unsetVars
-#Note: We need to use "All GA Features" package as "Web Profile 8" package doesn't have all the features required for DayTrader7.
-APP_URL="https://public.dhe.ibm.com/ibmdl/export/pub/software/openliberty/runtime/release/2020-09-15_1100/openliberty-20.0.0.10.zip"
-APP_ARCHIVE="$(basename ${APP_URL})"
-EXTRACT_ORIGINAL_NAME="wlp"
-EXTRACT_NEW_NAME="openliberty-20.0.0.10"
-APP_DEST="${DEST}/libertyBinaries"
-downloadDepencies
-
-BM_VERSION=${EXTRACT_NEW_NAME}
-
-##########################
-
-unsetVars
-APP_URL="https://github.com/WASdev/sample.daytrader7/releases/download/v1.2/daytrader-ee7.ear"
+APP_URL="${INSTALLABLES_OL_URL}/${OL_ZIP}"
 APP_ARCHIVE="$(basename ${APP_URL})"
 EXTRACT_ORIGINAL_NAME=${APP_ARCHIVE}
-EXTRACT_NEW_NAME=${EXTRACT_ORIGINAL_NAME}
-APP_DEST="${DEST}/libertyBinaries/${BM_VERSION}/usr/shared/apps/webcontainer"
+EXTRACT_NEW_NAME="OL-liberty-${BUILD}"
+APP_DEST="${DEST}/libertyBinaries"
+AUTH_NEEDED=true
 downloadDepencies
 
 ##########################
 
 unsetVars
-APP_URL="http://archive.apache.org/dist/db/derby/db-derby-10.10.1.1/db-derby-10.10.1.1-lib.zip"
+APP_URL="${LIBERTYFS_BUILD_URL}/${WL_ZIP}"
 APP_ARCHIVE="$(basename ${APP_URL})"
-EXTRACT_ORIGINAL_NAME="db-derby-10.10.1.1-lib"
-EXTRACT_NEW_NAME=${EXTRACT_ORIGINAL_NAME}
-APP_DEST="${DEST}"
+EXTRACT_ORIGINAL_NAME=${APP_ARCHIVE}
+EXTRACT_NEW_NAME="WL-liberty-${BUILD}"
+APP_DEST="${DEST}/libertyBinaries"
+AUTH_NEEDED=true
+AUTH_USERNAME=${}
+AUTH_PASSWORD=${}
 downloadDepencies
 
-DERBY_FILE_LOCATION="${DEST}/libertyBinaries/${BM_VERSION}/usr/shared/resources/derby/"
-echoAndRunCmd "mkdir -p ${DERBY_FILE_LOCATION}"
-echoAndRunCmd "cp ${APP_DEST}/${EXTRACT_NEW_NAME}/lib/derby.jar ${DERBY_FILE_LOCATION}"
-
 ##########################
-
-unsetVars
-APP_URL="https://github.com/WASdev/sample.daytrader7/archive/v1.2.zip"
-APP_ARCHIVE="$(basename ${APP_URL})"
-EXTRACT_ORIGINAL_NAME="sample.daytrader7-1.2"
-EXTRACT_NEW_NAME=${EXTRACT_ORIGINAL_NAME}
-APP_DEST="${DEST}"
-downloadDepencies
-
-JMX_FILE_LOCATION="${DEST}/scripts/resource/client_scripts"
-echoAndRunCmd "mkdir -p ${JMX_FILE_LOCATION}"
-echoAndRunCmd "cp ${APP_DEST}/${EXTRACT_NEW_NAME}/jmeter_files/daytrader7.jmx ${JMX_FILE_LOCATION}"
-
-##########################
-
-unsetVars
-APP_URL="https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-3.3.zip"
-APP_ARCHIVE="$(basename ${APP_URL})"
-EXTRACT_ORIGINAL_NAME="apache-jmeter-3.3" 
-EXTRACT_NEW_NAME=${EXTRACT_ORIGINAL_NAME}
-APP_DEST="${DEST}/JMeter"
-downloadDepencies
-
-JMETER_LOCATION="${APP_DEST}/${EXTRACT_NEW_NAME}"
-downloadJmeterDependencies
-
-##########################
-
-populateDatabase
-
-##########################
-
 

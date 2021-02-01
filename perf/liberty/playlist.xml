@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,32 +12,685 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 -->
-<playlist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../TKG/playlist.xsd">
+<playlist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../../TKG/playlist.xsd">
 	<test>
-		<testCaseName>liberty-dt7-startup</testCaseName>
-		<command>export SERVER_PHYSCPU_NUM=2; export SMT=true; bash $(Q)$(TEST_RESROOT)$(D)configs$(D)dt7_sufp.sh$(Q) $(TEST_RESROOT); \
-		${TEST_STATUS}
+		<testCaseName>OpenLibertySUFPAcmeAirMicro</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) acmeair-micro $(TEST_RESROOT) OL; \
+			${TEST_STATUS}
 		</command>
-		<!-- TODO: Liberty benchmarks has support for zOS but we've never run Mac and aarch64. Enable zOS after testing. -->
-		<platformRequirements>bits.64,^os.zos,^os.osx,^arch.aarch64</platformRequirements>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
 		<levels>
-			<level>special</level>
+			<level>extended</level>
 		</levels>
 		<groups>
 			<group>perf</group>
 		</groups>
 	</test>
 	<test>
-		<testCaseName>liberty-dt7-throughput</testCaseName>
-		<command>export SERVER_PHYSCPU_NUM=2; export SMT=true; bash $(Q)$(TEST_RESROOT)$(D)configs$(D)dt7_throughput.sh$(Q) $(TEST_RESROOT); \
-		${TEST_STATUS}
+		<testCaseName>OpenLibertySUFPAcmeAirMono</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) acmeair-mono $(TEST_RESROOT) OL; \
+			${TEST_STATUS}
 		</command>
-		<!-- TODO: Liberty benchmarks has support for non-Linux platforms (Windows/AIX/zOS) but we've never run Mac and aarch64. Also, we've 
-		used xLinux to run client and DB in the past. Hence, we'll need to test to see whether JMeter and other dependencies can run on 
-		other platforms. Enable other platform after testing. -->
-		<platformRequirements>os.linux,bits.64,^os.zos,^os.osx,^arch.aarch64</platformRequirements>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
 		<levels>
-			<level>special</level>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPCDIBase</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) cdi-base $(TEST_RESROOT) OL; \
+			${TEST_STATUS}
+		</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPCDIFat</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) cdi-fat $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPCDIOneJarFat</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) cdi-one-jar-fat $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPDT7</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) dt7 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPDT8</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) dt8 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPHugeEJB</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) huge-ejb $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPJavaEE7</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) javaee7 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPJavaEE8</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) javaee8 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPJaxrsFat</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) jaxrs-fat $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPJenkins</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) jenkins $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPMicroProfile3.0</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) micro-profile-3.0 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPMicroProfile3.3</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) micro-profile-3.3 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPMicroProfile4.0</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) micro-profile-4.0 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPNoApp</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) no-app $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPNoFeat</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) no-feat $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPPetclinic</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) petclinic $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPPingperf</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) pingperf $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPSpring156</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) spring-1.5.6 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPSpring211</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) spring-2.1.1 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPTradelite7</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) tradelite7 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPTradelite8</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) tradelite8 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPWebprofile7</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) webProfile7 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPWebprofile8</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) webProfile8 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>OpenLibertySUFPWebprofile9</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) webProfile9 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPAcmeAirMicro</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) acmeair-micro $(TEST_RESROOT) WL; \
+			${TEST_STATUS}
+		</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPAcmeAirMono</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) acmeair-mono $(TEST_RESROOT) WL; \
+			${TEST_STATUS}
+		</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPCDIBase</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) cdi-base $(TEST_RESROOT) WL; \
+			${TEST_STATUS}
+		</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPCDIFat</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) cdi-fat $(TEST_RESROOT) WL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPCDIOneJarFat</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) cdi-one-jar-fat $(TEST_RESROOT) WL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPDT7</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) dt7 $(TEST_RESROOT) WL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPDT8</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) dt8 $(TEST_RESROOT) WL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPHugeEJB</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) huge-ejb $(TEST_RESROOT) WL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPJavaEE7</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) javaee7 $(TEST_RESROOT) WL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPJavaEE8</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) javaee8 $(TEST_RESROOT) WL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPJaxrsFat</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) jaxrs-fat $(TEST_RESROOT) WL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPJenkins</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) jenkins $(TEST_RESROOT) WL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPMicroProfile3.0</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) micro-profile-3.0 $(TEST_RESROOT) WL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPMicroProfile3.3</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) micro-profile-3.3 $(TEST_RESROOT) WL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPMicroProfile4.0</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) micro-profile-4.0 $(TEST_RESROOT) WL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPNoApp</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) no-app $(TEST_RESROOT) WL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPNoFeat</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) no-feat $(TEST_RESROOT) WL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPPetclinic</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) petclinic $(TEST_RESROOT) WL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPPingperf</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) pingperf $(TEST_RESROOT) WL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPSpring156</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) spring-1.5.6 $(TEST_RESROOT) WL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPSpring211</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) spring-2.1.1 $(TEST_RESROOT) WL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPTradelite7</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) tradelite7 $(TEST_RESROOT) WL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPTradelite8</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) tradelite8 $(TEST_RESROOT) WL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPWebprofile7</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) webProfile7 $(TEST_RESROOT) WL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPWebprofile8</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) webProfile8 $(TEST_RESROOT) WL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>WebsphereLibertySUFPWebprofile9</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) webProfile9 $(TEST_RESROOT) WL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
 		</levels>
 		<groups>
 			<group>perf</group>
