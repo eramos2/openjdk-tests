@@ -1,0 +1,47 @@
+<server description="new server">
+
+  <!-- Enable features -->
+  <featureManager>
+      <feature>localConnector-1.0</feature>
+      <feature>microProfile-1.0</feature>
+  </featureManager>
+
+  <!-- To access this server from a remote client add a host attribute to the following element, e.g. host="*" -->
+  <httpEndpoint host="*" httpPort="9080" httpsPort="9443" id="defaultHttpEndpoint"/>
+
+<!--
+  <webContainer deferServletLoad="false"/>
+  <cdi12 enableImplicitBeanArchives="false"/>
+  <applicationManager startTimeout="300s" stopTimeout="30s"/>
+  <executor coreThreads="4" maxThreads="4"/>
+-->
+
+<!-- Automatically expand WAR files and EAR files -->
+<applicationManager autoExpand="true" startTimeout="300s" stopTimeout="30s"/>
+
+  <applicationMonitor updateTrigger="mbean"/>
+
+  <webApplication id="meetings" location="/sufp/apps/cdi-one-jar-fat/fat-cdi-meetings-one-jar.war" name="meetings" context-root="meetings" >
+    <classloader commonLibraryRef="mongodriver"/>
+    <application-bnd>
+      <security-role name="any">
+          <special-subject type="ALL_AUTHENTICATED_USERS"></special-subject>
+      </security-role>
+      <security-role name="all">
+           <special-subject type="EVERYONE"></special-subject>
+      </security-role>
+    </application-bnd>
+  </webApplication>
+
+  <basicRegistry>
+    <user password="test" name="test"></user>
+  </basicRegistry>
+  
+  <keyStore id="defaultKeyStore" password="{aes}AJjv9lLYa9pgHXjCb7efkqkQrJ6P3nsnokVADZli5lAiZlaE097dZV6ixLl/hZmVfkYevbp3j6SNZ9v8DnolJ6Y="/>
+
+
+  <library id="mongodriver">
+    <file name="/sufp/apps/cdi-one-jar-fat/mongo-java-driver-2.11.1.jar"/>
+  </library>
+
+</server>
