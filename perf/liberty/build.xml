@@ -14,7 +14,7 @@
 # limitations under the License.
 -->
 
-<project name="Liberty Tests" default="build" basedir=".">
+<project name="Liberty Docker Tests" default="build" basedir=".">
 	<taskdef resource="net/sf/antcontrib/antlib.xml" />
 	<description>Liberty Tests</description>
 
