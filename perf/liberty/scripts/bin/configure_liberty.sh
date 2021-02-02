@@ -280,10 +280,10 @@ fi
 echo "LIBERTYFS_BUILD_URL=${LIBERTYFS_BUILD_URL}"
 echo "LIBERTY_BUILD_LEVEL=${LIBERTY_BUILD_LEVEL}"
 FE_OL_URL=`curl -u ${AUTH_USERNAME}:${AUTH_PASSWORD} ${LIBERTYFS_BUILD_URL}/fe/ | grep -oE "href=\"${LIBERTY_BUILD_LEVEL}.*\.linux/\"" | sed 's/\/"//' | sed 's/href="//'`
-INSTALLABLES_OL_URL="${FE_OL_URL}/linux/zipper/externals/installables"
-OL_ZIP=`echo ${INSTALLABLES_OL_URL} | grep -oE "openliberty-all.*.zip\"" | sed 's/"//'`
+INSTALLABLES_OL_URL="${LIBERTYFS_BUILD_URL}/fe/${FE_OL_URL}/linux/zipper/externals/installables"
+OL_ZIP=`curl -u ${AUTH_USERNAME}:${AUTH_PASSWORD} ${INSTALLABLES_OL_URL}/ | grep -oE "openliberty-all.*.zip\"" | sed 's/"//'`
 # To download WL search for wlp-[build].zip file https://libertyfs.hursley.ibm.com/liberty/dev/Xo/release/[BUILD LABEL]/wlp-[build].zip
-WL_ZIP=`echo "${LIBERTYFS_BUILD_URL}" | grep -oE "wlp-${LIBERTY_BUILD_LEVEL}\.zip\"" | sed 's/"//'`
+WL_ZIP=`curl -u ${AUTH_USERNAME}:${AUTH_PASSWORD} ${LIBERTYFS_BUILD_URL}/ | grep -oE "wlp-${LIBERTY_BUILD_LEVEL}\.zip\"" | sed 's/"//'`
 
 ##########################
 
