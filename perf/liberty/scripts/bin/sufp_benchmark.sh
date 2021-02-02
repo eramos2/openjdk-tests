@@ -17,13 +17,13 @@
 
 
 echo "Transfering sufp scripts (pingperfPingScript.sh, cleanupScripts.sh, pingFirstResponse.sh) to load driver - ${LOAD_DRIVER}"
-scp -r ${DEST}/scripts/sufp/pingperfPingScript.sh ${DEST}/scripts/sufp/cleanupScripts.sh ${DEST}/scripts/sufp/pingFirstResponse.sh root@${LOAD_DRIVER}:/sufp/ 
+scp -r ${TEST_RESROOT}/scripts/sufp/pingperfPingScript.sh ${TEST_RESROOT}/scripts/sufp/cleanupScripts.sh ${TEST_RESROOT}/scripts/sufp/pingFirstResponse.sh root@${LOAD_DRIVER}:/sufp/ 
 
 
 # Get the WL or OL build directory
 BUILD_DIR=`ls ${LIBERTY_BINARIES_DIR} | grep "${LIBERTY_VERSION}-liberty"`
 dirDate=`date "+%y%m%d_%k%M%S" | tr -d " "`
-resDir=${TEST_RESROOT}/libertyResults/${BUILD_DIR}/${APP}_${dirDate}
+resDir=${LIBERTY_BINARIES_DIR}/libertyResults/${BUILD_DIR}/${APP}_${dirDate}
 echo "Create resDir: ${resDir}"
 mkdir -p ${resDir}
 
@@ -31,8 +31,8 @@ cd ${BUILD_DIR}/wlp
 ${TEST_RESROOT}/scripts/sufp/sufpSetupServers.sh ${TEST_RESROOT}/scripts/sufp
 
 cd ${BUILD_DIR}/wlp
-echo "Starting test on app: ${APP} for build: ${BUILD}"
-${TEST_RESROOT}/scripts/sufp/libertySufpCycles.sh ${resDir} ${BUILD}_${APP}_${java}_two-warmups-cpus-4-runs-${MEASUREMENT_RUNS}-try-1 ${APP} ${MEASUREMENT_RUNS}
-echo "Finished test on app: ${APP} for build: ${BUILD}"
+echo "Starting test on app: ${APP} for build: ${BUILD_DIR}"
+${TEST_RESROOT}/scripts/sufp/libertySufpCycles.sh ${resDir} ${BUILD_DIR}_${APP}_${java}_two-warmups-cpus-4-runs-${MEASUREMENT_RUNS}-try-1 ${APP} ${MEASUREMENT_RUNS}
+echo "Finished test on app: ${APP} for build: ${BUILD_DIR}"
 
 
