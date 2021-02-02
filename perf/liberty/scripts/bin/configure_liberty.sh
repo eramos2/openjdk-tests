@@ -265,6 +265,8 @@ echoAndRunCmd "mkdir -p ${DEST} ${LIBERTY_DEP_CACHE_LOCATION}"
 # REPO - https://libertyfs.hursley.ibm.com/liberty/dev/Xo/release/cl210220210125-1100-_GAq8QF70Eeu-m6gcHvZdzA or https://libertyfs.hursley.ibm.com/liberty/dev/Xo/release2/
 # https://libertyfs.hursley.ibm.com/liberty/dev/Xo/release/last.good.build.html or https://libertyfs.hursley.ibm.com/liberty/dev/Xo/release2/last.good.build.html
 # CHECK IF LATEST BUILD IS DESIRED
+LIBERTYFS_URL=https://${LIBERTY_BUILD_REPO}/liberty/dev/${LIBERTY_BUILD_STREAM}
+echo "LIBERTYFS_URL=${LIBERTYFS_URL}"
 if [[ "${LIBERTY_BUILD_LEVEL}" == "latest" ]]; then
 	getLibertyLatestBuildLabel
 	# Get the build from LIBERTYFS_BUILD_URL so we can use it for WL_ZIP - https://libertyfs.hursley.ibm.com/liberty/dev/Xo/release/cl210220210125-1100-_GAq8QF70Eeu-m6gcHvZdzA -> cl210220210125-1100
@@ -295,8 +297,8 @@ downloadDepencies
 ##########################
 
 unsetVars
-APP_URL="${LIBERTYFS_BUILD_URL}/${WL_ZIP}"
-APP_ARCHIVE="$(basename ${APP_URL})"
+APP_URL="${}/${WL_ZIP}"
+APP_ARCHIVE="$(basename ${APLIBERTYFS_BUILD_URLP_URL})"
 EXTRACT_ORIGINAL_NAME=${APP_ARCHIVE}
 EXTRACT_NEW_NAME="WL-liberty-${LIBERTY_BUILD_LEVEL}"
 APP_DEST="${DEST}/libertyBinaries"
