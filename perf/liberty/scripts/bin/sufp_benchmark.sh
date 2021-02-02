@@ -31,8 +31,8 @@ cd ${BUILD_DIR}/wlp
 ${TEST_RESROOT}/scripts/sufp/sufpSetupServers.sh ${TEST_RESROOT}/scripts/sufp
 
 cd ${BUILD_DIR}/wlp
-echo "Starting test on app: ${APP} for build: ${BUILD_DIR}"
-${TEST_RESROOT}/scripts/sufp/libertySufpCycles.sh ${resDir} ${BUILD_DIR}_${APP}_${java}_two-warmups-cpus-4-runs-${MEASUREMENT_RUNS}-try-1 ${APP} ${MEASUREMENT_RUNS}
-echo "Finished test on app: ${APP} for build: ${BUILD_DIR}"
+echo "Starting test on app: ${APP} for build: ${LIBERTY_BUILD_LEVEL}"
+${TEST_RESROOT}/scripts/sufp/libertySufpCycles.sh ${resDir} ${LIBERTY_BUILD_LEVEL}_${APP}_${java}_two-warmups-cpus-4-runs-${MEASUREMENT_RUNS}-try-1 ${APP} ${MEASUREMENT_RUNS}
+echo "Finished test on app: ${APP} for build: ${LIBERTY_BUILD_LEVEL}"
 
 
