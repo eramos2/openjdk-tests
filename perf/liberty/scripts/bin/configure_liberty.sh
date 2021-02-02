@@ -182,7 +182,7 @@ getLibertyLatestBuildLabel()
 	# Get the latest build label from release or release2
 	if [[ "${LATEST_LABEL_RELEASE}" > "${LATEST_LABEL_RELEASE2}" ]]; then
     	echo "${LATEST_LABEL_RELEASE} greater than ${LATEST_LABEL_RELEASE2} - using ${LIBERTYFS_URL}/release/${LATEST_LABEL_RELEASE} URL"
-		LIBERTYFS_BUILD_URL="${LIBERTYFS_URL}/release/${LIBERTYFS_LATEST_RELEASE}"
+		LIBERTYFS_BUILD_URL="${LIBERTYFS_URL}/release/${LATEST_LABEL_RELEASE}"
 	else
     	echo "${LATEST_LABEL_RELEASE2} greater than ${LATEST_LABEL_RELEASE} - using ${LIBERTYFS_URL}/release2/${LATEST_LABEL_RELEASE2} URL"
 		LIBERTYFS_BUILD_URL="${LIBERTYFS_URL}/release2/${LATEST_LABEL_RELEASE2}"
@@ -299,7 +299,7 @@ downloadDepencies
 ##########################
 
 unsetVars
-APP_URL="${}/${WL_ZIP}"
+APP_URL="${LIBERTYFS_BUILD_URL}/${WL_ZIP}"
 APP_ARCHIVE="$(basename ${APLIBERTYFS_BUILD_URLP_URL})"
 EXTRACT_ORIGINAL_NAME=${APP_ARCHIVE}
 EXTRACT_NEW_NAME="WL-liberty-${LIBERTY_BUILD_LEVEL}"
