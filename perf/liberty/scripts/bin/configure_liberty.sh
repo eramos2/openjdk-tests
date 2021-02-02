@@ -279,7 +279,7 @@ fi
 # To download OL https://libertyfs.hursley.ibm.com/liberty/dev/Xo/release/[BUILD LABEL]/fe/cl210220210125-1100.47.linux/linux/zipper/externals/installables/ and search for openliberty-all there 
 echo "LIBERTYFS_BUILD_URL=${LIBERTYFS_BUILD_URL}"
 echo "LIBERTY_BUILD_LEVEL=${LIBERTY_BUILD_LEVEL}"
-FE_OL_URL=`curl -u ${AUTH_USERNAME}:${AUTH_PASSWORD} ${LIBERTYFS_BUILD_URL}/fe | grep -oE "href=\"${LIBERTY_BUILD_LEVEL}.*\.linux/\"" | sed 's/\/"//' | sed 's/href="//'`
+FE_OL_URL=`curl -u ${AUTH_USERNAME}:${AUTH_PASSWORD} ${LIBERTYFS_BUILD_URL}/fe/ | grep -oE "href=\"${LIBERTY_BUILD_LEVEL}.*\.linux/\"" | sed 's/\/"//' | sed 's/href="//'`
 INSTALLABLES_OL_URL="${FE_OL_URL}/linux/zipper/externals/installables"
 OL_ZIP=`echo ${INSTALLABLES_OL_URL} | grep -oE "openliberty-all.*.zip\"" | sed 's/"//'`
 # To download WL search for wlp-[build].zip file https://libertyfs.hursley.ibm.com/liberty/dev/Xo/release/[BUILD LABEL]/wlp-[build].zip
