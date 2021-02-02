@@ -22,6 +22,7 @@ scp -r ${TEST_RESROOT}/scripts/sufp/scripts/pingperfPingScript.sh ${TEST_RESROOT
 
 # Get the WL or OL build directory
 BUILD_DIR=`ls ${LIBERTY_BINARIES_DIR} | grep "${LIBERTY_VERSION}-liberty"`
+echo "BUILD_DIR=${BUILD_DIR}"
 dirDate=`date "+%y%m%d_%k%M%S" | tr -d " "`
 resDir=${LIBERTY_BINARIES_DIR}/libertyResults/${BUILD_DIR}/${APP}_${dirDate}
 echo "Create resDir: ${resDir}"
