@@ -153,6 +153,7 @@ downloadDepencies()
 		
 		if [ "${APP_ARCHIVE}" != "${EXTRACT_NEW_NAME}" ]; then
 			echo "${APP_ARCHIVE} requires extraction."
+			pwd
 			echoAndRunCmd "unzip -oq ${APP_ARCHIVE} -d ${APP_DEST}"
 			
 			if [ "${EXTRACT_NEW_NAME}" != "${EXTRACT_ORIGINAL_NAME}" ]; then
