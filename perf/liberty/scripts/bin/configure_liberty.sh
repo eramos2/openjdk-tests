@@ -140,7 +140,8 @@ downloadDepencies()
 				CURL_CMD="curl -OLk ${APP_URL}"
 			elif [ -z "${AUTH_TOKEN}" ]; then
 				echo "Use AUTH_USERNAME AND AUTH_PASSWORD to authenticate - ${AUTH_USERNAME}:${AUTH_PASSWORD}"
-				CURL_CMD="curl -OL -u ${AUTH_USERNAME}:${AUTH_PASSWORD} ${APP_URL}"
+				PARTIAL_CURL_CMD="curl -OL -u ${AUTH_USERNAME}:${AUTH_PASSWORD} ${APP_URL}"
+				CURL_CMD="eval $PARTIAL_CURL_CMD"
 			else 
 			    echo "Use AUTH_TOKEN to authenticate - ${AUTH_TOKEN}"
 				PARTIAL_CURL_CMD="curl -OL -H \"Authorization: token ${AUTH_TOKEN}\" \"${APP_URL}\""
