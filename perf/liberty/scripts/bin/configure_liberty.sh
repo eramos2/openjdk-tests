@@ -298,7 +298,7 @@ APP_URL="${INSTALLABLES_OL_URL}/${OL_ZIP}"
 APP_ARCHIVE="$(basename ${APP_URL})"
 EXTRACT_ORIGINAL_NAME=${APP_ARCHIVE}
 EXTRACT_NEW_NAME="OL-liberty-${LIBERTY_BUILD_LEVEL}"
-APP_DEST="${DEST}/libertyBinaries"
+APP_DEST="${DEST}/libertyBinaries/OL-liberty"
 AUTH_NEEDED=true
 ls ${APP_DEST}
 downloadDepencies
@@ -310,7 +310,7 @@ APP_URL="${LIBERTYFS_BUILD_URL}/${WL_ZIP}"
 APP_ARCHIVE="$(basename ${APP_URL})"
 EXTRACT_ORIGINAL_NAME=${APP_ARCHIVE}
 EXTRACT_NEW_NAME="WL-liberty-${LIBERTY_BUILD_LEVEL}"
-APP_DEST="${DEST}/libertyBinaries"
+APP_DEST="${DEST}/libertyBinaries/WL-liberty"
 AUTH_NEEDED=true
 downloadDepencies
 
