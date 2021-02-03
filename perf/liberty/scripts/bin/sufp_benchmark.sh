@@ -29,7 +29,7 @@ echo "Create resDir: ${resDir}"
 mkdir -p ${resDir}
 
 cd ${BUILD_DIR}/wlp
-${TEST_RESROOT}/scripts/sufp/scripts/sufpSetupServers.sh ${TEST_RESROOT}/scripts/sufp/scripts/
+${TEST_RESROOT}/scripts/sufp/scripts/sufpSetupServers.sh ${TEST_RESROOT}/scripts/sufp
 
 cd ${BUILD_DIR}/wlp
 echo "Starting test on app: ${APP} for build: ${LIBERTY_BUILD_LEVEL}"
