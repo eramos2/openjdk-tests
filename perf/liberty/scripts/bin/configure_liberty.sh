@@ -206,21 +206,21 @@ searchLibertyBuild()
 
 	# Search for a build match on release or release2. Match looks like example bellow:
 	# <tr><td valign="top"><img src="/icons/folder.gif" alt="[DIR]"></td><td><a href="cl210220210121-1100-_hXbe0FvPEeuM3vrL9EeJlQ/">cl210220210121-1100-_hXbe0FvPEeuM3vrL9EeJlQ/</a></td><td align="right">2021-01-26 10:24  </td><td align="right">  - </td><td>&nbsp;</td></tr>
-	local BUILD_LABEL_RELEASE=`curl -u ${AUTH_USERNAME}:${AUTH_PASSWORD} ${LIBERTYFS_URL}/release | grep "${LIBERTY_BUILD_LEVEL}"`
+	local BUILD_LABEL_RELEASE=`curl -u ${AUTH_USERNAME}:${AUTH_PASSWORD} ${LIBERTYFS_URL}/release/ | grep "${LIBERTY_BUILD_LEVEL}"`
 	local BUILD_LABEL_RELEASE2=`curl -u ${AUTH_USERNAME}:${AUTH_PASSWORD} ${LIBERTYFS_URL}/release2/ | grep "${LIBERTY_BUILD_LEVEL}"`
 	local BUILD_LABEL
 	if [[ ! -z "${BUILD_LABEL_RELEASE}" ]]; then
-		echo "Found ${LIBERTY_BUILD_LEVEL} in ${LIBERTYFS_URL}/release"
+		echo "Found ${LIBERTY_BUILD_LEVEL} in ${LIBERTYFS_URL}/release/"
 		echo "${BUILD_LABEL_RELEASE}"
 	    BUILD_LABEL=`echo ${BUILD_LABEL_RELEASE} | grep -oE "${LIBERTY_BUILD_LEVEL}.*/\"" | sed 's/\/"//'`
 		LIBERTYFS_BUILD_URL="${LIBERTYFS_URL}/release/${BUILD_LABEL}"
 	elif [[ ! -z "${BUILD_LABEL_RELEASE2}" ]]; then
-		echo "Found ${LIBERTY_BUILD_LEVEL} in ${LIBERTYFS_URL}/release2"
+		echo "Found ${LIBERTY_BUILD_LEVEL} in ${LIBERTYFS_URL}/release2/"
 		echo "${BUILD_LABEL_RELEASE2}"
 	    BUILD_LABEL=`echo ${BUILD_LABEL_RELEASE2} | grep -oE "${LIBERTY_BUILD_LEVEL}.*/\"" | sed 's/\/"//'`
 		LIBERTYFS_BUILD_URL="${LIBERTYFS_URL}/release2/${BUILD_LABEL}"
 	else
-		echo "Exiting without configuring Liberty since ${LIBERTY_BUILD_LEVEL} was not found in ${LIBERTYFS_URL}/release or ${LIBERTYFS_URL}/release2"
+		echo "Exiting without configuring Liberty since ${LIBERTY_BUILD_LEVEL} was not found in ${LIBERTYFS_URL}/release/ or ${LIBERTYFS_URL}/release2/"
 		exit
 	fi
 
