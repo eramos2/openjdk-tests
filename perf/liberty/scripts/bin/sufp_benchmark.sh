@@ -27,7 +27,7 @@ dirDate=`date "+%y%m%d_%k%M%S" | tr -d " "`
 resDir=${LIBERTY_BINARIES_DIR}/libertyResults/${BUILD_DIR}/${APP}_${dirDate}
 echo "Create resDir: ${resDir}"
 mkdir -p ${resDir}
-
+echo "LIBERTY_BINARIES_DIR=${LIBERTY_BINARIES_DIR}"
 cd ${LIBERTY_BINARIES_DIR}/${BUILD_DIR}/wlp
 ${TEST_RESROOT}/scripts/sufp/scripts/sufpSetupServers.sh ${TEST_RESROOT}/scripts/sufp
 
