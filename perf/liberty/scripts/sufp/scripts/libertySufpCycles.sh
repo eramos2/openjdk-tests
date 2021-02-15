@@ -60,7 +60,7 @@ srvrMsgsLog=${srvrLogDir}/messages.log
 numaargs="numactl --physcpubind 11-12,27-28"
 
 ## NEED TO FIX THIS SO IT CAN BE SET DYNAMICALLY
-setMongo="export MONGO_HOST=titans08"
+setMongo="export MONGO_HOST=${MONGO_HOST}"
 $setMongo
 
 ibmJava=`echo $JAVA_HOME | grep j9`

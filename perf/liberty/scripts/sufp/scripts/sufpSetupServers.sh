@@ -8,11 +8,27 @@ sufpScriptDir=$1
 echo "about to kill all java procs, unless you stop me in next 10 secs"
 sleep 15
 #killall -9 java
-pkill -f "/WPA_INST*"
+#pkill -f "/WPA_INST*"
+for jar in ws-launch.jar ws-server.jar; do
+    PS_MATCH=`ps aux | grep java | grep ${curr} | grep $jar | grep javaagent | grep -v grep`
+    if [ -n "$PS_MATCH" ]; then
+	  # Echo processes into build log (stdout)
+      echo "$PS_MATCH"
+	pids=`ps aux | grep java | grep $PWD | grep $jar | grep javaagent | grep -v grep | awk '{print $2}'`
+	for pid_x in $pids
+	do
+	  kill -9 ${pid_x}
+	done
+	else
+      echo "No previous $jar processes found"
+    fi
+done
+sleep 3
+
 # run this from the <build>/wlp dir of a new Liberty build
 targDir=${sufpScriptDir}/apps
 
-setMongo="export MONGO_HOST=titans08"
+setMongo="export MONGO_HOST=${MONGO_HOST}"
 $setMongo
 
 arg=$1
