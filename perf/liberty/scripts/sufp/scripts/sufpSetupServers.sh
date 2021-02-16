@@ -43,8 +43,8 @@ fi
 echo "*** installing app from $targDir ***"
 sleep 5
 
-numaargs="numactl --physcpubind 6-7,14-15"
-
+#numaargs="numactl --physcpubind 6-7,14-15"
+numaargs="numactl --physcpubind ${PHYS_CPU_BIND}"
 
 $numaargs ./bin/server create ${APP}  
 /usr/bin/cp -f ${targDir}/${APP}/server.xml usr/servers/${APP}/
