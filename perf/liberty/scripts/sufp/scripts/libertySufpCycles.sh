@@ -222,33 +222,6 @@ fi
 
 #pingperfRequestString="while [[ \"$(curl -s -o /dev/null -w ''%{http_code}'' ${testHost}:9080/pingperf/ping/greeting)\" != \"200\" ]]; do sleep 0.001; done"
 
-extra30=""
-noSleepFPCPU=""
-#noSleepFPCPU="yes"
-javacoreDuringStartup=""
-#javacoreDuringStartup="yes"
-numJavacoreDuringStartup=15
-numJavacoreDuringStartup=1
-takeJavacore=""
-#takeJavacore="yes"
-getJcoreMemInfo=""
-#getJcoreMemInfo="yes"
-getGCInfo=""
-#getGCInfo="yes"
-grabLogTimes=""
-#grabLogTimes="yes"
-useEmptySCC=""
-#useEmptySCC="yes"
-saveLogs=""
-#saveLogs="yes"
-saveErrorLogs=""
-#saveErrorLogs="yes"
-errorString="Exception |FFDC1015I|CWWKF0042E"
-
-twoWarmups=""
-twoWarmups="yes"
-clearFileCache=""
-clearFileCache="yes"
 startDebug=""
 #startDebug="yes"
 
@@ -257,7 +230,7 @@ echo ""
 
 
 startCom="${numaargs} ${curr}/bin/server start ${server} "
-if [[ ! -z $startDebug ]] ; then
+if [[ ${START_DEBUG} == "true" ]] ; then
 	export WLP_DEBUG_SUSPEND=n
 	startCom="${numaargs} ${curr}/bin/server debug ${server} "
 fi
@@ -300,7 +273,7 @@ for jar in ws-launch.jar ws-server.jar; do
 done
 	
 
-if [[ ! -z $twoWarmups ]] ; then
+if [[ ${TWO_WARMUPS} == "true" ]] ; then
         echo " second warmup start requested"
         if [[ ! -z $timeToFirstRequest ]] ; then
 #                ( ssh $requestHost $pingperfRequestScript $testHost ) &
@@ -333,26 +306,26 @@ if [[ ! -z $twoWarmups ]] ; then
 done
 fi
 
-if [[ ! -z $saveErrorLogs ]] ; then
-        consoleError=`egrep "${errorString}" ${srvrLogDir}/console.log`
-        messagesError=`egrep "${errorString}" ${srvrLogDir}/messages.log`
+if [[ ${SAVE_ERROR_LOGS} == "true" ]] ; then
+        consoleError=`egrep "${ERROR_STRING}" ${srvrLogDir}/console.log`
+        messagesError=`egrep "${ERROR_STRING}" ${srvrLogDir}/messages.log`
         if [[ ! -z $consoleError ]] | [[ ! -z $messagesError ]] ; then
                 echo "*** errors detected - collecting logs ***"
                 zip -j ${logDir}/error-logs-run-${i}.zip ${srvrLogDir}/console.log ${srvrLogDir}/messages.log >/dev/null
         fi
 fi
 
-if [[ ! -z $getGCInfo ]] ; then
+if [[ ${GET_GC_INFO} == "true" ]] ; then
 	echo "removing old verbose gc logs"
 	rm -f ${srvrLogDir}/verbo*
 fi
 
 echo " now run the measured iterations "
 for i in `seq 1 $iters`; do
-        if [[ ! -z $clearFileCache ]] ; then
+        if [[ ${CLEAR_FILE_CACHE} == "true" ]] ; then
                 sync;echo 3 > /proc/sys/vm/drop_caches > /dev/null  # clear linux file cache
         fi
-	if [[ ! -z $useEmptySCC ]] ; then
+	if [[ ${USE_EMPTY_SCC} == "true" ]] ; then
 		# clear java class cache
 		${JAVA_HOME}/bin/java -Xshareclasses:destroyAll
 		libClassCache="${curr}/usr/servers/.classCache"
@@ -360,9 +333,9 @@ for i in `seq 1 $iters`; do
 		rm -f ${libClassCache}/*
 		sleep 3
 	fi
-	if [[ ! -z $javacoreDuringStartup ]] ; then
+	if [[ ${JAVACORE_DURING_STARTUP} == "true" ]] ; then
 		( sleep 0.8
-		for x in `seq 1 ${numJavacoreDuringStartup}`; do
+		for x in `seq 1 ${NUM_JAVACORE_DURING_STARTUP}`; do
 			kill -3 `ps -ef | grep java | grep "ws-server.jar ${server}" | grep -v "status:start" | awk '{print $2}'`
 			sleep 0.5
 		done ) &
@@ -400,7 +373,7 @@ for i in `seq 1 $iters`; do
                 done
         fi
 
-	if [[ -z $noSleepFPCPU ]] ; then
+	if [[ ${NO_SLEEP_FP_CPU} == "false" ]] ; then
 		sleep 15
 	fi
 #	sleep 15
@@ -409,7 +382,7 @@ for i in `seq 1 $iters`; do
 	cp0=`top -b -n 1 | grep "${server_pid}.*java" | awk '{print $11}' `
 #	acl means "time spent in/under AppClassLoader.loadClass " only works with timing hacked into com.ibm.ws.classloading.jar
 #	acl=`grep gjd ${curr}/usr/servers/${server}/logs/console.log | awk '{x+=$6}END{printf "%2.0f ms \n", x/1000000}' `
-	if [[ ! -z $extra30 ]] ; then
+	if [[ ${EXTRA30} == "true" ]] ; then
 		sleep 30	# let post-startup activity (if any) complete and settle down
 		server_pid=`ps aux | grep java | grep ws-server.jar | awk '{print $2}'`
 		fp1=`ps -e -o pid= -o comm= -o rss= | grep "${server_pid}.*java" | awk '{print $3}'`
@@ -417,7 +390,7 @@ for i in `seq 1 $iters`; do
 	fi
 #echo "***** SLEEPING FOR DIAG *****"
 #sleep 5000
-	if [[ ! -z $takeJavacore ]] ; then
+	if [[ ${TAKE_JAVACORE} == "true" ]] ; then
 		pid=`ps -ef | grep java | grep "ws-server.jar ${server}" | awk '{print $2}'`
 		echo "taking javacore on pid $pid with 'kill -3 $pid'"
 		kill -3 $pid
@@ -426,22 +399,22 @@ for i in `seq 1 $iters`; do
 		targ=`ls -tr ${curr}/usr/servers/${server}/javacore.* | grep $pid | tail -1`
 #		egrep "XMTHDCATEGORY.*[1-9]" ${curr}/usr/servers/${server}/javacore.*${pid}.0001.txt  | tee -a ${resFile}
 		egrep "XMTHDCATEGORY.*[1-9]" $targ  | tee -a ${resFile}
-		if [[ ! -z $getJcoreMemInfo ]] ; then
+		if [[ ${GET_JCORE_MEMINFO} == "true" ]] ; then
 			grep MEMUSER $targ | egrep "JRE:|VM:|Classes:|Memory Manager|Threads|JIT:|\-Class Librar" | tee -a ${resFile}
 		fi
 		pid=""
 	fi
-	if [[ ! -z $getGCInfo ]] ; then
+	if [[ ${GET_GC_INFO} == "true" ]] ; then
 		# find the newest GC log
 		verboLog=`ls -tr ${srvrLogDir}/ | grep verbose | tail -1`
 		gcLog="${srvrLogDir}/${verboLog}"
 		if [[ ! -z $gcLog ]] ; then
 			tac $gcLog | grep -m 1 -B 10 "gc-end.*glob" | egrep "gc-end|nursery|tenure" | sort  | tee -a ${resFile}
 		else
-			echo "getGCInfo enabled but no GC log found" | tee -a ${resFile}
+			echo "GET_GC_INFO enabled but no GC log found" | tee -a ${resFile}
 		fi
 	fi
-	if [[ ! -z $grabLogTimes ]] ; then
+	if [[ ${GRAB_LOG_TIMES} == "true" ]] ; then
 		targ="has been launch|started after|started in|completed in|ready to run"
 #		egrep "has been launch|started after|started in|completed in|ready to run" ${curr}/usr/servers/${server}/logs/messages.log  | tee -a ${resFile}
 		egrep "${targ}" ${srvrMsgsLog}  | tee -a ${resFile}
@@ -474,19 +447,19 @@ for i in `seq 1 $iters`; do
     fi
 #	echo -e "\t\t AppClassLoader.loadClass time: $acl"  | tee -a ${resFile}
 #	egrep 'product = |CWWKZ0001I|CWWKF0008I' ${curr}/usr/servers/${server}/logs/messages.log  > $timeLog
-	if [[ ! -z $saveLogs ]] || [[ ! -z $takeJavacore ]] || [[ ! -z $javacoreDuringStartup ]] ; then
+	if [[ ${SAVE_LOGS} == "true" ]] || [[ ${TAKE_JAVACORE} == "true" ]] || [[ ${JAVACORE_DURING_STARTUP} == "true" ]] ; then
 		mkdir ${logDir}/run-${i}
 		cp ${srvrConLog}  ${logDir}/run-${i}/
 		cp ${srvrMsgsLog} ${logDir}/run-${i}/
 		cp ${srvrLogDir}/trace.log  ${logDir}/run-${i}/  2>/dev/null
-		if [[ ! -z $takeJavacore ]] || [[ ! -z $javacoreDuringStartup ]] ; then
+		if [[ ${TAKE_JAVACORE} == "true" ]] || [[ ${JAVACORE_DURING_STARTUP} == "true" ]] ; then
 			mv ${curr}/usr/servers/${server}/javacore* ${logDir}/run-${i}/  >/dev/null
 		fi
 		zip -j ${logDir}/logs-run-${i}.zip ${srvrConLog} ${srvrMsgsLog} >/dev/null
 	fi
-        if [[ ! -z $saveErrorLogs ]] ; then
-                consoleError=`egrep "${errorString}" ${srvrLogDir}/console.log`
-                messagesError=`egrep "${errorString}" ${srvrLogDir}/messages.log`
+        if [[ ${SAVE_ERROR_LOGS} == "true" ]] ; then
+                consoleError=`egrep "${ERROR_STRING}" ${srvrLogDir}/console.log`
+                messagesError=`egrep "${ERROR_STRING}" ${srvrLogDir}/messages.log`
                 if [[ ! -z $consoleError ]] | [[ ! -z $messagesError ]] ; then
                         echo "*** errors detected - collecting logs ***"
                         zip -j ${logDir}/error-logs-run-${i}.zip ${srvrLogDir}/console.log ${srvrLogDir}/messages.log >/dev/null
@@ -497,7 +470,7 @@ done
 rm -f $timeLog
 echo "" | tee -a ${resFile}
 
-if [[ ! -z $takeJavacore ]] ; then
+if [[ ${TAKE_JAVACORE} == "true" ]] ; then
 	allThrdsAvg=`awk '/ attached threads/ {x+=$6;y++}END{printf "%2.3f", x/y}' $resFile`
 	sysJvmThrdsAvg=`awk '/System-JVM/ {x+=$3;y++}END{printf "%2.3f", x/y}' $resFile`
 	gcThrdsAvg=`awk '/GC/ {x+=$4;y++}END{printf "%2.3f", x/y}' $resFile`
@@ -517,7 +490,7 @@ if [[ ! -z $takeJavacore ]] ; then
 	echo "2XMTHDCATEGORY +--Application: $applicationThrdsAvg secs (${applicThrdsPct}%)" | tee -a ${resFile}
 	echo ""  | tee -a ${resFile}
 fi
-if [[ ! -z $getGCInfo ]] ; then
+if [[ ${GET_GC_INFO} == "true" ]] ; then
         avgNurserySize=`grep "mem type=\"nursery" ${resFile} | awk -F\" '{x+=$6}END{printf "%2.2f",  x/NR/1024/1024}'`
         avgNurseryUsed=`grep "mem type=\"nursery" ${resFile} | awk -F\" '{x+=$6;x-=$4}END{printf "%2.2f",  x/NR/1024/1024}'`
         avgTenureSize=`grep "mem type=\"tenure" ${resFile} | awk -F\" '{x+=$6}END{printf "%2.2f",  x/NR/1024/1024}'`
@@ -536,7 +509,7 @@ if [[ ! -z $getGCInfo ]] ; then
 
 	zip -qj ${resDir}/${test}.gc-logs.zip  ${srvrLogDir}/verbo*
 fi
-if [[ ! -z $getJcoreMemInfo ]] ; then
+if [[ ${GET_JCORE_MEMINFO} == "true" ]] ; then
 	avgJREmem=`grep "MEMUSER.*JRE" ${resFile} | tr -d "," | awk '{x+=$3}END{printf "%2.2f", x/NR/1024/1024}'`
 	avgVMmem=`grep "MEMUSER.*VM" ${resFile} | tr -d "," | awk '{x+=$3}END{printf "%2.2f", x/NR/1024/1024}'`
 	avgClassesmem=`grep "MEMUSER.*Classes" ${resFile} | tr -d "," | awk '{x+=$4}END{printf "%2.2f", x/NR/1024/1024}'`
@@ -571,7 +544,7 @@ cpuRes=`grep top $resFile | awk -F: '{cpu=((60*$2)+$3) ; sum+=cpu; sumsq+=(cpu)^
 avg_cp0=`grep top $resFile | awk -F: '{x+=$2;y+=$3}END{printf "%2.2f", 60*x/NR + y/NR}'` 
 shortRes=""
 avg_start=`grep top $resFile | awk '{x+=$1} END {printf "%.0f", x/NR}'`
-if [[ ! -z $extra30 ]] ; then
+if [[ ${EXTRA30} == "true" ]] ; then
 	#avg_fp1=`grep top $resFile | awk '{y++;x+=$3} END {print int(x/y+0.5)}'`
 	avg_fp1=`grep top $resFile | awk '{x+=$3} END {printf "%.0f", x/NR/1024}'`
 	avg_cp1=`grep top $resFile | sed -e "s/.* //" | awk -F: '{x+=$1;y+=$2}END{printf "%2.0f:%2.2f", x/NR, y/NR}'`
