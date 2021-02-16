@@ -57,7 +57,8 @@ srvrMsgsLog=${srvrLogDir}/messages.log
 
 ## NEED TO FIX THIS SO IT CAN BE SET FOR EACH SYSTEM ##
 ##titans01
-numaargs="numactl --physcpubind 11-12,27-28"
+#numaargs="numactl --physcpubind 11-12,27-28"
+numaargs="numactl --physcpubind ${PHYS_CPU_BIND}"
 
 ## NEED TO FIX THIS SO IT CAN BE SET DYNAMICALLY
 setMongo="export MONGO_HOST=${MONGO_HOST}"
