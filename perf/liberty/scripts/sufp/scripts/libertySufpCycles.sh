@@ -222,9 +222,6 @@ fi
 
 #pingperfRequestString="while [[ \"$(curl -s -o /dev/null -w ''%{http_code}'' ${testHost}:9080/pingperf/ping/greeting)\" != \"200\" ]]; do sleep 0.001; done"
 
-startDebug=""
-#startDebug="yes"
-
 echo "*** numaargs: $numaargs ***"  | tee -a ${resDir}/${test}.env
 echo ""
 
