@@ -315,6 +315,15 @@ fi
 if [[ ${GET_GC_INFO} == "true" ]] ; then
 	echo "removing old verbose gc logs"
 	rm -f ${srvrLogDir}/verbo*
+
+	echo "Adding verbose gc args to jvm.options"
+	if [[ -z ${GC_VALUE} ]]; 
+	then
+	  GC_VALUE="25,10000"
+	fi
+
+	echo "-verbose:gc" > ${srvrLogDir}/../jvm.options
+	echo "-Xverbosegclog:${srvrLogDir}/verbosegc.%seq.log,${GC_VALUE}" >> ${srvrLogDir}/../jvm.options
 fi
 
 echo " now run the measured iterations "
