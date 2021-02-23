@@ -82,14 +82,104 @@ ROOT_RESULTS_DIR    - Absolute path of Liberty results directory on remote stora
 "
 }
 
+#######################################################################################
+#	STARTUP TIME, FOOTPRINT, FIRST RESPONSE, CPU USAGE UTILS - Helper methods that are sufp specific
+#######################################################################################
+
+##
+## First Response scenario setup. Set strings for respString, and testTarget. Kill any zombie ping scripts on requestHost.
+setFirstResponse()
+{
+    printf '%s\n' "
+.--------------------------
+| First Response Setup
+"
+  # Scenarios that do first response request
+  local FR_SCENARIOS=("acmeair-micro" "acmeair-mono" "cdi-base" "cdi-fat" "cdi-one-jar-fat" "pingperf" "dt7" "dt8" "jaxrs-fat" "jenkins" "petclinic" "spring-1.5.6" "spring-2.1.1" "springboot-war" "tradelite7" "tradelite8")  
+  
+  timeToFirstRequest="false"
+  firstResponseScript=/sufp/pingFirstResponse.sh
+  cleanupScript=/sufp/cleanupScripts.sh
+
+  if [[ " ${FR_SCENARIOS[@]} " =~ " ${SCENARIO} " ]];
+  then
+    timeToFirstRequest="true"
+  fi
+
+  echo "*** kill any zombie ping scripts on requestHost: ${requestHost} ***" 
+  ssh ${requestHost} "${cleanupScript} ${firstResponseScript}"
+
+  respString=""
+  testTarget=""
+
+  # Assign testTarget and respString accorging to current scenario
+  case ${SCENARIO} in
+    pingperf)
+      testTarget="/pingperf/ping/greeting"
+	    respString=" SystemOut "
+      ;;
+    acmeair-micro)
+      testTarget="/"
+	    respString="Complete List : MongoClientOptions"
+      ;;
+    acmeair-mono)
+      testTarget="/rest/info/config/runtime"
+	    respString="SRVE0242I.*acmeair-monolithic.*Initialization successful"
+      ;;
+    cdi-base|cdi-fat|cdi-one-jar-fat)
+      testTarget="/meetings/rest/meetings"
+	    respString="SRVE0242I.*meetings.*Initialization successful"
+      ;;
+    dt7|dt8)
+      testTarget="/daytrader/servlet/PingServlet"
+	    respString="SRVE0242I.*PingServlet.*Initialization successful"
+      ;;
+    jaxrs-fat)
+      testTarget="/jaxrs-fat/rest/hello/sayHello"
+	    respString="SRVE0242I.*jaxrs-fat.*Initialization successful"
+      ;;
+    jenkins)
+      testTarget="/jenkins/"
+	    respString="SRVE0242I.*jenkins.*Initialization successful"
+      ;;
+    petclinic)
+      testTarget="/petclinic/"
+	    respString="SRVE0242I.*petclinic.*welcome.jsp.*Initialization successful"
+      ;;
+    spring-1.5.6|spring-2.1.1)
+      testTarget="/"
+	    respString="SRVE0242I.*authservice-springboot.*Initialization successful"
+      ;;
+    springboot-war)
+      testTarget="/spring-petclinic/"
+	    respString="SRVE0242I.*spring-petclinic.*Initialization successful"
+      ;;
+    tradelite7|tradelite8)
+      testTarget="/tradelite/servlet/PingServlet"
+	    respString="SRVE0242I.*PingServlet.*Initialization successful"
+      ;;
+    *) ;;
+  esac
+
+  if [[ -z $timeToFirstRequest ]] ; then
+	  echo -e "\n ****  measuring startup with config  ${SCENARIO}  **** \n"
+	  echo -e "        STARTED_STRING: '${STARTED_STRING}' \n"
+  else
+	  echo -e "\n ****  measuring first response with app  ${SCENARIO}  ****\n"
+	  echo -e "        first response string: \"$respString\"  "
+  fi
+
+}
+
  # Import the common utilities needed to run this benchmark
 . "$(dirname $0)"/common_utils.sh
 
 echo "Inside sufp_docker_benchmark_test.sh"
 
 TAG=full
-
-
+STARTED_STRING=" is ready to run a smarter"
+testHost=`hostname`
+testPort=9080
 
 echo "Found Scenario: ${SCENARIO}"
 
@@ -137,7 +227,7 @@ docker ps
 nukeDocker
 
 
-
+setFirstResponse
 
   
 for i in `seq 1 ${MEASUREMENT_RUNS}`
@@ -167,16 +257,20 @@ then
 	echo "Found Build: ${BUILD_CUR}"
 	echo "JDK_LEVEL=${JDK_LEVEL_CUR}"
 fi
+  
 
+  if [[ ! -z ${timeToFirstRequest} ]];
+  then
+	  ( ssh ${LOAD_DRIVER} $firstResponseScript $testHost $testPort $testTarget ) &
+  fi
   echo "Get startup time results"
-
   echo "--get stop time"
   # normal
-  time1=`docker exec ${CID} cat /logs/messages.log | grep smarter  | awk '{gsub("\\\\["," "); print $0}' | awk '{print $1 " " $2}' | awk '{gsub(","," "); print $0 " UTC"}' | rev | awk '{sub(":","."); print $0}' | rev`
+  time1=`docker exec ${CID} cat /logs/messages.log | grep ${STARTED_STRING}  | awk '{gsub("\\\\["," "); print $0}' | awk '{print $1 " " $2}' | awk '{gsub(","," "); print $0 " UTC"}' | rev | awk '{sub(":","."); print $0}' | rev`
   if [[ $(echo $time1 | grep -c liberty_message) == 1 ]]
   then
-     #json
-    time1=`docker exec ${CID} cat /logs/messages.log | grep smarter | awk -v k="text" '{n=split($0,a,","); for (i=1; i<=n; i++) print a[i]}' | grep ibm_datetime | awk '{gsub("\""," ");print $3}'`
+    #json
+    time1=`docker exec ${CID} cat /logs/messages.log | grep ${STARTED_STRING} | awk -v k="text" '{n=split($0,a,","); for (i=1; i<=n; i++) print a[i]}' | grep ibm_datetime | awk '{gsub("\""," ");print $3}'`
   fi
   let stopMillis=`date "+%s%N" -d "$time1"`/1000000
      
@@ -188,9 +282,36 @@ fi
   echo "--get startup time"
   let startup=$((stopMillis - startMillis))
   echo "Startup time: ${startup}"
+
+  echo "--get first response time"
+  respTime=""
+  if [[ ! -z ${timeToFirstRequest} ]];
+  then
+    RESP_TIME=""
+    while [[ -z $RESP_TIME ]];
+    do
+      resp=`docker exec ${CID} cat /logs/messages.log | grep "${respString}" | awk '{print $2}' | sed 's/\(.*\):/\1./'`
+      if [[ ! -z $resp ]];
+      then
+        RESP_TIME=`echo $(($(date +%s%N -d $resp)/1000000))`
+        resptime=`expr $RESP_TIME - $startMillis`
+      else
+        ## TODO - NEED to fix this so it does it for a finite amount of iterations an abort after it fails, to avoid an infinite loop
+        sleep 2
+      fi
+    done
+  fi
+  if [[ ! -z ${timeToFirstRequest} ]];
+  then
+    echo "First Response: ${resptime}"
+  else
+    echo -e "First Response: n/a"
+  fi
+
   echo "--get footprint"
   echo "Footprint (mb)=$(docker stats ${CID} --no-stream --format "table {{.MemUsage}}"| sed "1 d"| awk '{print substr($1, 1, length($1)-3)}')"
 
+  echo "app: ${SCENARIO}"
   docker stop $CID
   nukeDocker
 done
