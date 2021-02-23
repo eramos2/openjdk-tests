@@ -300,7 +300,9 @@ echo "BASE_TAG=${BASE_TAG}"
 echo "Current directory=$(dirname $0)"
 $(dirname $0)/open-liberty/buildAll_wasperf.sh ${LIBERTY_BUILD_LEVEL} ${BASE_TAG} "${DEST}/OL-docker-images/ci.docker-master"
 
-
+scriptDir=${1}/scripts
+echo "Transfering script to load driver"
+scp -r $(dirname $0)/../sufp/pingperfPingScript.sh ${scriptDir}/../sufp/cleanupScripts.sh ${scriptDir}/../sufp/pingFirstResponse.sh root@${LOAD_DRIVER}:/sufp/ 
 
 
 
