@@ -106,8 +106,8 @@ setFirstResponse()
     timeToFirstRequest="true"
   fi
 
-  echo "*** kill any zombie ping scripts on requestHost: ${requestHost} ***" 
-  ssh ${requestHost} "${cleanupScript} ${firstResponseScript}"
+  echo "*** kill any zombie ping scripts on requestHost: ${LOAD_DRIVER} ***" 
+  ssh ${LOAD_DRIVER} "${cleanupScript} ${firstResponseScript}"
 
   respString=""
   testTarget=""
