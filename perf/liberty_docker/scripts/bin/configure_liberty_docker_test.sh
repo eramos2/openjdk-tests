@@ -302,7 +302,7 @@ $(dirname $0)/open-liberty/buildAll_wasperf.sh ${LIBERTY_BUILD_LEVEL} ${BASE_TAG
 
 scriptDir=${1}/scripts
 echo "Transfering script to load driver"
-scp -r $(dirname $0)/../sufp/pingperfPingScript.sh ${scriptDir}/../sufp/cleanupScripts.sh ${scriptDir}/../sufp/pingFirstResponse.sh root@${LOAD_DRIVER}:/sufp/ 
+scp -r $(dirname $0)/../sufp/pingperfPingScript.sh $(dirname $0)/../sufp/cleanupScripts.sh $(dirname $0)/../sufp/pingFirstResponse.sh root@${LOAD_DRIVER}:/sufp/ 
 
 
 
