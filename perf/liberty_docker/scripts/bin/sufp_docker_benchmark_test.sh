@@ -204,7 +204,7 @@ fi
 
 echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/server.xml /config/server.xml" >> ${DOCKER_FILE} 
 #Check if war file exist for copy
-if [[ `cat ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/*.war | grep *.war` ]]
+if [[ `cat ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/*.war | grep *.war` ]];
 then
 echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/*.war /config/apps/" >> ${DOCKER_FILE}
 fi
@@ -212,7 +212,8 @@ fi
 #Edit server.xml to point to app location
 serverXML="scripts/sufp/apps/${SCENARIO}/server.xml"
 sed -i "s|\"/sufp/apps/${SCENARIO}|\"/config/apps|g" ${TEST_RESROOT}/${serverXML}
-if [[ `echo ${SCENARIO} | grep spring ` ]] ; then
+if [[ `echo ${SCENARIO} | grep spring ` ]]; 
+then
 	echo "RUN mkdir -p /config/dropins/spring" >> ${DOCKER_FILE}
   echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/*.jar /config/dropins/spring" >> ${DOCKER_FILE}
 fi
