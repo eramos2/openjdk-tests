@@ -207,9 +207,9 @@ echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/server.xml /config/serve
 echo "Checking war file"
 echo "${TEST_RESROOT}"
 ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/
-echo "$(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep *.war)"
+echo "$(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .war)"
 
-if [ ! -z $(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep *.war) ];
+if [ ! -z $(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .war) ];
 then
   echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/*.war /config/apps/" >> ${DOCKER_FILE}
 else
