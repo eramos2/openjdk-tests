@@ -216,9 +216,14 @@ then
 elif [ ! -z $(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .ear) ];
 then
   echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/$(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .ear) /config/apps/$(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .ear)" >> ${DOCKER_FILE}
-  echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/resources /config/apps/resources" >> ${DOCKER_FILE}
+  
 else
   echo "not scenario to docker"
+fi
+
+if [ ! -z $(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO} | grep resources) ];
+then
+  echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/resources /config/apps/resources" >> ${DOCKER_FILE}
 fi
 
 #Edit server.xml to point to app location
