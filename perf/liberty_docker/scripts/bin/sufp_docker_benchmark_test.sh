@@ -212,7 +212,6 @@ echo "$(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .war)"
 if [ ! -z $(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .war) ];
 then
   echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/$(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .war) /config/apps/$(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .war)" >> ${DOCKER_FILE}
-  echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/resources /config/apps/resources" >> ${DOCKER_FILE}
 elif [ ! -z $(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .ear) ];
 then
   echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/$(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .ear) /config/apps/$(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .ear)" >> ${DOCKER_FILE}
@@ -226,9 +225,12 @@ then
   echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/resources /config/apps/resources" >> ${DOCKER_FILE}
 fi
 
+echo "COPY --chown=1001:0 /opt/db2jars /opt/db2jars" >> ${DOCKER_FILE}
+
 #Edit server.xml to point to app location
 serverXML="scripts/sufp/apps/${SCENARIO}/server.xml"
 sed -i "s|\"/sufp/apps/${SCENARIO}|\"/config/apps|g" ${TEST_RESROOT}/${serverXML}
+sed -i "s|\"/opt/db2jars|\"/opt/db2jars|g" ${TEST_RESROOT}/${serverXML}
 if [[ `echo ${SCENARIO} | grep spring ` ]]; 
 then
 	echo "RUN mkdir -p /config/dropins/spring" >> ${DOCKER_FILE}
