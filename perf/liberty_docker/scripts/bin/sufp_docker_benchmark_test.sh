@@ -262,7 +262,7 @@ do
   #docker build -t acmeair-authservice -f ${DOCKER_FILE} --no-cache .
   docker build -t ${scenarioTag} -f ${DOCKER_FILE} --no-cache ${TEST_RESROOT}
   #docker run -d acmeair-authservice
-  docker run -d ${scenarioTag}
+  docker run -d ${scenarioTag} -p 9080:9080
   #Get Container ID
   CID=`docker ps | awk 'FNR == 2 {print}'| awk '{print $1}'`
   sleep 30
