@@ -220,6 +220,9 @@ else
   echo "not scenario to docker"
 fi
 
+echo "EXPOSE 27017" >> ${DOCKER_FILE}
+echo "EXPOSE 9080" >> ${DOCKER_FILE}
+
 if [ ! -z $(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO} | grep resources) ];
 then
   echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/resources /config/apps/resources" >> ${DOCKER_FILE}
