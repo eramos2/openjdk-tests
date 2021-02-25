@@ -225,7 +225,7 @@ then
   echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/resources /config/apps/resources" >> ${DOCKER_FILE}
 fi
 
-echo "COPY --chown=1001:0 /opt/db2jars /opt/db2jars" >> ${DOCKER_FILE}
+#echo "COPY --chown=1001:0 /opt/db2jars /opt/db2jars" >> ${DOCKER_FILE}
 
 #Edit server.xml to point to app location
 serverXML="scripts/sufp/apps/${SCENARIO}/server.xml"
