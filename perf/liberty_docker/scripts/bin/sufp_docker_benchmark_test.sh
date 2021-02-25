@@ -161,6 +161,7 @@ setFirstResponse()
     *) ;;
   esac
 
+STARTED_STRING=" is ready to run a smarter"
   if [[ -z $timeToFirstRequest ]] ; then
 	  echo -e "\n ****  measuring startup with config  ${SCENARIO}  **** \n"
 	  echo -e "        STARTED_STRING: '${STARTED_STRING}' \n"
@@ -177,7 +178,7 @@ setFirstResponse()
 echo "Inside sufp_docker_benchmark_test.sh"
 
 TAG=full
-STARTED_STRING=" is ready to run a smarter"
+
 testHost=`hostname`
 testPort=9080
 
@@ -290,11 +291,11 @@ fi
   echo "Get startup time results"
   echo "--get stop time"
   # normal
-  time1=`docker exec ${CID} cat /logs/messages.log | grep ${STARTED_STRING}  | awk '{gsub("\\\\["," "); print $0}' | awk '{print $1 " " $2}' | awk '{gsub(","," "); print $0 " UTC"}' | rev | awk '{sub(":","."); print $0}' | rev`
+  time1=`docker exec ${CID} cat /logs/messages.log | grep "${STARTED_STRING}" | awk '{gsub("\\\["," "); print $0}' | awk '{print $1 " " $2}' | awk '{gsub(","," "); print $0 " UTC"}' | rev | awk '{sub(":","."); print $0}' | rev`
   if [[ $(echo $time1 | grep -c liberty_message) == 1 ]]
   then
     #json
-    time1=`docker exec ${CID} cat /logs/messages.log | grep ${STARTED_STRING} | awk -v k="text" '{n=split($0,a,","); for (i=1; i<=n; i++) print a[i]}' | grep ibm_datetime | awk '{gsub("\""," ");print $3}'`
+    time1=`docker exec ${CID} cat /logs/messages.log | grep "${STARTED_STRING}" | awk -v k="text" '{n=split($0,a,","); for (i=1; i<=n; i++) print a[i]}' | grep ibm_datetime | awk '{gsub("\""," ");print $3}'`
   fi
   let stopMillis=`date "+%s%N" -d "$time1"`/1000000
      
