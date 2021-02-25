@@ -222,7 +222,7 @@ fi
 
 echo "EXPOSE 27017" >> ${DOCKER_FILE}
 echo "EXPOSE 9080" >> ${DOCKER_FILE}
-echo "ENV MONGO_HOST=titans17"
+echo "ENV MONGO_HOST=titans17" >> ${DOCKER_FILE}
 
 if [ ! -z $(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO} | grep resources) ];
 then
