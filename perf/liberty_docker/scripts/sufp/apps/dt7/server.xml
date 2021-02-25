@@ -41,7 +41,7 @@
 <authData id="TradeDataSourceAuthData" user="db2inst2" password="ibmdb2"/>
 <authData id="TradeAdminAuthData" user="db2inst2" password="ibmdb2"/>
 
-<dataSource jndiName="jdbc/TradeDataSource" id="DefaultDataSource" jdbcDriverRef="DB2JCC" connectionManagerRef="conMgr1" statementCacheSize="60" isolationLevel="TRANSACTION_READ_COMMITTED"> <properties serverName="titans08" portNumber="50001" databaseName="trade7db" driverType="4" user="db2inst2" password="ibmdb2"/> </dataSource>
+<dataSource jndiName="jdbc/TradeDataSource" id="DefaultDataSource" jdbcDriverRef="DB2JCC" connectionManagerRef="conMgr1" statementCacheSize="60" isolationLevel="TRANSACTION_READ_COMMITTED"> <properties serverName="titans17" portNumber="50001" databaseName="trade7db" driverType="4" user="db2inst2" password="ibmdb2"/> </dataSource>
 
 <messagingEngine id="defaultME">
 <queue id="TradeBrokerQueue" />
