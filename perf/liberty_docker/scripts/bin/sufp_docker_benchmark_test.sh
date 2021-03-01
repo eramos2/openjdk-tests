@@ -320,7 +320,7 @@ fi
       resp=`docker exec ${CID} cat /logs/messages.log | grep "${respString}" | awk '{print $2}' | sed 's/\(.*\):/\1./'`
       if [[ ! -z $resp ]];
       then
-        RESP_TIME=`echo $(($(date +%s%N -d $resp)/1000000))`
+        RESP_TIME=`echo $(($(date "+%s%N" -d "$resp")/1000000))`
         resptime=`expr $RESP_TIME - $startMillis`
       else
         ## TODO - NEED to fix this so it does it for a finite amount of iterations an abort after it fails, to avoid an infinite loop
