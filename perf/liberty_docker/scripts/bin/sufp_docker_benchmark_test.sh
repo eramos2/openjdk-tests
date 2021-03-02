@@ -263,6 +263,11 @@ do
   docker build -t ${scenarioTag} -f ${DOCKER_FILE} --no-cache ${TEST_RESROOT}
   echo "docker build -t ${scenarioTag} -f ${DOCKER_FILE} --no-cache ${TEST_RESROOT}"
   #docker run -d acmeair-authservice
+  if [[ ! -z ${timeToFirstRequest} ]];
+  then
+	  ( ssh ${LOAD_DRIVER} $firstResponseScript $testHost $testPort $testTarget ) &
+  fi
+  
   docker run -p 9080:9080 -d ${scenarioTag} 
   echo "docker run -p 9080:9080 -d ${scenarioTag} "
   #Get Container ID
@@ -286,10 +291,7 @@ then
 fi
   
 
-  if [[ ! -z ${timeToFirstRequest} ]];
-  then
-	  ( ssh ${LOAD_DRIVER} $firstResponseScript $testHost $testPort $testTarget ) &
-  fi
+  
   echo "Get startup time results"
   echo "--get stop time"
   # normal
