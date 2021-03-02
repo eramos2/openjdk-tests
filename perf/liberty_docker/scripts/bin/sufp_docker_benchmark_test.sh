@@ -321,10 +321,10 @@ fi
       if [[ ! -z $resp ]];
       then
         RESP_TIME=`echo $(($(date "+%s%N" -d "$resp")/1000000))`
-        let SEC_RESP=`date "+%s%N" -d "$resp"`/1000000
+        SEC_RESP=`date "+%s%N" -d "$resp"`/1000000
         echo "startMillis=${startMillis}, RESP_TIME=${RESP_TIME}, resp=${resp}, SEC_RESP=${SEC_RESP}"
         resptime=`expr $RESP_TIME - $startMillis`
-        let secresp_time=$(($SEC_RESP - $startMillis))
+        secresp_time=`expr $SEC_RESP - $startMillis`
         echo "secresp_time=${secresp_time}"
       else
         ## TODO - NEED to fix this so it does it for a finite amount of iterations an abort after it fails, to avoid an infinite loop
