@@ -317,11 +317,15 @@ fi
     RESP_TIME=""
     while [[ -z $RESP_TIME ]];
     do
-      resp=`docker exec ${CID} cat /logs/messages.log | grep "${respString}" | awk '{print $2}' | sed 's/\(.*\):/\1./'`
+      resp=`docker exec ${CID} cat /logs/messages.log | grep "${respString}" | awk '{gsub("\\\["," "); print $0}' | awk '{print $1 " " $2}' | awk '{gsub(","," "); print $0 " UTC"}' | rev | awk '{sub(":","."); print $0}' | rev`
       if [[ ! -z $resp ]];
       then
         RESP_TIME=`echo $(($(date "+%s%N" -d "$resp")/1000000))`
+        let SEC_RESP=`date "+%s%N" -d "$resp"`/1000000
+        echo "startMillis=${startMillis}, RESP_TIME=${RESP_TIME}, resp=${resp}, SEC_RESP=${SEC_RESP}"
         resptime=`expr $RESP_TIME - $startMillis`
+        let secresp_time=$(($SEC_RESP - $startMillis))
+        echo "secresp_time=${secresp_time}"
       else
         ## TODO - NEED to fix this so it does it for a finite amount of iterations an abort after it fails, to avoid an infinite loop
         sleep 2
