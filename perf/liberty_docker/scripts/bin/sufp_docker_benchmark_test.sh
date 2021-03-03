@@ -199,7 +199,7 @@ else
 fi
 
 echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/server.xml /config/server.xml" >> ${DOCKER_FILE} 
-#Check if war file exist for copy
+#Check if war|ear file exist for copy
 echo "Checking war file"
 echo "${TEST_RESROOT}"
 ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/
@@ -208,12 +208,14 @@ echo "$(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .war)"
 if [ ! -z $(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .war) ];
 then
   echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/$(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .war) /config/apps/$(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .war)" >> ${DOCKER_FILE}
-elif [ ! -z $(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .ear) ];
+fi
+if [ ! -z $(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .ear) ];
 then
   echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/$(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .ear) /config/apps/$(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .ear)" >> ${DOCKER_FILE}
-  
-else
-  echo "not scenario to docker"
+fi
+if [ ! -z $(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .jar) ];
+then
+  echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/$(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .jar) /config/apps/$(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .jar)" >> ${DOCKER_FILE}
 fi
 
 echo "EXPOSE 27017" >> ${DOCKER_FILE}
