@@ -21,7 +21,7 @@
 
   <applicationMonitor updateTrigger="mbean"/>
 
-  <webApplication id="meetings" location="/sufp/apps/cdi-one-jar-fat/fat-cdi-meetings-one-jar.war" name="meetings" context-root="meetings" >
+  <webApplication id="meetings" location="/sufp/apps/cdi-fat/fat-cdi-meetings.war" name="meetings" context-root="meetings" >
     <classloader commonLibraryRef="mongodriver"/>
     <application-bnd>
       <security-role name="any">
@@ -41,7 +41,7 @@
 
 
   <library id="mongodriver">
-    <file name="/sufp/apps/cdi-one-jar-fat/mongo-java-driver-2.11.1.jar"/>
+    <file name="/sufp/apps/cdi-fat/mongo-java-driver-2.11.1.jar"/>
   </library>
 
 </server>

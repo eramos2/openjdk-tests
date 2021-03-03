@@ -97,7 +97,7 @@ setFirstResponse()
   # Scenarios that do first response request
   local FR_SCENARIOS=("acmeair-micro" "acmeair-mono" "cdi-base" "cdi-fat" "cdi-one-jar-fat" "pingperf" "dt7" "dt8" "jaxrs-fat" "jenkins" "petclinic" "spring-1.5.6" "spring-2.1.1" "springboot-war" "tradelite7" "tradelite8")  
   
-  timeToFirstRequest="false"
+  timeToFirstRequest=""
   firstResponseScript=/sufp/pingFirstResponse.sh
   cleanupScript=/sufp/cleanupScripts.sh
 
@@ -199,7 +199,7 @@ else
 fi
 
 echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/server.xml /config/server.xml" >> ${DOCKER_FILE} 
-#Check if war file exist for copy
+#Check if war|ear file exist for copy
 echo "Checking war file"
 echo "${TEST_RESROOT}"
 ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/
@@ -208,12 +208,14 @@ echo "$(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .war)"
 if [ ! -z $(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .war) ];
 then
   echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/$(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .war) /config/apps/$(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .war)" >> ${DOCKER_FILE}
-elif [ ! -z $(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .ear) ];
+fi
+if [ ! -z $(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .ear) ];
 then
   echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/$(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .ear) /config/apps/$(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .ear)" >> ${DOCKER_FILE}
-  
-else
-  echo "not scenario to docker"
+fi
+if [ ! -z $(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .jar) ];
+then
+  echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/$(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .jar) /config/apps/$(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/ | grep .jar)" >> ${DOCKER_FILE}
 fi
 
 echo "EXPOSE 27017" >> ${DOCKER_FILE}
@@ -284,6 +286,10 @@ then
 	echo "JDK_LEVEL=${JDK_LEVEL_CUR}"
   fi
   
+  echo "--get CPU Usage"
+  cpu_in_nanosecs=$(curl --unix-socket /var/run/docker.sock http://localhost/containers/${CID}/stats?stream=false | sed 's/^.*cpu_stats":/\"cpu_stats\":/' | awk 'BEGIN {FS = \":|,\"} ; {print $4}')
+  echo "CPU: $((${cpu_in_nanosecs}/1000000))"
+
   echo "Get startup time results"
   echo "--get stop time"
   # normal
