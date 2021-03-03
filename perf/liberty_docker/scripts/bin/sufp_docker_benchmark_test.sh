@@ -183,11 +183,6 @@ testHost=`hostname`
 testPort=9080
 
 echo "Found Scenario: ${SCENARIO}"
-
-
-
-
-
 echo "Running SUFT Tests"
 echo "Current directory is:"
 pwd
@@ -249,20 +244,19 @@ echo "Current working dir"
 pwd
 ls
 docker ps
-nukeDocker
-
 
 setFirstResponse
 
   
 for i in `seq 1 ${MEASUREMENT_RUNS}`
 do
+  nukeDocker
   #convert scenario name to lowercase so it can be passed as the docker container tag 
   scenarioTag=`echo "${SCENARIO}" | awk '{print tolower($0)}'`
-  #docker build -t acmeair-authservice -f ${DOCKER_FILE} --no-cache .
   docker build -t ${scenarioTag} -f ${DOCKER_FILE} --no-cache ${TEST_RESROOT}
   echo "docker build -t ${scenarioTag} -f ${DOCKER_FILE} --no-cache ${TEST_RESROOT}"
-  #docker run -d acmeair-authservice
+  
+  # Start first response ping script
   if [[ ! -z ${timeToFirstRequest} ]];
   then
 	  ( ssh ${LOAD_DRIVER} $firstResponseScript $testHost $testPort $testTarget ) &
@@ -288,9 +282,7 @@ then
 	echo "Found ${LIBERTY_VERSION} Release: ${RELEASE_CUR}"
 	echo "Found Build: ${BUILD_CUR}"
 	echo "JDK_LEVEL=${JDK_LEVEL_CUR}"
-fi
-  
-
+  fi
   
   echo "Get startup time results"
   echo "--get stop time"
@@ -323,11 +315,7 @@ fi
       if [[ ! -z $resp ]];
       then
         RESP_TIME=`echo $(($(date "+%s%N" -d "$resp")/1000000))`
-        let SEC_RESP=`date "+%s%N" -d "$resp"`/1000000
-        echo "startMillis=${startMillis}, RESP_TIME=${RESP_TIME}, resp=${resp}, SEC_RESP=${SEC_RESP}"
         resptime=`expr $RESP_TIME - $startMillis`
-        let secresp_time=$(($SEC_RESP - $startMillis))
-        echo "secresp_time=${secresp_time}"
       else
         ## TODO - NEED to fix this so it does it for a finite amount of iterations an abort after it fails, to avoid an infinite loop
         sleep 2
@@ -346,7 +334,7 @@ fi
 
   echo "app: ${SCENARIO}"
   docker stop $CID
-  nukeDocker
+  #nukeDocker
 done
 
 
