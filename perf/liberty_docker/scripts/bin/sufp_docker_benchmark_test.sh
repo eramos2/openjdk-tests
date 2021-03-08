@@ -287,7 +287,7 @@ then
   fi
   
   echo "--get CPU Usage"
-  cpu_in_nanosecs=$(curl --unix-socket /var/run/docker.sock http://localhost/containers/${CID}/stats?stream=false | sed 's/^.*cpu_stats":/\"cpu_stats\":/' | awk 'BEGIN {FS = \":|,\"} ; {print $4}')
+  cpu_in_nanosecs=$(curl --unix-socket /var/run/docker.sock http://localhost/containers/${CID}/stats?stream=false | sed 's/^.*cpu_stats":/"cpu_stats":/' | awk 'BEGIN {FS = ":|,"} ; {print $4}')
   echo "CPU: $((${cpu_in_nanosecs}/1000000))"
 
   echo "Get startup time results"
