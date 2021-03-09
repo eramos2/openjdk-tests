@@ -501,11 +501,10 @@
 			<group>perf</group>
 		</groups>
 	</test>
-	<test>
+	<!-- <test>
 		<testCaseName>DockerWebsphereLibertySUFPJenkins</testCaseName>
 		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) jenkins $(TEST_RESROOT) WL; \
 			${TEST_STATUS}</command>
-		<!-- scripts are only tested on linux -->
 		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
 		<levels>
 			<level>extended</level>
@@ -513,7 +512,7 @@
 		<groups>
 			<group>perf</group>
 		</groups>
-	</test>
+	</test> -->
 	<test>
 		<testCaseName>DockerWebsphereLibertySUFPMicroProfile3.0</testCaseName>
 		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) micro-profile-3.0 $(TEST_RESROOT) WL; \
