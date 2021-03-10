@@ -501,7 +501,7 @@
 			<group>perf</group>
 		</groups>
 	</test>
-	<!-- <test>
+	<test>
 		<testCaseName>DockerWebsphereLibertySUFPJenkins</testCaseName>
 		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) jenkins $(TEST_RESROOT) WL; \
 			${TEST_STATUS}</command>
@@ -512,7 +512,7 @@
 		<groups>
 			<group>perf</group>
 		</groups>
-	</test> -->
+	</test>
 	<test>
 		<testCaseName>DockerWebsphereLibertySUFPMicroProfile3.0</testCaseName>
 		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) micro-profile-3.0 $(TEST_RESROOT) WL; \
