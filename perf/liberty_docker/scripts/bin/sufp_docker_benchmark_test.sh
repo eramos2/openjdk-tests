@@ -140,7 +140,12 @@ setFirstResponse()
       ;;
     jenkins)
       testTarget="/jenkins/"
-	    respString="SRVE0242I.*jenkins.*Initialization successful\|Jenkins is fully up and running"
+      if [[ "${LIBERTY_VERSION}" == "WL" ]]; 
+      then
+	      respString="Jenkins is fully up and running"
+      else
+        respString="SRVE0242I.*jenkins.*Initialization successful"
+      fi
       ;;
     petclinic)
       testTarget="/petclinic/"
