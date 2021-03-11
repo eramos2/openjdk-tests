@@ -140,8 +140,7 @@ setFirstResponse()
       ;;
     jenkins)
       testTarget="/jenkins/"
-	    #respString="SRVE0242I.*jenkins.*Initialization successful"
-      respString="Jenkins is fully up and running"
+	    respString="SRVE0242I.*jenkins.*Initialization successful\|Jenkins is fully up and running"
       ;;
     petclinic)
       testTarget="/petclinic/"
