@@ -140,7 +140,8 @@ setFirstResponse()
       ;;
     jenkins)
       testTarget="/jenkins/"
-	    respString="SRVE0242I.*jenkins.*Initialization successful"
+	    #respString="SRVE0242I.*jenkins.*Initialization successful"
+      respString="Jenkins is fully up and running"
       ;;
     petclinic)
       testTarget="/petclinic/"
@@ -284,7 +285,7 @@ then
 	echo "Found ${LIBERTY_VERSION} Release: ${RELEASE_CUR}"
 	echo "Found Build: ${BUILD_CUR}"
 	echo "JDK_LEVEL=${JDK_LEVEL_CUR}"
-  fi
+fi
   
   echo "--get CPU Usage"
   cpu_in_nanosecs=$(curl --unix-socket /var/run/docker.sock http://localhost/containers/${CID}/stats?stream=false | sed 's/^.*cpu_stats":/\"cpu_stats\":/' | awk 'BEGIN {FS = \":|,\"} ; {print $4}')
