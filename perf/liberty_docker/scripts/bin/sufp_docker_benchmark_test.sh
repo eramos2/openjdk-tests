@@ -275,8 +275,8 @@ if [[ $i == 1 ]]
 then
   if [[ "${LIBERTY_VERSION}" == "WL" ]]; 
   then
-    RELEASE=`docker logs ${CID} | grep "WebSphere Application Server" | awk '{print $6}' | awk '{gsub("/"," "); print $1}'`
-    BUILD=`docker logs ${CID} | grep "WebSphere Application Server" | awk '{print $6}' | awk '{gsub("/"," "); print $2}'  | awk '{gsub("\\\.", " "); print $4}' | awk '{print substr($1, 1, length($1)-1)}'`
+    RELEASE_CUR=`docker logs ${CID} | grep "WebSphere Application Server" | awk '{print $6}' | awk '{gsub("/"," "); print $1}'`
+    BUILD_CUR=`docker logs ${CID} | grep "WebSphere Application Server" | awk '{print $6}' | awk '{gsub("/"," "); print $2}'  | awk '{gsub("\\\.", " "); print $4}' | awk '{print substr($1, 1, length($1)-1)}'`
   else
     RELEASE_CUR=`docker logs ${CID} 2>/dev/null | grep "Open Liberty" | awk '{print $5}' | awk '{gsub("/"," "); print $1}'`
 	  BUILD_CUR=`docker logs ${CID} 2>/dev/null | grep "Open Liberty" | awk '{print $5}' | awk '{gsub("/"," "); print $2}'  | awk '{gsub("\\\.", " "); print $4}' | awk '{print substr($1, 1, length($1)-1)}'`
