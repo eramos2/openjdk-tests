@@ -266,9 +266,10 @@ rm -rf ${LIBERTY_DEP_CACHE_LOCATION}/master.zip
 #OL - only uses kernel image currently, may nee dto add full.
 ##Websphere Liberty
 
-USERNAME=wasperf@us.ibm.com
-PASSWORD=UmVncmVzc2lvbjdQQHRyb2w=
-DECODED_PASSWORD=`echo ${PASSWORD} | base64 --decode`
+USERNAME=${WASPERF_USERNAME}
+#PASSWORD=${WASPERF_PASSWORD}
+#DECODED_PASSWORD=`echo ${PASSWORD} | base64 --decode`
+DECODED_PASSWORD=${WASPERF_PASSWORD}
 #BUILD=latest
 BUILD=$LIBERTY_BUILD_LEVEL
 BASE_TAG=java8-ibmjava
