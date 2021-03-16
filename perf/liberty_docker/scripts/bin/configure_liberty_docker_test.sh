@@ -276,6 +276,7 @@ BASE_TAG=java8-ibmjava
 
 OPENLIBERTY=false
 
+pruneDocker
 DO_THROUGHPUT_TESTS=true
 DO_SUFT_TESTS=true
 echo "Clean Docker" 
