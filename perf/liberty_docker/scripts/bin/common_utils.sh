@@ -1873,3 +1873,13 @@ nukeDocker()
   echo "Nuke Docker"
   docker stop $(docker ps -a -q); docker rm $(docker ps -a -q)
 }
+
+##
+## Free disk space, prevent /var/lib/docker/overlay2 from using to much disk 
+pruneDocker()
+{
+  echo "Prune Docker"
+  docker stop $(docker ps -a -q); docker rm $(docker ps -a -q)
+  docker system prune -f
+  docker network create my-net
+}
