@@ -271,8 +271,8 @@ do
 	  ( ssh "${LOAD_DRIVER}" $firstResponseScript "$testHost" $testPort $testTarget ) &
   fi
   
-  docker run -p 9080:9080 -d "${scenarioTag}" --cpuset-cpus="$PHYS_CPU_BIND" --memory="$CONTAINER_MAX_MEM"
-  echo "docker run -p 9080:9080 -d ${scenarioTag} --cpuset-cpus=$PHYS_CPU_BIND --memory=$CONTAINER_MAX_MEM"
+  docker run -p 9080:9080 --cpuset-cpus="$PHYS_CPU_BIND" --memory="$CONTAINER_MAX_MEM" -d "${scenarioTag}"
+  echo "docker run -p 9080:9080 --cpuset-cpus=$PHYS_CPU_BIND --memory=$CONTAINER_MAX_MEM -d ${scenarioTag} "
   #Get Container ID
   CID=$(docker ps | awk 'FNR == 2 {print}'| awk '{print $1}')
   sleep 30
