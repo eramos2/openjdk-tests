@@ -464,8 +464,8 @@ for i in `seq 1 $iters`; do
 		zip -j ${logDir}/logs-run-${i}.zip ${srvrConLog} ${srvrMsgsLog} >/dev/null
 	fi
         if [[ ${SAVE_ERROR_LOGS} == "true" ]] ; then
-                consoleError=`egrep "${ERROR_STRING}" ${srvrLogDir}/console.log`
-                messagesError=`egrep "${ERROR_STRING}" ${srvrLogDir}/messages.log`
+                consoleError=$(egrep "${ERROR_STRING}" ${srvrLogDir}/console.log)
+                messagesError=$(egrep "${ERROR_STRING}" ${srvrLogDir}/messages.log)
                 if [[ ! -z $consoleError ]] | [[ ! -z $messagesError ]] ; then
                         echo "*** errors detected - collecting logs ***"
                         zip -j ${logDir}/error-logs-run-${i}.zip ${srvrLogDir}/console.log ${srvrLogDir}/messages.log >/dev/null
@@ -477,16 +477,16 @@ rm -f $timeLog
 echo "" | tee -a ${resFile}
 
 if [[ ${TAKE_JAVACORE} == "true" ]] ; then
-	allThrdsAvg=`awk '/ attached threads/ {x+=$6;y++}END{printf "%2.3f", x/y}' $resFile`
-	sysJvmThrdsAvg=`awk '/System-JVM/ {x+=$3;y++}END{printf "%2.3f", x/y}' $resFile`
-	gcThrdsAvg=`awk '/GC/ {x+=$4;y++}END{printf "%2.3f", x/y}' $resFile`
-	jitThrdsAvg=`awk '/JIT/ {x+=$4;y++}END{printf "%2.3f", x/y}' $resFile`
-	applicationThrdsAvg=`awk '/Application/ {x+=$3;y++}END{printf "%2.3f", x/y}' $resFile`
+	allThrdsAvg=$(awk '/ attached threads/ {x+=$6;y++}END{printf "%2.3f", x/y}' $resFile)
+	sysJvmThrdsAvg=$(awk '/System-JVM/ {x+=$3;y++}END{printf "%2.3f", x/y}' $resFile)
+	gcThrdsAvg=$(awk '/GC/ {x+=$4;y++}END{printf "%2.3f", x/y}' $resFile)
+	jitThrdsAvg=$(awk '/JIT/ {x+=$4;y++}END{printf "%2.3f", x/y}' $resFile)
+	applicationThrdsAvg=$(awk '/Application/ {x+=$3;y++}END{printf "%2.3f", x/y}' $resFile)
 
-	sysJvmThrdsPct=`echo $allThrdsAvg $sysJvmThrdsAvg | awk '{x+=$1;y+=$2}END{printf "%2.1f", (y*100)/x}'`
-	gcJvmThrdsPct=`echo $allThrdsAvg $gcThrdsAvg | awk '{x+=$1;y+=$2}END{printf "%2.1f", (y*100)/x}'`
-	jitJvmThrdsPct=`echo $allThrdsAvg $jitThrdsAvg | awk '{x+=$1;y+=$2}END{printf "%2.1f", (y*100)/x}'`
-	applicThrdsPct=`echo $allThrdsAvg $applicationThrdsAvg | awk '{x+=$1;y+=$2}END{printf "%2.1f", (y*100)/x}'`
+	sysJvmThrdsPct=$(echo $allThrdsAvg $sysJvmThrdsAvg | awk '{x+=$1;y+=$2}END{printf "%2.1f", (y*100)/x}')
+	gcJvmThrdsPct=$(echo $allThrdsAvg $gcThrdsAvg | awk '{x+=$1;y+=$2}END{printf "%2.1f", (y*100)/x}')
+	jitJvmThrdsPct=$(echo $allThrdsAvg $jitThrdsAvg | awk '{x+=$1;y+=$2}END{printf "%2.1f", (y*100)/x}')
+	applicThrdsPct=$(echo $allThrdsAvg $applicationThrdsAvg | awk '{x+=$1;y+=$2}END{printf "%2.1f", (y*100)/x}')
 
 	echo "***** Javacore Thread CPU usage averages *****" | tee -a ${resFile}
 	echo "1XMTHDCATEGORY All JVM attached threads: $allThrdsAvg secs" | tee -a ${resFile}
@@ -552,8 +552,8 @@ shortRes=""
 avg_start=`grep top $resFile | awk '{x+=$1} END {printf "%.0f", x/NR}'`
 if [[ ${EXTRA30} == "true" ]] ; then
 	#avg_fp1=`grep top $resFile | awk '{y++;x+=$3} END {print int(x/y+0.5)}'`
-	avg_fp1=`grep top $resFile | awk '{x+=$3} END {printf "%.0f", x/NR/1024}'`
-	avg_cp1=`grep top $resFile | sed -e "s/.* //" | awk -F: '{x+=$1;y+=$2}END{printf "%2.0f:%2.2f", x/NR, y/NR}'`
+	avg_fp1=$(grep top "$resFile" | awk '{x+=$3} END {printf "%.0f", x/NR/1024}')
+	avg_cp1=$(grep top "$resFile" | sed -e "s/.* //" | awk -F: '{x+=$1;y+=$2}END{printf "%2.0f:%2.2f", x/NR, y/NR}')
 	#echo "${suRes}% ; FP: $avg_fp0 MB, CPU: $avg_cp0 ; After 30 secs- FP: $avg_fp1 MB, CPU: $avg_cp1" | tee -a $resFile
 	echo "${suRes}% ; FP: $avg_fp0 MB, CPU: $avg_cp0 ; After 30 secs- FP: $avg_fp1 MB, CPU: $avg_cp1" | tee -a $resFile
 else
