@@ -178,8 +178,8 @@ getLibertyLatestBuildLabel()
 "
 
 	# Get build label from last.good.build.label Ex -> "cl210120201123-1900-_uucZEC21EeuXe4FTUa5Giw"
-	local LATEST_LABEL_RELEASE=`curl -u ${AUTH_USERNAME}:${AUTH_PASSWORD} ${LIBERTYFS_URL}/release/last.good.build.label`
-	local LATEST_LABEL_RELEASE2=`curl -u ${AUTH_USERNAME}:${AUTH_PASSWORD} ${LIBERTYFS_URL}/release2/last.good.build.label`
+	local LATEST_LABEL_RELEASE=$(curl -u "${AUTH_USERNAME}":"${AUTH_PASSWORD}" "${LIBERTYFS_URL}"/release/last.good.build.label)
+	local LATEST_LABEL_RELEASE2=$(curl -u "${AUTH_USERNAME}":"${AUTH_PASSWORD}" "${LIBERTYFS_URL}"/release2/last.good.build.label)
 
 	# Get the latest build label from release or release2
 	if [[ "${LATEST_LABEL_RELEASE}" > "${LATEST_LABEL_RELEASE2}" ]]; then
@@ -206,18 +206,18 @@ searchLibertyBuild()
 
 	# Search for a build match on release or release2. Match looks like example bellow:
 	# <tr><td valign="top"><img src="/icons/folder.gif" alt="[DIR]"></td><td><a href="cl210220210121-1100-_hXbe0FvPEeuM3vrL9EeJlQ/">cl210220210121-1100-_hXbe0FvPEeuM3vrL9EeJlQ/</a></td><td align="right">2021-01-26 10:24  </td><td align="right">  - </td><td>&nbsp;</td></tr>
-	local BUILD_LABEL_RELEASE=`curl -u ${AUTH_USERNAME}:${AUTH_PASSWORD} ${LIBERTYFS_URL}/release/ | grep "${LIBERTY_BUILD_LEVEL}"`
-	local BUILD_LABEL_RELEASE2=`curl -u ${AUTH_USERNAME}:${AUTH_PASSWORD} ${LIBERTYFS_URL}/release2/ | grep "${LIBERTY_BUILD_LEVEL}"`
+	local BUILD_LABEL_RELEASE=$(curl -u "${AUTH_USERNAME}":"${AUTH_PASSWORD}" "${LIBERTYFS_URL}"/release/ | grep "${LIBERTY_BUILD_LEVEL}")
+	local BUILD_LABEL_RELEASE2=$(curl -u "${AUTH_USERNAME}":"${AUTH_PASSWORD}" "${LIBERTYFS_URL}"/release2/ | grep "${LIBERTY_BUILD_LEVEL}")
 	local BUILD_LABEL
 	if [[ ! -z "${BUILD_LABEL_RELEASE}" ]]; then
 		echo "Found ${LIBERTY_BUILD_LEVEL} in ${LIBERTYFS_URL}/release/"
 		echo "${BUILD_LABEL_RELEASE}"
-	    BUILD_LABEL=`echo ${BUILD_LABEL_RELEASE} | grep -oE "${LIBERTY_BUILD_LEVEL}.*/\"" | sed 's/\/"//'`
+	    BUILD_LABEL=$(echo "${BUILD_LABEL_RELEASE}" | grep -oE "${LIBERTY_BUILD_LEVEL}.*/\"" | sed 's/\/"//')
 		LIBERTYFS_BUILD_URL="${LIBERTYFS_URL}/release/${BUILD_LABEL}"
 	elif [[ ! -z "${BUILD_LABEL_RELEASE2}" ]]; then
 		echo "Found ${LIBERTY_BUILD_LEVEL} in ${LIBERTYFS_URL}/release2/"
 		echo "${BUILD_LABEL_RELEASE2}"
-	    BUILD_LABEL=`echo ${BUILD_LABEL_RELEASE2} | grep -oE "${LIBERTY_BUILD_LEVEL}.*/\"" | sed 's/\/"//'`
+	    BUILD_LABEL=$(echo "${BUILD_LABEL_RELEASE2}" | grep -oE "${LIBERTY_BUILD_LEVEL}.*/\"" | sed 's/\/"//')
 		LIBERTYFS_BUILD_URL="${LIBERTYFS_URL}/release2/${BUILD_LABEL}"
 	else
 		echo "Exiting without configuring Liberty since ${LIBERTY_BUILD_LEVEL} was not found in ${LIBERTYFS_URL}/release/ or ${LIBERTYFS_URL}/release2/"
@@ -277,7 +277,7 @@ fi
 if [[ "${LIBERTY_BUILD_LEVEL}" == "latest" ]]; then
 	getLibertyLatestBuildLabel
 	# Get the build from LIBERTYFS_BUILD_URL so we can use it for WL_ZIP - https://libertyfs.hursley.ibm.com/liberty/dev/Xo/release/cl210220210125-1100-_GAq8QF70Eeu-m6gcHvZdzA -> cl210220210125-1100
-	LIBERTY_BUILD_LEVEL=`echo ${LIBERTYFS_BUILD_URL} | sed 's/^.*\///' | sed 's/-_.*//'`
+	LIBERTY_BUILD_LEVEL=$(echo "${LIBERTYFS_BUILD_URL}" | sed 's/^.*\///' | sed 's/-_.*//')
 else
 	searchLibertyBuild
 fi
@@ -286,11 +286,11 @@ fi
 # To download OL https://libertyfs.hursley.ibm.com/liberty/dev/Xo/release/[BUILD LABEL]/fe/cl210220210125-1100.47.linux/linux/zipper/externals/installables/ and search for openliberty-all there 
 echo "LIBERTYFS_BUILD_URL=${LIBERTYFS_BUILD_URL}"
 echo "LIBERTY_BUILD_LEVEL=${LIBERTY_BUILD_LEVEL}"
-FE_OL_URL=`curl -u ${AUTH_USERNAME}:${AUTH_PASSWORD} ${LIBERTYFS_BUILD_URL}/fe/ | grep -oE "href=\"${LIBERTY_BUILD_LEVEL}.*\.linux/\"" | sed 's/\/"//' | sed 's/href="//'`
+FE_OL_URL=$(curl -u "${AUTH_USERNAME}":"${AUTH_PASSWORD}" "${LIBERTYFS_BUILD_URL}"/fe/ | grep -oE "href=\"${LIBERTY_BUILD_LEVEL}.*\.linux/\"" | sed 's/\/"//' | sed 's/href="//')
 INSTALLABLES_OL_URL="${LIBERTYFS_BUILD_URL}/fe/${FE_OL_URL}/linux/zipper/externals/installables"
-OL_ZIP=`curl -u ${AUTH_USERNAME}:${AUTH_PASSWORD} ${INSTALLABLES_OL_URL}/ | grep -oE "openliberty-all.*.zip\"" | sed 's/"//'`
+OL_ZIP=$(curl -u "${AUTH_USERNAME}":"${AUTH_PASSWORD}" "${INSTALLABLES_OL_URL}"/ | grep -oE "openliberty-all.*.zip\"" | sed 's/"//')
 # To download WL search for wlp-[build].zip file https://libertyfs.hursley.ibm.com/liberty/dev/Xo/release/[BUILD LABEL]/wlp-[build].zip
-WL_ZIP=`curl -u ${AUTH_USERNAME}:${AUTH_PASSWORD} ${LIBERTYFS_BUILD_URL}/ | grep -oE "wlp-${LIBERTY_BUILD_LEVEL}\.zip\"" | sed 's/"//'`
+WL_ZIP=$(curl -u "${AUTH_USERNAME}":"${AUTH_PASSWORD}" "${LIBERTYFS_BUILD_URL}"/ | grep -oE "wlp-${LIBERTY_BUILD_LEVEL}\.zip\"" | sed 's/"//')
 echo "FE_OL_URL=${FE_OL_URL}"
 echo "INSTALLABLES_OL_URL=${INSTALLABLES_OL_URL}"
 echo "OL_ZIP=${OL_ZIP}"
@@ -300,7 +300,7 @@ echo "WL_ZIP=${WL_ZIP}"
 
 unsetVars
 APP_URL="${INSTALLABLES_OL_URL}/${OL_ZIP}"
-APP_ARCHIVE="$(basename ${APP_URL})"
+APP_ARCHIVE="$(basename "${APP_URL}")"
 EXTRACT_ORIGINAL_NAME="wlp"
 EXTRACT_NEW_NAME="${EXTRACT_ORIGINAL_NAME}"
 APP_DEST="${DEST}/libertyBinaries/OL-liberty"
@@ -312,7 +312,7 @@ downloadDepencies
 
 unsetVars
 APP_URL="${LIBERTYFS_BUILD_URL}/${WL_ZIP}"
-APP_ARCHIVE="$(basename ${APP_URL})"
+APP_ARCHIVE="$(basename "${APP_URL}")"
 EXTRACT_ORIGINAL_NAME="wlp"
 EXTRACT_NEW_NAME="${EXTRACT_ORIGINAL_NAME}"
 APP_DEST="${DEST}/libertyBinaries/WL-liberty"
