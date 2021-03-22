@@ -118,9 +118,13 @@ setFirstResponse()
       testTarget="/pingperf/ping/greeting"
 	    respString=" SystemOut "
       ;;
-    acmeair-micro)
+    acmeair-micro-1.0)
       testTarget="/"
 	    respString="Complete List : MongoClientOptions"
+      ;;
+    acmeair-micro-4.0)
+      testTarget="/flight"
+	    respString="SRVE0242I.*acmeair-flightservice.*Initialization successful"
       ;;
     acmeair-mono)
       testTarget="/rest/info/config/runtime"

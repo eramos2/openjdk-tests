@@ -16,7 +16,7 @@
   </httpEndpoint>
   <quickStartSecurity userName="${env.USERNAME}" userPassword="${env.PASSWORD}" />
   <logging consoleFormat="${LOGGING_FORMAT}" consoleSource="message,trace,accessLog,ffdc,audit" messageFormat="${LOGGING_FORMAT}" messageSource="message,trace,accessLog,ffdc,audit" traceSpecification="${TRACE_SPEC}" />-->
-  <webApplication name="acmeair-flightservice" location="/sufp/apps/acmeair-micro/acmeair-flightservice-java-4.0.war" contextRoot="/flight">
+  <webApplication name="acmeair-flightservice" location="/sufp/apps/acmeair-micro-4.0/acmeair-flightservice-java-4.0.war" contextRoot="/flight">
     <!-- enable visibility to third party apis -->
     <classloader apiTypeVisibility="api,ibm-api,spec,stable,third-party"/>
   </webApplication>
