@@ -18,7 +18,7 @@
 -->
 
     <webApplication name="flightservice"
-        location="/sufp/apps/acmeair-micro/flightservice-java-2.0.0-SNAPSHOT.war"
+        location="/sufp/apps/acmeair-micro-1.0/flightservice-java-2.0.0-SNAPSHOT.war"
         contextRoot="/" />
     <!--logging traceSpecification="*=audit:com.acmeair.*=finest"/-->
 </server>
