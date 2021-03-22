@@ -145,7 +145,8 @@ echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" | tee -a ${resDir}/${test}.env
 sleepTime=5
 timeToFirstRequest=""
 
-if [[ $server == "acmeair-micro" ]] || \
+if [[ $server == "acmeair-micro-1.0" ]] || \
+    [[ $server == "acmeair-micro-4.0" ]] || \
 	[[ $server == "acmeair-mono" ]] || \
 	[[ $server == "cdi-base" ]] || \
 	[[ $server == "cdi-fat" ]] || \
@@ -179,10 +180,13 @@ testTarget=""
 if [[ $server == "pingperf" ]] ; then
 	testTarget="/pingperf/ping/greeting"
 	respString=" SystemOut "
-elif [[ $server == "acmeair-micro" ]] ; then
+elif [[ $server == "acmeair-micro-1.0" ]] ; then
 	testTarget="/"
 #	respString="SRVE0242I.*flightservice.*Initialization successful"
 	respString="Complete List : MongoClientOptions"
+elif [[ $server == "acmeair-micro-4.0" ]] ; then
+	testTarget="/flight"
+	respString="SRVE0242I.*acmeair-flightservice.*Initialization successful"
 elif [[ $server == "acmeair-mono" ]] ; then
 	testTarget="/rest/info/config/runtime"
 	respString="SRVE0242I.*acmeair-monolithic.*Initialization successful"
