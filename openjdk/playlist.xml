@@ -23,27 +23,6 @@
 		</variations>
 		<command>$(JAVA_COMMAND) -Xmx512m -jar $(Q)$(TEST_RESROOT)$(D)jtreg$(D)lib$(D)jtreg.jar$(Q) \
 	$(JTREG_BASIC_OPTIONS) $(CUSTOM_NATIVE_OPTIONS) -vmoptions:$(Q)-Xmx512m $(JVM_OPTIONS)$(Q) \
-	-w $(Q)$(REPORTDIR)$(D)work$(Q) \
-	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
-	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
-	$(Q)$(OPENJDK_DIR)$(D)$(JDK_CUSTOM_TARGET)$(Q); \
-	$(TEST_STATUS)</command>
-		<levels>
-			<level>extended</level>
-		</levels>
-		<groups>
-			<group>openjdk</group>
-		</groups>
-	</test>
-	<test>
-		<testCaseName>openj9_custom</testCaseName>
-		<variations>
-			<variation>Mode150</variation>
-			<variation>Mode650</variation>
-			<variation>Mode1000</variation>
-		</variations>
-		<command>$(JAVA_COMMAND) -Xmx512m -jar $(Q)$(TEST_RESROOT)$(D)jtreg$(D)lib$(D)jtreg.jar$(Q) \
-	$(JTREG_BASIC_OPTIONS) $(CUSTOM_NATIVE_OPTIONS) -vmoptions:$(Q)-Xmx512m $(JVM_OPTIONS)$(Q) \
 	$(TIMEOUT_HANDLER) \
 	-w $(Q)$(REPORTDIR)$(D)work$(Q) \
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
@@ -56,10 +35,6 @@
 		<groups>
 			<group>openjdk</group>
 		</groups>
-		<impls>
-			<impl>openj9</impl>
-			<impl>ibm</impl>
-		</impls>
 	</test>
 	<test>
 		<testCaseName>hotspot_all</testCaseName>
@@ -75,10 +50,10 @@
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	$(Q)$(JTREG_HOTSPOT_TEST_DIR):hotspot_all$(Q); \
 	$(TEST_STATUS)</command>
-		<subsets>
-			<subset>8</subset>
-			<subset>9</subset>
-		</subsets>
+		<versions>
+			<version>8</version>
+			<version>9</version>
+		</versions>
 		<levels>
 			<level>extended</level>
 		</levels>
@@ -105,9 +80,9 @@
 	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
 	$(Q)$(JTREG_HOTSPOT_TEST_DIR):hotspot_native_sanity$(Q); \
 	$(TEST_STATUS)</command>
-		<subsets>
-			<subset>11+</subset>
-		</subsets>
+		<versions>
+			<version>11+</version>
+		</versions>
 		<levels>
 			<level>extended</level>
 		</levels>
@@ -135,9 +110,9 @@
 	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
 	$(Q)$(JTREG_HOTSPOT_TEST_DIR):hotspot_compiler$(Q); \
 	$(TEST_STATUS)</command>
-		<subsets>
-			<subset>11+</subset>
-		</subsets>
+		<versions>
+			<version>11+</version>
+		</versions>
 		<levels>
 			<level>extended</level>
 		</levels>
@@ -165,9 +140,9 @@
 	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
 	$(Q)$(JTREG_HOTSPOT_TEST_DIR)$(D)runtime$(D)Nestmates$(Q); \
 	$(TEST_STATUS)</command>
-		<subsets>
-			<subset>11+</subset>
-		</subsets>
+		<versions>
+			<version>11+</version>
+		</versions>
 		<levels>
 			<level>extended</level>
 		</levels>
@@ -194,10 +169,10 @@
 	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
 	$(Q)$(JTREG_HOTSPOT_TEST_DIR):jre$(Q); \
 	$(TEST_STATUS)</command>
-		<subsets>
-			<subset>8</subset>
-			<subset>9</subset>
-		</subsets>
+		<versions>
+			<version>8</version>
+			<version>9</version>
+		</versions>
 		<levels>
 			<level>extended</level>
 		</levels>
@@ -328,9 +303,9 @@
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	$(Q)$(OPENJDK_DIR)$(D)test$(D)jdk$(D)jdk$(D)internal$(D)loader$(D)NativeLibraries$(D)Main.java$(Q); \
 	$(TEST_STATUS)</command>
-		<subsets>
-			<subset>15+</subset>
-		</subsets>
+		<versions>
+			<version>15+</version>
+		</versions>
 		<levels>
 			<level>sanity</level>
 		</levels>
@@ -356,9 +331,9 @@
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	$(Q)$(OPENJDK_DIR)$(D)test$(D)jdk$(D)java$(D)lang$(D)ProcessBuilder$(D)checkHandles$(D)CheckHandles.java$(Q); \
 	$(TEST_STATUS)</command>
-		<subsets>
-			<subset>11+</subset>
-		</subsets>
+		<versions>
+			<version>11+</version>
+		</versions>
 		<levels>
 			<level>sanity</level>
 		</levels>
@@ -368,7 +343,7 @@
 		<groups>
 			<group>openjdk</group>
 		</groups>
-		<platformRequirements>os.win</platformRequirements>
+		<platformRequirements>os.win,bits.64</platformRequirements>
 	</test>
 	<test>
 		<testCaseName>jdk_lang_ref_FinalizeOverride_j9</testCaseName>
@@ -384,9 +359,9 @@
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	$(Q)$(OPENJDK_DIR)$(D)test$(D)jdk$(D)java$(D)lang$(D)ref$(D)FinalizeOverride.java$(Q); \
 	$(TEST_STATUS)</command>
-		<subsets>
-			<subset>11+</subset>
-		</subsets>
+		<versions>
+			<version>11+</version>
+		</versions>
 		<levels>
 			<level>special</level>
 		</levels>
@@ -412,9 +387,9 @@
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	$(Q)$(OPENJDK_DIR)$(D)test$(D)jdk$(D)java$(D)util$(D)zip$(D)ZipFile$(D)TestCleaner.java$(Q); \
 	$(TEST_STATUS)</command>
-		<subsets>
-			<subset>11+</subset>
-		</subsets>
+		<versions>
+			<version>11+</version>
+		</versions>
 		<levels>
 			<level>special</level>
 		</levels>
@@ -467,11 +442,11 @@
 	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_math$(Q); \
 	$(TEST_STATUS)</command>
-		<subsets>
-			<subset>8</subset>
-			<subset>9</subset>
-			<subset>10</subset>
-		</subsets>
+		<versions>
+			<version>8</version>
+			<version>9</version>
+			<version>10</version>
+		</versions>
 		<levels>
 			<level>special</level>
 		</levels>
@@ -731,7 +706,7 @@
 			<variation>$(TEST_VARIATION_DUMP) Mode1000</variation>
 		</variations>
 		<command>$(JAVA_COMMAND) -Xmx512m -jar $(Q)$(TEST_RESROOT)$(D)jtreg$(D)lib$(D)jtreg.jar$(Q) \
-	$(JTREG_BASIC_OPTIONS) -vmoptions:$(Q)-Xmx512m $(JVM_OPTIONS)$(Q) \
+	$(JTREG_BASIC_OPTIONS) -vmoptions:$(Q)-Xmx1540m $(JVM_OPTIONS)$(Q) \
 	$(TIMEOUT_HANDLER) \
 	-w $(Q)$(REPORTDIR)$(D)work$(Q) \
 	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
@@ -898,9 +873,9 @@
 		<levels>
 			<level>sanity</level>
 		</levels>
-		<subsets>
-			<subset>8</subset>
-		</subsets>
+		<versions>
+			<version>8</version>
+		</versions>
 		<groups>
 			<group>openjdk</group>
 		</groups>
@@ -950,9 +925,9 @@
 	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_foreign$(Q); \
 	$(TEST_STATUS)</command>
-		<subsets>
-			<subset>14+</subset>
-		</subsets>
+		<versions>
+			<version>14+</version>
+		</versions>
 		<levels>
 			<level>sanity</level>
 		</levels>
@@ -964,7 +939,7 @@
 		<testCaseName>jdk_foreign_native</testCaseName>
 		<disabled>
 			<comment>https://github.com/AdoptOpenJDK/openjdk-tests/issues/2218#issuecomment-770048450</comment>
-			<subset>16+</subset>
+			<version>16+</version>
 			<impl>openj9</impl>
 		</disabled>
 		<variations>
@@ -979,9 +954,9 @@
 	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
 	$(Q)$(OPENJDK_DIR)$(D)test$(D)jdk$(D)java$(D)foreign$(D)TestNative.java$(Q); \
 	$(TEST_STATUS)</command>
-		<subsets>
-			<subset>14+</subset>
-		</subsets>
+		<versions>
+			<version>14+</version>
+		</versions>
 		<levels>
 			<level>sanity</level>
 		</levels>
@@ -991,6 +966,7 @@
 		<groups>
 			<group>openjdk</group>
 		</groups>
+		<platformRequirements>bits.64,^arch.ppc,^arch.390,^arch.riscv,^os.zos,^os.sunos</platformRequirements>
 	</test>
 	<test>
 		<testCaseName>jdk_instrument</testCaseName>
@@ -1008,10 +984,10 @@
 	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_instrument$(Q); \
 	$(TEST_STATUS)</command>
-		<subsets>
-			<subset>8</subset>
-			<subset>11+</subset>
-		</subsets>
+		<versions>
+			<version>8</version>
+			<version>11+</version>
+		</versions>
 		<levels>
 			<level>extended</level>
 		</levels>
@@ -1041,9 +1017,9 @@
 	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_svc_sanity$(Q); \
 	$(TEST_STATUS)</command>
-		<subsets>
-			<subset>11+</subset>
-		</subsets>
+		<versions>
+			<version>11+</version>
+		</versions>
 		<levels>
 			<level>sanity</level>
 		</levels>
@@ -1074,9 +1050,9 @@
 		<levels>
 			<level>extended</level>
 		</levels>
-		<subsets>
-			<subset>11+</subset>
-		</subsets>
+		<versions>
+			<version>11+</version>
+		</versions>
 		<groups>
 			<group>openjdk</group>
 		</groups>
@@ -1100,9 +1076,9 @@
 	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):build$(Q); \
 	$(TEST_STATUS)</command>
-		<subsets>
-			<subset>11+</subset>
-		</subsets>
+		<versions>
+			<version>11+</version>
+		</versions>
 		<levels>
 			<level>extended</level>
 		</levels>
@@ -1116,6 +1092,11 @@
 	</test>
 	<test>
 		<testCaseName>jdk_imageio</testCaseName>
+		<disabled>
+			<comment>https://github.com/AdoptOpenJDK/openjdk-tests/issues/2327#issuecomment-799459653</comment>
+			<version>16+</version>
+			<plat>.*mac.*</plat>
+		</disabled>
 		<variations>
 			<variation>Mode150</variation>
 			<variation>Mode650</variation>
@@ -1130,10 +1111,10 @@
 	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_imageio$(Q); \
 	$(TEST_STATUS)</command>
-		<subsets>
-			<subset>8</subset>
-			<subset>11+</subset>
-		</subsets>
+		<versions>
+			<version>8</version>
+			<version>11+</version>
+		</versions>
 		<levels>
 			<level>extended</level>
 		</levels>
@@ -1160,9 +1141,9 @@
 	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_client_sanity$(Q); \
 	$(TEST_STATUS)</command>
-		<subsets>
-			<subset>11+</subset>
-		</subsets>
+		<versions>
+			<version>11+</version>
+		</versions>
 		<levels>
 			<level>extended</level>
 		</levels>
@@ -1190,9 +1171,9 @@
 	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_security_infra$(Q); \
 	$(TEST_STATUS)</command>
-		<subsets>
-			<subset>11+</subset>
-		</subsets>
+		<versions>
+			<version>11+</version>
+		</versions>
 		<levels>
 			<level>extended</level>
 		</levels>
@@ -1220,9 +1201,9 @@
 	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_native_sanity$(Q); \
 	$(TEST_STATUS)</command>
-		<subsets>
-			<subset>11+</subset>
-		</subsets>
+		<versions>
+			<version>11+</version>
+		</versions>
 		<levels>
 			<level>extended</level>
 		</levels>
@@ -1249,10 +1230,10 @@
 	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jdk_2d$(Q); \
 	$(TEST_STATUS)</command>
-		<subsets>
-			<subset>8</subset>
-			<subset>11+</subset>
-		</subsets>
+		<versions>
+			<version>8</version>
+			<version>11+</version>
+		</versions>
 		<levels>
 			<level>extended</level>
 		</levels>
@@ -1283,9 +1264,9 @@
 	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR):jfc_demo$(Q); \
 	$(TEST_STATUS)</command>
-		<subsets>
-			<subset>11+</subset>
-		</subsets>
+		<versions>
+			<version>11+</version>
+		</versions>
 		<levels>
 			<level>extended</level>
 		</levels>
@@ -1313,9 +1294,9 @@
 	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR)/com/sun/crypto/provider/Cipher$(Q); \
 	$(TEST_STATUS)</command>
-		<subsets>
-			<subset>11+</subset>
-		</subsets>
+		<versions>
+			<version>11+</version>
+		</versions>
 		<levels>
 			<level>sanity</level>
 		</levels>
@@ -1339,9 +1320,9 @@
 	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR)/java/nio/Buffer$(Q); \
 	$(TEST_STATUS)</command>
-		<subsets>
-			<subset>11+</subset>
-		</subsets>
+		<versions>
+			<version>11+</version>
+		</versions>
 		<levels>
 			<level>sanity</level>
 		</levels>
@@ -1365,9 +1346,9 @@
 	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR)/sun/nio/cs/ISO8859x.java$(Q); \
 	$(TEST_STATUS)</command>
-		<subsets>
-			<subset>11+</subset>
-		</subsets>
+		<versions>
+			<version>11+</version>
+		</versions>
 		<levels>
 			<level>sanity</level>
 		</levels>
@@ -1391,11 +1372,37 @@
 	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
 	$(Q)$(JTREG_JDK_TEST_DIR)/tools/pack200$(Q); \
 	$(TEST_STATUS)</command>
-		<subsets>
-			<subset>11</subset>
-		</subsets>
+		<versions>
+			<version>11</version>
+		</versions>
 		<levels>
 			<level>sanity</level>
+		</levels>
+		<groups>
+			<group>openjdk</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>jdk_vector</testCaseName>
+		<variations>
+			<variation>Mode150</variation>
+			<variation>Mode650</variation>
+			<variation>Mode1000</variation>
+		</variations>
+		<command>$(JAVA_COMMAND) -Xmx512m -jar $(Q)$(TEST_RESROOT)$(D)jtreg$(D)lib$(D)jtreg.jar$(Q) \
+	$(JTREG_BASIC_OPTIONS) -vmoptions:$(Q)-Xmx512m $(JVM_OPTIONS)$(Q) \
+	-w $(Q)$(REPORTDIR)$(D)work$(Q) \
+	-r $(Q)$(TEST_RESROOT)$(D)report$(Q) \
+	-jdk:$(Q)$(TEST_JDK_HOME)$(Q) \
+	-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList.txt$(Q) \
+	-exclude:$(Q)$(TEST_RESROOT)$(D)$(PROBLEM_LIST_FILE)$(Q) \
+	$(Q)$(JTREG_JDK_TEST_DIR):jdk_vector$(Q); \
+	$(TEST_STATUS)</command>
+		<versions>
+			<version>16+</version>
+		</versions>
+		<levels>
+			<level>extended</level>
 		</levels>
 		<groups>
 			<group>openjdk</group>

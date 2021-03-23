@@ -18,6 +18,20 @@
 		</groups>
 	</test>
 	<test>
+		<testCaseName>system_custom</testCaseName>
+		<variations>
+			<variation>NoOptions</variation>
+		</variations>
+		<command>$(SYSTEMTEST_CMD_TEMPLATE) $(CUSTOM_TARGET);\
+	$(TEST_STATUS)</command>
+		<levels>
+			<level>special</level>
+		</levels>
+		<groups>
+			<group>system</group>
+		</groups>
+	</test>
+	<test>
 		<testCaseName>MiniMix_5m</testCaseName>
 		<variations>
 			<variation>Mode150</variation>
@@ -32,9 +46,9 @@
 		<groups>
 			<group>system</group>
 		</groups>
-		<subsets>
-			<subset>11+</subset>
-		</subsets>
+		<versions>
+			<version>11+</version>
+		</versions>
 	</test>
 	<test>
 		<testCaseName>MiniMix_jdk8_5m</testCaseName>
@@ -49,9 +63,9 @@
 		<groups>
 			<group>system</group>
 		</groups>
-		<subsets>
-			<subset>8</subset>
-		</subsets>
+		<versions>
+			<version>8</version>
+		</versions>
 	</test>
 	<test>
 		<testCaseName>ClassLoadingTest_5m</testCaseName>
@@ -233,9 +247,9 @@
 		<groups>
 			<group>system</group>
 		</groups>
-		<subsets>
-			<subset>8</subset>
-		</subsets>
+		<versions>
+			<version>8</version>
+		</versions>
 	</test>
 	<test>
 		<testCaseName>HCRLateAttachWorkload_previewEnabled</testCaseName>
@@ -252,9 +266,28 @@
 		<groups>
 			<group>system</group>
 		</groups>
-		<subsets>
-			<subset>11+</subset>
-		</subsets>
+		<versions>
+			<version>11+</version>
+		</versions>
+	</test>
+	<test>
+		<testCaseName>JdiTest</testCaseName>
+		<disabled>
+			<comment>AdoptOpenJDK/openjdk-systemtest/issues/63</comment>
+		</disabled>
+		<variations>
+			<variation>Mode150</variation>
+			<variation>Mode650</variation>
+			<variation>Mode1000</variation>
+		</variations>
+		<command>$(SYSTEMTEST_CMD_TEMPLATE) -test=JdiTest; \
+	$(TEST_STATUS)</command>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>system</group>
+		</groups>
 	</test>
 	<test>
 		<testCaseName>HeapHogLoadTest_5m</testCaseName>
