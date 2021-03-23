@@ -143,7 +143,7 @@ parseCommandLineArgs()
 
 			"--test_images_required" )
 				TEST_IMAGES_REQUIRED="$1"; shift;;
-			
+
 			"--debug_images_required" )
 				DEBUG_IMAGES_REQUIRED="$1"; shift;;
 
@@ -171,16 +171,16 @@ getBinaryOpenjdk()
 
 	if [ "$SDK_RESOURCE" != "upstream" ]; then
 		if [ "$(ls -A $SDKDIR/openjdkbinary)" ]; then
-        	echo "$SDKDIR/openjdkbinary is not an empty directory, please empty it or specify a different SDK directory."
-        	echo "This directory is used to download SDK resources into it and the script will not overwrite its contents."
-        	exit 1
-        fi
-    fi
+			echo "$SDKDIR/openjdkbinary is not an empty directory, please empty it or specify a different SDK directory."
+			echo "This directory is used to download SDK resources into it and the script will not overwrite its contents."
+			exit 1
+		fi
+	fi
 
 	if [ "$CUSTOMIZED_SDK_URL" != "" ]; then
 		download_url=$CUSTOMIZED_SDK_URL
-                # if these are passed through via withCredentials(CUSTOMIZED_SDK_URL_CREDENTIAL_ID) these will not be visible within job output,
-                # if supplied when run manually with --username and --password these will be seen in plaintext within job output
+		# if these are passed through via withCredentials(CUSTOMIZED_SDK_URL_CREDENTIAL_ID) these will not be visible within job output,
+		# if supplied when run manually with --username and --password these will be seen in plaintext within job output
 		if [ "$USERNAME" != "" ] && [ "$PASSWORD" != "" ]; then
 			curl_options="--user $USERNAME:$PASSWORD"
 		fi
@@ -273,7 +273,13 @@ getBinaryOpenjdk()
 				echo "curl error code: $download_exit_code"
 				echo "Failed to retrieve $file, exiting. This is what we received of the file and MD5 sum:"
 				ls -ld $file
-				md5sum $file
+
+				if [[ "$OSTYPE" == "darwin"* ]]; then
+				    md5 $file
+				 else
+				    md5sum $file
+				fi
+
 				exit 1
 			fi
 			set -e
@@ -313,12 +319,16 @@ getBinaryOpenjdk()
 				if [ -d "$SDKDIR/openjdkbinary/j2sdk-image/jre" ]; then
 					extract_dir="./j2sdk-image/jre"
 				fi
-				echo "unzip $jar_name in $extract_dir..."
+				echo "Uncompressing $jar_name over $extract_dir..."
 				if [[ $jar_name == *zip || $jar_name == *jar ]]; then
 					unzip -q $jar_name -d $extract_dir
 				else
-					# some debug-image tar has parent folder. --strip 1 is used to remove it
-					gzip -cd $jar_name | tar xof - -C $extract_dir --strip 1
+					# some debug-image tar has parent folder ... strip it
+					if tar --version 2>&1 | grep GNU 2>&1; then
+						gzip -cd $jar_name | tar xof - -C $extract_dir --strip 1
+					else
+						mkdir dir.$$ && cd dir.$$ && gzip -cd ../$jar_name | tar xof - && cd * && tar cf - . | (cd ../../$extract_dir && tar xpf -) && cd ../.. && rm -rf dir.$$
+					fi
 				fi
 			else
 				if [ -d "$SDKDIR/openjdkbinary/tmp" ]; then
@@ -326,14 +336,17 @@ getBinaryOpenjdk()
 				else
 					mkdir $SDKDIR/openjdkbinary/tmp
 				fi
-				echo "unzip file: $jar_name ..."
+				echo "Uncompressing file: $jar_name ..."
 				if [[ $jar_name == *zip || $jar_name == *jar ]]; then
 					unzip -q $jar_name -d ./tmp
+				elif [[ $jar_name == *.pax* ]]; then
+					cd ./tmp
+					pax -p xam -rzf ../$jar_name
 				else
-					gzip -cd $jar_name | tar xof - -C ./tmp
+					gzip -cd $jar_name | (cd tmp && tar xof -)
 				fi
 
-				cd ./tmp
+				cd $SDKDIR/openjdkbinary/tmp
 				jar_dirs=`ls -d */`
 				jar_dir_array=(${jar_dirs//\\n/ })
 				len=${#jar_dir_array[@]}
@@ -345,11 +358,8 @@ getBinaryOpenjdk()
 						mv $jar_dir_name ../j2re-image
 					elif [[ "$jar_dir_name" =~ jdk*  &&  "$jar_dir_name" != "j2sdk-image" ]]; then
 						mv $jar_dir_name ../j2sdk-image
-					# if native test libs folder is available, mv it under native-test-libs
-					elif [[ "$jar_dir_name"  =~ native-test-libs*  &&  "$jar_dir_name" != "native-test-libs" ]]; then
-						mv $jar_dir_name ../native-test-libs
 					#The following only needed if openj9 has a different image name convention
-					elif [[ "$jar_dir_name" != "j2sdk-image"  &&  "$jar_dir_name" != "native-test-libs" ]]; then
+					elif [[ "$jar_dir_name" != "j2sdk-image" ]]; then
 						mv $jar_dir_name ../j2sdk-image
 					fi
 				elif [[ "$len" > 1 ]]; then
@@ -463,11 +473,11 @@ getFunctionalTestMaterial()
 
 	mv openj9/test/TestConfig TestConfig
 	mv openj9/test/Utils Utils
-    if [ -d functional ]; then
-        mv openj9/test/functional/* functional/
-    else
-	    mv openj9/test/functional functional
-    fi
+	if [ -d functional ]; then
+		mv openj9/test/functional/* functional/
+	else
+		mv openj9/test/functional functional
+	fi
 	checkOpenJ9RepoSHA
 
 	rm -rf openj9
@@ -514,6 +524,8 @@ getFunctionalTestMaterial()
 
 			if [ "$sha" != "" ]; then
 				cd $dest
+				echo "git fetch -q --unshallow"
+				git fetch -q --unshallow
 				echo "update to $sha"
 				git checkout $sha
 				cd $TESTDIR
@@ -543,9 +555,17 @@ if [[ $TEST_JDK_HOME == "" ]]; then
 	TEST_JDK_HOME=$SDKDIR/openjdkbinary/j2sdk-image
 fi
 _java=${TEST_JDK_HOME}/bin/java
+_release=${TEST_JDK_HOME}/release
 if [ -x ${_java} ]; then
 	echo "Run ${_java} -version"
+	echo "=JAVA VERSION OUTPUT BEGIN="
 	${_java} -version
+	echo "=JAVA VERSION OUTPUT END="
+	if [ -e ${_release} ]; then
+		echo "=RELEASE INFO BEGIN="
+		cat ${_release}
+		echo "=RELEASE INFO END="
+	fi
 else
 	echo "${TEST_JDK_HOME}/bin/java does not exist! Searching under TEST_JDK_HOME: ${TEST_JDK_HOME}..."
 	# Search javac as java may not be unique
@@ -562,7 +582,9 @@ else
 
 		java_dir=$(dirname "${_javac}")
 		echo "Run: ${java_dir}/java -version"
+		echo "=JAVA VERSION OUTPUT BEGIN="
 		${java_dir}/java -version
+		echo "=JAVA VERSION OUTPUT END="
 		TEST_JDK_HOME=${java_dir}/../
 		echo "TEST_JDK_HOME=${TEST_JDK_HOME}" > ${TESTDIR}/job.properties
 	else

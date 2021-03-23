@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server description="OpenLiberty Microprofile Server">
+    <featureManager>
+        <!--feature>microProfile-1.0</feature-->
+        <feature>jaxrs-2.1</feature>
+        <feature>cdi-2.0</feature>
+    </featureManager>
+    <!--executor name="LargeThreadPool" id="default" coreThreads="25" maxThreads="25"/-->
+    <httpEndpoint id="defaultHttpEndpoint" host="*" httpPort="9080" httpsPort="9443"/>
+    <webApplication contextRoot="pingperf" location="/sufp/apps/pingperf/pingperf.war" />
+    <!--applicationManager autoExpand="true"/-->
+<!--
+    <logging maxFiles="50" />
+    <cdi12 enableImplicitBeanArchives="false"/>
+    <webApplication contextRoot="pingperf" location="/sufp/apps/pingperf/pingperf.war" />
+    <webApplication contextRoot="pingperf" location="/sufp/apps/pingperf/pingperf.war" deferServletLoad="false" />
+    <webApplication contextRoot="pingperf" location="/sufp/apps/pingperf/jdx/pingperf.war" />
+    <applicationManager useJandex="true"/>
+-->
+</server>
