@@ -15,8 +15,22 @@
 <playlist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="../../TKG/playlist.xsd">
 	<test>
-		<testCaseName>DockerOpenLibertySUFPAcmeAirMicro</testCaseName>
-		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) acmeair-micro $(TEST_RESROOT) OL; \
+		<testCaseName>DockerOpenLibertySUFPAcmeAirMicro1.0</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) acmeair-micro-1.0 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}
+		</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>DockerOpenLibertySUFPAcmeAirMicro4.0</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) acmeair-micro-4.0 $(TEST_RESROOT) OL; \
 			${TEST_STATUS}
 		</command>
 		<!-- scripts are only tested on linux -->
@@ -356,8 +370,22 @@
 		</groups>
 	</test>
 	<test>
-		<testCaseName>DockerWebsphereLibertySUFPAcmeAirMicro</testCaseName>
-		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) acmeair-micro $(TEST_RESROOT) WL; \
+		<testCaseName>DockerWebsphereLibertySUFPAcmeAirMicro1.0</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) acmeair-micro-1.0 $(TEST_RESROOT) WL; \
+			${TEST_STATUS}
+		</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>DockerWebsphereLibertySUFPAcmeAirMicro4.0</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) acmeair-micro-4.0 $(TEST_RESROOT) WL; \
 			${TEST_STATUS}
 		</command>
 		<!-- scripts are only tested on linux -->
@@ -505,7 +533,6 @@
 		<testCaseName>DockerWebsphereLibertySUFPJenkins</testCaseName>
 		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) jenkins $(TEST_RESROOT) WL; \
 			${TEST_STATUS}</command>
-		<!-- scripts are only tested on linux -->
 		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
 		<levels>
 			<level>extended</level>

@@ -82,6 +82,105 @@ ROOT_RESULTS_DIR    - Absolute path of Liberty results directory on remote stora
 "
 }
 
+#######################################################################################
+#	STARTUP TIME, FOOTPRINT, FIRST RESPONSE, CPU USAGE UTILS - Helper methods that are sufp specific
+#######################################################################################
+
+##
+## First Response scenario setup. Set strings for respString, and testTarget. Kill any zombie ping scripts on requestHost.
+setFirstResponse()
+{
+    printf '%s\n' "
+.--------------------------
+| First Response Setup
+"
+  # Scenarios that do first response request
+  local FR_SCENARIOS=("acmeair-micro-1.0" "acmeair-micro-4.0" "acmeair-mono" "cdi-base" "cdi-fat" "cdi-one-jar-fat" "pingperf" "dt7" "dt8" "jaxrs-fat" "jenkins" "petclinic" "spring-1.5.6" "spring-2.1.1" "springboot-war" "tradelite7" "tradelite8")  
+  
+  timeToFirstRequest=""
+  firstResponseScript=/sufp/pingFirstResponse.sh
+  cleanupScript=/sufp/cleanupScripts.sh
+  
+  for scen in "${FR_SCENARIOS[@]}"
+  do
+    [[ "$SCENARIO" = "$scen" ]] && timeToFirstRequest="true"
+  done
+
+  echo "*** kill any zombie ping scripts on requestHost: ${LOAD_DRIVER} ***" 
+  ssh "${LOAD_DRIVER}" \"${cleanupScript} ${firstResponseScript}\"
+
+  respString=""
+  testTarget=""
+
+  # Assign testTarget and respString accorging to current scenario
+  case ${SCENARIO} in
+    pingperf)
+      testTarget="/pingperf/ping/greeting"
+	    respString=" SystemOut "
+      ;;
+    acmeair-micro-1.0)
+      testTarget="/"
+	    respString="Complete List : MongoClientOptions"
+      ;;
+    acmeair-micro-4.0)
+      testTarget="/flight"
+	    respString="SRVE0242I.*acmeair-flightservice.*Initialization successful"
+      ;;
+    acmeair-mono)
+      testTarget="/rest/info/config/runtime"
+	    respString="SRVE0242I.*acmeair-monolithic.*Initialization successful"
+      ;;
+    cdi-base|cdi-fat|cdi-one-jar-fat)
+      testTarget="/meetings/rest/meetings"
+	    respString="SRVE0242I.*meetings.*Initialization successful"
+      ;;
+    dt7|dt8)
+      testTarget="/daytrader/servlet/PingServlet"
+	    respString="SRVE0242I.*PingServlet.*Initialization successful"
+      ;;
+    jaxrs-fat)
+      testTarget="/jaxrs-fat/rest/hello/sayHello"
+	    respString="SRVE0242I.*jaxrs-fat.*Initialization successful"
+      ;;
+    jenkins)
+      testTarget="/jenkins/"
+      if [[ "${LIBERTY_VERSION}" == "WL" ]]; 
+      then
+	      respString="Jenkins is fully up and running"
+      else
+        respString="SRVE0242I.*jenkins.*Initialization successful"
+      fi
+      ;;
+    petclinic)
+      testTarget="/petclinic/"
+	    respString="SRVE0242I.*petclinic.*welcome.jsp.*Initialization successful"
+      ;;
+    spring-1.5.6|spring-2.1.1)
+      testTarget="/"
+	    respString="SRVE0242I.*authservice-springboot.*Initialization successful"
+      ;;
+    springboot-war)
+      testTarget="/spring-petclinic/"
+	    respString="SRVE0242I.*spring-petclinic.*Initialization successful"
+      ;;
+    tradelite7|tradelite8)
+      testTarget="/tradelite/servlet/PingServlet"
+	    respString="SRVE0242I.*PingServlet.*Initialization successful"
+      ;;
+    *) ;;
+  esac
+
+STARTED_STRING=" is ready to run a smarter"
+  if [[ -z $timeToFirstRequest ]] ; then
+	  echo -e "\n ****  measuring startup with config  ${SCENARIO}  **** \n"
+	  echo -e "        STARTED_STRING: '${STARTED_STRING}' \n"
+  else
+	  echo -e "\n ****  measuring first response with app  ${SCENARIO}  ****\n"
+	  echo -e "        first response string: \"$respString\"  "
+  fi
+
+}
+
  # Import the common utilities needed to run this benchmark
 . "$(dirname $0)"/common_utils.sh
 
@@ -89,14 +188,10 @@ echo "Inside sufp_docker_benchmark_test.sh"
 
 TAG=full
 
-
+testHost=$(hostname)
+testPort=9080
 
 echo "Found Scenario: ${SCENARIO}"
-
-
-
-
-
 echo "Running SUFT Tests"
 echo "Current directory is:"
 pwd
@@ -113,16 +208,44 @@ else
 fi
 
 echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/server.xml /config/server.xml" >> ${DOCKER_FILE} 
-#Check if war file exist for copy
-if [[ `cat ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO}/*.war | grep *.war` ]]
+#Check if war|ear file exist for copy
+echo "Checking for war|jar file and add them to the container /config/apps/ dir"
+
+if [ ! -z "$(ls "${TEST_RESROOT}"/scripts/sufp/apps/"${SCENARIO}"/*.war)" ];
 then
-echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/*.war /config/apps/" >> ${DOCKER_FILE}
+  echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/$(ls "${TEST_RESROOT}"/scripts/sufp/apps/"${SCENARIO}"/*.war) /config/apps/$(ls "${TEST_RESROOT}"/scripts/sufp/apps/"${SCENARIO}"/*war)" >> ${DOCKER_FILE}
 fi
+if [ ! -z "$(ls "${TEST_RESROOT}"/scripts/sufp/apps/"${SCENARIO}"/*.ear)" ];
+then
+  echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/$(ls "${TEST_RESROOT}"/scripts/sufp/apps/"${SCENARIO}"/*.ear) /config/apps/$(ls "${TEST_RESROOT}"/scripts/sufp/apps/"${SCENARIO}"/*.ear)" >> ${DOCKER_FILE}
+fi
+if [ ! -z "$(ls "${TEST_RESROOT}"/scripts/sufp/apps/"${SCENARIO}"/*.jar)" ];
+then
+  echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/$(ls "${TEST_RESROOT}"/scripts/sufp/apps/"${SCENARIO}"/*.jar) /config/apps/$(ls "${TEST_RESROOT}"/scripts/sufp/apps/"${SCENARIO}"/*.jar)" >> ${DOCKER_FILE}
+fi
+
+# Write to docker file 
+{
+  echo "EXPOSE 27017"
+  echo "EXPOSE 9080"
+  echo "ENV MONGO_HOST=${MONGO_HOST}"
+  echo "RUN configure.sh"
+  echo "RUN configure.sh"
+} >> ${DOCKER_FILE}
+
+if [ ! -z $(ls ${TEST_RESROOT}/scripts/sufp/apps/${SCENARIO} | grep resources) ];
+then
+  echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/resources /config/apps/resources" >> ${DOCKER_FILE}
+fi
+
+#echo "COPY --chown=1001:0 /opt/db2jars /opt/db2jars" >> ${DOCKER_FILE}
 
 #Edit server.xml to point to app location
 serverXML="scripts/sufp/apps/${SCENARIO}/server.xml"
-sed -i "s|\"/sufp/apps/${SCENARIO}|\"/config/apps|g" ${TEST_RESROOT}/${serverXML}
-if [[ `echo ${SCENARIO} | grep spring ` ]] ; then
+sed -i "s|\"/sufp/apps/${SCENARIO}|\"/config/apps|g" "${TEST_RESROOT}"/"${serverXML}"
+sed -i "s|\"/opt/db2jars|\"/opt/db2jars|g" "${TEST_RESROOT}"/"${serverXML}"
+if [[ `echo ${SCENARIO} | grep spring ` ]]; 
+then
 	echo "RUN mkdir -p /config/dropins/spring" >> ${DOCKER_FILE}
   echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/*.jar /config/dropins/spring" >> ${DOCKER_FILE}
 fi
@@ -134,65 +257,108 @@ echo "Current working dir"
 pwd
 ls
 docker ps
-nukeDocker
 
-
-
+setFirstResponse
 
   
-for i in `seq 1 ${MEASUREMENT_RUNS}`
+for i in $(seq 1 "${MEASUREMENT_RUNS}")
 do
+  nukeDocker
   #convert scenario name to lowercase so it can be passed as the docker container tag 
-  scenarioTag=`echo "${SCENARIO}" | awk '{print tolower($0)}'`
-  #docker build -t acmeair-authservice -f ${DOCKER_FILE} --no-cache .
-  docker build -t ${scenarioTag} -f ${DOCKER_FILE} --no-cache ${TEST_RESROOT}
-  #docker run -d acmeair-authservice
-  docker run -d ${scenarioTag}
+  scenarioTag=$(echo "${SCENARIO}" | awk '{print tolower($0)}')
+  docker build -t "${scenarioTag}" -f ${DOCKER_FILE} --no-cache "${TEST_RESROOT}"
+  echo "docker build -t ${scenarioTag} -f ${DOCKER_FILE} --no-cache ${TEST_RESROOT}"
+  
+  # Start first response ping script
+  if [[ ! -z ${timeToFirstRequest} ]];
+  then
+	  ( ssh "${LOAD_DRIVER}" $firstResponseScript "$testHost" $testPort $testTarget ) &
+  fi
+  
+  docker run -p 9080:9080 --cpuset-cpus="$PHYS_CPU_BIND" --memory="$CONTAINER_MAX_MEM" -d "${scenarioTag}"
+  echo "docker run -p 9080:9080 --cpuset-cpus=$PHYS_CPU_BIND --memory=$CONTAINER_MAX_MEM -d ${scenarioTag} "
   #Get Container ID
-  CID=`docker ps | awk 'FNR == 2 {print}'| awk '{print $1}'`
+  CID=$(docker ps | awk 'FNR == 2 {print}'| awk '{print $1}')
   sleep 30
 
 if [[ $i == 1 ]]
 then
   if [[ "${LIBERTY_VERSION}" == "WL" ]]; 
   then
-    RELEASE=`docker logs ${CID} | grep "WebSphere Application Server" | awk '{print $6}' | awk '{gsub("/"," "); print $1}'`
-    BUILD=`docker logs ${CID} | grep "WebSphere Application Server" | awk '{print $6}' | awk '{gsub("/"," "); print $2}'  | awk '{gsub("\\\.", " "); print $4}' | awk '{print substr($1, 1, length($1)-1)}'`
+    RELEASE_CUR=$(docker logs "${CID}" | grep "WebSphere Application Server" | awk '{print $6}' | awk '{gsub("/"," "); print $1}')
+    BUILD_CUR=$(docker logs "${CID}" | grep "WebSphere Application Server" | awk '{print $6}' | awk '{gsub("/"," "); print $2}'  | awk '{gsub("\\\.", " "); print $4}' | awk '{print substr($1, 1, length($1)-1)}')
   else
-    RELEASE_CUR=`docker logs ${CID} 2>/dev/null | grep "Open Liberty" | awk '{print $5}' | awk '{gsub("/"," "); print $1}'`
-	  BUILD_CUR=`docker logs ${CID} 2>/dev/null | grep "Open Liberty" | awk '{print $5}' | awk '{gsub("/"," "); print $2}'  | awk '{gsub("\\\.", " "); print $4}' | awk '{print substr($1, 1, length($1)-1)}'`
+    RELEASE_CUR=$(docker logs "${CID}" 2>/dev/null | grep "Open Liberty" | awk '{print $5}' | awk '{gsub("/"," "); print $1}')
+	  BUILD_CUR=$(docker logs "${CID}" 2>/dev/null | grep "Open Liberty" | awk '{print $5}' | awk '{gsub("/"," "); print $2}'  | awk '{gsub("\\\.", " "); print $4}' | awk '{print substr($1, 1, length($1)-1)}')
   fi
-	JDK_LEVEL_CUR=`docker exec ${CID} java -version 2>&1 | tr -d '\n'`
+	JDK_LEVEL_CUR=$(docker exec "${CID}" java -version 2>&1 | tr -d '\n')
 	echo "Found ${LIBERTY_VERSION} Release: ${RELEASE_CUR}"
 	echo "Found Build: ${BUILD_CUR}"
 	echo "JDK_LEVEL=${JDK_LEVEL_CUR}"
 fi
+  
+  echo "--get CPU Usage"
+  cpu_in_nanosecs=$(curl --unix-socket /var/run/docker.sock http://localhost/containers/"${CID}"/stats?stream=false | sed 's/^.*cpu_stats":/"cpu_stats":/' | awk 'BEGIN {FS = ":|,"} ; {print $4}')
+  cpuUsage=$((cpu_in_nanosecs/1000000))
 
   echo "Get startup time results"
-
   echo "--get stop time"
   # normal
-  time1=`docker exec ${CID} cat /logs/messages.log | grep smarter  | awk '{gsub("\\\\["," "); print $0}' | awk '{print $1 " " $2}' | awk '{gsub(","," "); print $0 " UTC"}' | rev | awk '{sub(":","."); print $0}' | rev`
-  if [[ $(echo $time1 | grep -c liberty_message) == 1 ]]
+  time1=$(docker exec "${CID}" cat /logs/messages.log | grep "${STARTED_STRING}" | awk '{gsub("\\\["," "); print $0}' | awk '{print $1 " " $2}' | awk '{gsub(","," "); print $0 " UTC"}' | rev | awk '{sub(":","."); print $0}' | rev)
+  if [[ $(echo "$time1" | grep -c liberty_message) == 1 ]]
   then
-     #json
-    time1=`docker exec ${CID} cat /logs/messages.log | grep smarter | awk -v k="text" '{n=split($0,a,","); for (i=1; i<=n; i++) print a[i]}' | grep ibm_datetime | awk '{gsub("\""," ");print $3}'`
+    #json
+    time1=$(docker exec ${CID} cat /logs/messages.log | grep "${STARTED_STRING}" | awk -v k="text" '{n=split($0,a,","); for (i=1; i<=n; i++) print a[i]}' | grep ibm_datetime | awk '{gsub("\""," ");print $3}')
   fi
   let stopMillis=`date "+%s%N" -d "$time1"`/1000000
      
   echo "--use docker log timestamp to get start time"
-  time2=`docker exec ${CID} cat /logs/messages.log | grep launched | awk '{gsub("\\\[", " "); print $0}'| awk '{print $1 " " $2}' | awk '{gsub(",",","); print $0 " UTC"}' | rev | awk '{sub(":","."); print $0}' | awk '{gsub(",",""); print $0}' | rev`
+  time2=$(docker exec "${CID}" cat /logs/messages.log | grep launched | awk '{gsub("\\\[", " "); print $0}'| awk '{print $1 " " $2}' | awk '{gsub(",",","); print $0 " UTC"}' | rev | awk '{sub(":","."); print $0}' | awk '{gsub(",",""); print $0}' | rev)
   echo "time1: $time1 time2: $time2"  
   let startMillis=`date "+%s%N" -d "$time2"`/1000000
     
   echo "--get startup time"
-  let startup=$((stopMillis - startMillis))
-  echo "Startup time: ${startup}"
-  echo "--get footprint"
-  echo "Footprint (mb)=$(docker stats ${CID} --no-stream --format "table {{.MemUsage}}"| sed "1 d"| awk '{print substr($1, 1, length($1)-3)}')"
+  (( startup=stopMillis - startMillis ))
+  
 
-  docker stop $CID
-  nukeDocker
+  echo "--get first response time"
+  if [[ ! -z ${timeToFirstRequest} ]];
+  then
+    RESP_TIME=""
+    while [[ -z $RESP_TIME ]];
+    do
+      resp=$(docker exec "${CID}" cat /logs/messages.log | grep "${respString}" | awk '{gsub("\\\["," "); print $0}' | awk '{print $1 " " $2}' | awk '{gsub(","," "); print $0 " UTC"}' | rev | awk '{sub(":","."); print $0}' | rev)
+      if [[ ! -z $resp ]];
+      then
+        RESP_TIME=`echo $(($(date "+%s%N" -d "$resp")/1000000))`
+        resptime=$(("$RESP_TIME" - "$startMillis"))
+      else
+        ## TODO - NEED to fix this so it does it for a finite amount of iterations an abort after it fails, to avoid an infinite loop
+        sleep 2
+      fi
+    done
+  fi
+  if [[ ! -z ${timeToFirstRequest} ]];
+  then
+    firstResponse="${resptime}"
+  else
+    firstResponse="n/a"
+  fi
+
+  echo "--get footprint"
+  footprint=$(docker stats "${CID}" --no-stream --format "table {{.MemUsage}}"| sed "1 d"| awk '{print substr($1, 1, length($1)-3)}')
+  
+
+  # Display scenarios (TODO SAVE TO DATASTORE AND/OR DB)
+  #######################################
+  echo "First Response: ${firstResponse}"
+  echo "Startup time: ${startup}"
+  echo "Footprint (mb)=$footprint"
+  echo "CPU: ${cpuUsage}"
+  echo "app: ${SCENARIO}"
+  #######################################
+  docker stop "$CID"
+  #nukeDocker
 done
 
 

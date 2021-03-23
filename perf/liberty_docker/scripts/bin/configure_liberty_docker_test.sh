@@ -266,15 +266,17 @@ rm -rf ${LIBERTY_DEP_CACHE_LOCATION}/master.zip
 #OL - only uses kernel image currently, may nee dto add full.
 ##Websphere Liberty
 
-USERNAME=wasperf@us.ibm.com
-PASSWORD=UmVncmVzc2lvbjdQQHRyb2w=
-DECODED_PASSWORD=`echo ${PASSWORD} | base64 --decode`
+USERNAME=${WASPERF_USERNAME}
+#PASSWORD=${WASPERF_PASSWORD}
+#DECODED_PASSWORD=`echo ${PASSWORD} | base64 --decode`
+DECODED_PASSWORD=${WASPERF_PASSWORD}
 #BUILD=latest
 BUILD=$LIBERTY_BUILD_LEVEL
 BASE_TAG=java8-ibmjava
 
 OPENLIBERTY=false
 
+pruneDocker
 DO_THROUGHPUT_TESTS=true
 DO_SUFT_TESTS=true
 echo "Clean Docker" 
@@ -283,7 +285,7 @@ echo "BUILD=${LIBERTY_BUILD_LEVEL}"
 echo "IMAGE=${OPENLIBERTY_IMAGE}"
 echo "BASE_TAG=${BASE_TAG}"
 echo "Current directory=$(dirname $0)"
-$(dirname $0)/websphere-liberty/build-daily-images-wasperf.sh ${USERNAME} ${DECODED_PASSWORD} ${LIBERTY_BUILD_LEVEL} ${BASE_TAG} "${DEST}/WL-docker-images/ci.docker-master"
+$(dirname $0)/websphere-liberty/build-daily-images-wasperf.sh "${USERNAME}" "${DECODED_PASSWORD}" "${LIBERTY_BUILD_LEVEL}" ${BASE_TAG} "${DEST}/WL-docker-images/ci.docker-master"
 
 OPENLIBERTY=true
 ### Open Liberty
@@ -298,9 +300,11 @@ echo "BUILD=${LIBERTY_BUILD_LEVEL}"
 echo "IMAGE=${OPENLIBERTY_IMAGE}"
 echo "BASE_TAG=${BASE_TAG}"
 echo "Current directory=$(dirname $0)"
-$(dirname $0)/open-liberty/buildAll_wasperf.sh ${LIBERTY_BUILD_LEVEL} ${BASE_TAG} "${DEST}/OL-docker-images/ci.docker-master"
+$(dirname $0)/open-liberty/buildAll_wasperf.sh "${LIBERTY_BUILD_LEVEL}" ${BASE_TAG} "${DEST}/OL-docker-images/ci.docker-master"
 
-
+scriptDir=${1}/scripts
+echo "Transfering script to load driver"
+scp -r $(dirname $0)/../sufp/pingperfPingScript.sh $(dirname $0)/../sufp/cleanupScripts.sh $(dirname $0)/../sufp/pingFirstResponse.sh root@"${LOAD_DRIVER}":/sufp/ 
 
 
 
