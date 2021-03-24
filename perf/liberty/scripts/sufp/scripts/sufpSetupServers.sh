@@ -49,6 +49,8 @@ numaargs="numactl --physcpubind ${PHYS_CPU_BIND}"
 $numaargs ./bin/server create ${APP}  
 /usr/bin/cp -f ${targDir}/${APP}/server.xml usr/servers/${APP}/
 /usr/bin/cp -f ${targDir}/${APP}/server.env usr/servers/${APP}/
+/usr/bin/cp -f ${targDir}/${APP}/bootstrap.properties usr/servers/${APP}/
+/usr/bin/cp -f ${targDir}/${APP}/jvm.options usr/servers/${APP}/jvm.options
 #Edit server.xml to point to app location
 sed -i "s|\"/sufp/apps|\"${targDir}|g" usr/servers/${APP}/server.xml  
 test=$(echo ${targDir}/${APP} | sed -e "s/\// /g")

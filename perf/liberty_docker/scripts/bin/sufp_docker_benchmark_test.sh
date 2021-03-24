@@ -212,6 +212,14 @@ if [ ! -z "$(ls "${TEST_RESROOT}"/scripts/sufp/apps/"${SCENARIO}"/server.env)" ]
 then
   echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/server.env /config/server.env" >> ${DOCKER_FILE}
 fi
+if [ ! -z "$(ls "${TEST_RESROOT}"/scripts/sufp/apps/"${SCENARIO}"/jvm.options)" ];
+then
+  echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/jvm.options /config/jvm.options" >> ${DOCKER_FILE}
+fi
+if [ ! -z "$(ls "${TEST_RESROOT}"/scripts/sufp/apps/"${SCENARIO}"/bootstrap.properties)" ];
+then
+  echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/bootstrap.properties /config/bootstrap.properties" >> ${DOCKER_FILE}
+fi
 #Check if war|ear file exist for copy
 echo "Checking for war|jar file and add them to the container /config/apps/ dir"
 
