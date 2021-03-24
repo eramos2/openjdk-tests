@@ -319,15 +319,15 @@ getLibertyInfo()
 #   then
     TAG=full
     #CID=`docker run -d websphereliberty/daily:${TAG}`
-	CID=`docker run -d websphereliberty/daily`
+	CID=$(docker run -d websphereliberty/daily)
 	# HACK !! To wait for container to start
 	sleep 5 
-    RELEASE=`docker logs ${CID} | grep "WebSphere Application Server" | awk '{print $6}' | awk '{gsub("/"," "); print $1}'`
+    RELEASE=$(docker logs ${CID} | grep "WebSphere Application Server" | awk '{print $6}' | awk '{gsub("/"," "); print $1}')
 	#docker stop ${CID} > /dev/null
 	#CID=`docker run -d websphereliberty/daily`
 	#CID=`docker run -d websphereliberty/daily`
-	BUILD=`docker logs ${CID} | grep "WebSphere Application Server" | awk '{print $6}' | awk '{gsub("/"," "); print $2}'  | awk '{gsub("\\\.", " "); print $4}' | awk '{print substr($1, 1, length($1)-1)}'`
-    JDK_LEVEL=`docker exec ${CID} java -version 2>&1 | tr -d '\n'`
+	BUILD=$(docker logs ${CID} | grep "WebSphere Application Server" | awk '{print $6}' | awk '{gsub("/"," "); print $2}'  | awk '{gsub("\\\.", " "); print $4}' | awk '{print substr($1, 1, length($1)-1)}')
+    JDK_LEVEL=$(docker exec ${CID} java -version 2>&1 | tr -d '\n')
 	echo "Found Websphere Liberty Release: ${RELEASE}"
 	echo "Found Build: ${BUILD}"
 	echo "JDK_LEVEL=${JDK_LEVEL}"
@@ -337,12 +337,12 @@ getLibertyInfo()
 	sleep 5
 	nukeDocker
 #   else
-    CID=`docker run -d openliberty/daily`
+    CID=$(docker run -d openliberty/daily)
 	## HACK !! to wait for container to start
 	sleep 5
-    RELEASE=`docker logs ${CID} 2>/dev/null | grep "Open Liberty" | awk '{print $5}' | awk '{gsub("/"," "); print $1}'`
-	BUILD=`docker logs ${CID} 2>/dev/null | grep "Open Liberty" | awk '{print $5}' | awk '{gsub("/"," "); print $2}'  | awk '{gsub("\\\.", " "); print $4}' | awk '{print substr($1, 1, length($1)-1)}'`
-	JDK_LEVEL=`docker exec ${CID} java -version 2>&1 | tr -d '\n'`
+    RELEASE=$(docker logs ${CID} 2>/dev/null | grep "Open Liberty" | awk '{print $5}' | awk '{gsub("/"," "); print $1}')
+	BUILD=$(docker logs ${CID} 2>/dev/null | grep "Open Liberty" | awk '{print $5}' | awk '{gsub("/"," "); print $2}'  | awk '{gsub("\\\.", " "); print $4}' | awk '{print substr($1, 1, length($1)-1)}')
+	JDK_LEVEL=$(docker exec ${CID} java -version 2>&1 | tr -d '\n')
 	echo "Found Open Liberty Release: ${RELEASE}"
 	echo "Found Build: ${BUILD}"
 	echo "JDK_LEVEL=${JDK_LEVEL}"
