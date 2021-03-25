@@ -345,8 +345,8 @@ for i in `seq 1 $iters`; do
 	fi
 	if [[ ${JAVACORE_DURING_STARTUP} == "true" ]] ; then
 		( sleep 0.8
-		for x in `seq 1 ${NUM_JAVACORE_DURING_STARTUP}`; do
-			kill -3 `ps -ef | grep java | grep "ws-server.jar ${server}" | grep -v "status:start" | awk '{print $2}'`
+		for x in $(seq 1 ${NUM_JAVACORE_DURING_STARTUP}); do
+			kill -3 $(ps -ef | grep java | grep "ws-server.jar ${server}" | grep -v "status:start" | awk '{print $2}')
 			sleep 0.5
 		done ) &
 	fi
@@ -359,8 +359,8 @@ for i in `seq 1 $iters`; do
 	${startCom} > /dev/null
 	started=""
 	while [[ -z $started ]] ; do
-		echo "		`date` - waiting for startup"
-		started=`grep "${startedString}" ${srvrMsgsLog}`
+		echo "		$(date) - waiting for startup"
+		started=$(grep "${startedString}" "${srvrMsgsLog}")
 		sleep 3
 	done
         stop=`echo $started | sed -e "s/\[//" | sed -e "s/\].*//" | sed 's/\(.*\)\:/\1\./' | tr -d ','`
@@ -372,7 +372,8 @@ for i in `seq 1 $iters`; do
         	RESP_TIME=""
                 while [[ -z $RESP_TIME ]] ; do
 #                        resp=`tail -3 ${srvrMsgsLog} | grep " SystemOut " | sed -e "s/.*SystemOut * O //" | awk '{print $1'} | grep -v [a-z,A-Z] | tr -d ','`
-                        resp=`tail -20 ${srvrMsgsLog} | grep "$respString" | awk '{print $2}' | sed 's/\(.*\):/\1./'`
+                        #resp=$(tail -20 "${srvrMsgsLog}" | grep "$respString" | awk '{print $2}' | sed 's/\(.*\):/\1./')
+						resp=$(cat ${srvrMsgsLog} | grep "$respString" | awk '{print $2}' | sed 's/\(.*\):/\1./')
 						if [[ ! -z $resp ]] ; then
 #						        echo " *** resp: $resp *** "
                                 RESP_TIME=`echo $(($(date +%s%N -d $resp)/1000000))`
