@@ -225,15 +225,15 @@ echo "Checking for war|jar file and add them to the container /config/apps/ dir"
 
 if [ ! -z "$(ls "${TEST_RESROOT}"/scripts/sufp/apps/"${SCENARIO}"/*.war)" ];
 then
-  echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/$(ls "${TEST_RESROOT}"/scripts/sufp/apps/"${SCENARIO}"/*.war) /config/apps/$(ls "${TEST_RESROOT}"/scripts/sufp/apps/"${SCENARIO}"/*war)" >> ${DOCKER_FILE}
+  echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/$(ls "${TEST_RESROOT}"/scripts/sufp/apps/"${SCENARIO}"/ | grep .*war) /config/apps/$(ls "${TEST_RESROOT}"/scripts/sufp/apps/"${SCENARIO}"/ | grep .*war )" >> ${DOCKER_FILE}
 fi
 if [ ! -z "$(ls "${TEST_RESROOT}"/scripts/sufp/apps/"${SCENARIO}"/*.ear)" ];
 then
-  echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/$(ls "${TEST_RESROOT}"/scripts/sufp/apps/"${SCENARIO}"/*.ear) /config/apps/$(ls "${TEST_RESROOT}"/scripts/sufp/apps/"${SCENARIO}"/*.ear)" >> ${DOCKER_FILE}
+  echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/$(ls "${TEST_RESROOT}"/scripts/sufp/apps/"${SCENARIO}"/ | grep .*ear) /config/apps/$(ls "${TEST_RESROOT}"/scripts/sufp/apps/"${SCENARIO}"/*.ear | grep .*ear)" >> ${DOCKER_FILE}
 fi
 if [ ! -z "$(ls "${TEST_RESROOT}"/scripts/sufp/apps/"${SCENARIO}"/*.jar)" ];
 then
-  echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/$(ls "${TEST_RESROOT}"/scripts/sufp/apps/"${SCENARIO}"/*.jar) /config/apps/$(ls "${TEST_RESROOT}"/scripts/sufp/apps/"${SCENARIO}"/*.jar)" >> ${DOCKER_FILE}
+  echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/$(ls "${TEST_RESROOT}"/scripts/sufp/apps/"${SCENARIO}"/ | grep .*jar) /config/apps/$(ls "${TEST_RESROOT}"/scripts/sufp/apps/"${SCENARIO}"/ | grep .*jar)" >> ${DOCKER_FILE}
 fi
 
 # Write to docker file 
