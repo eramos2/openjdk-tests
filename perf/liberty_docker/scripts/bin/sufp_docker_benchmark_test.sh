@@ -343,7 +343,7 @@ fi
       if [[ ! -z $resp ]];
       then
         RESP_TIME=`echo $(($(date "+%s%N" -d "$resp")/1000000))`
-        resptime=$(("$RESP_TIME" - "$startMillis"))
+        resptime=$((RESP_TIME - startMillis))
       else
         ## TODO - NEED to fix this so it does it for a finite amount of iterations an abort after it fails, to avoid an infinite loop
         sleep 2
