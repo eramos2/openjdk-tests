@@ -229,7 +229,7 @@ then
 fi
 if [ ! -z "$(ls "${TEST_RESROOT}"/scripts/sufp/apps/"${SCENARIO}"/*.ear)" ];
 then
-  echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/$(ls "${TEST_RESROOT}"/scripts/sufp/apps/"${SCENARIO}"/ | grep .*ear) /config/apps/$(ls "${TEST_RESROOT}"/scripts/sufp/apps/"${SCENARIO}"/*.ear | grep .*ear)" >> ${DOCKER_FILE}
+  echo "COPY --chown=1001:0 scripts/sufp/apps/${SCENARIO}/$(ls "${TEST_RESROOT}"/scripts/sufp/apps/"${SCENARIO}"/ | grep .*ear) /config/apps/$(ls "${TEST_RESROOT}"/scripts/sufp/apps/"${SCENARIO}"/ | grep .*ear)" >> ${DOCKER_FILE}
 fi
 if [ ! -z "$(ls "${TEST_RESROOT}"/scripts/sufp/apps/"${SCENARIO}"/*.jar)" ];
 then
