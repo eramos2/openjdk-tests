@@ -20,6 +20,7 @@ echo "Transfering sufp scripts (pingperfPingScript.sh, cleanupScripts.sh, pingFi
 scp -r ${TEST_RESROOT}/scripts/sufp/scripts/pingperfPingScript.sh ${TEST_RESROOT}/scripts/sufp/scripts/cleanupScripts.sh ${TEST_RESROOT}/scripts/sufp/scripts/pingFirstResponse.sh root@${LOAD_DRIVER}:/sufp/ 
 
 
+
 # Get the WL or OL build directory
 BUILD_DIR=`ls ${LIBERTY_BINARIES_DIR} | grep "${LIBERTY_VERSION}-liberty"`
 echo "BUILD_DIR=${BUILD_DIR}"
