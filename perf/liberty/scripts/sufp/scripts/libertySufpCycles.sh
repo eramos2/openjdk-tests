@@ -59,6 +59,7 @@ srvrMsgsLog=${srvrLogDir}/messages.log
 ##titans01
 #numaargs="numactl --physcpubind 11-12,27-28"
 numaargs="numactl --physcpubind ${PHYS_CPU_BIND}"
+frNumaargs="numactl --physcpubind ${FR_PHYS_CPU_BIND}"
 
 ## NEED TO FIX THIS SO IT CAN BE SET DYNAMICALLY
 setMongo="export MONGO_HOST=${MONGO_HOST}"
@@ -168,6 +169,7 @@ fi
 #pingperfRequestScript=/sufp/pingperfPingScript.sh
 firstResponseScript=/sufp/pingFirstResponse.sh
 cleanupScript=/sufp/cleanupScripts.sh
+respMillisFile=/tmp/sufp-resp-millis
 
 echo "*** kill any zombie ping scripts on requestHost ***" 
 ssh ${requestHost} "${cleanupScript} ${firstResponseScript}"
@@ -229,6 +231,9 @@ fi
 echo "*** numaargs: $numaargs ***"  | tee -a ${resDir}/${test}.env
 echo ""
 
+if [[ ! -z $clearFileCache ]] ; then
+	sync;echo 1 > /proc/sys/vm/drop_caches              # clear linux file cache
+fi
 
 startCom="${numaargs} ${curr}/bin/server start ${server} "
 if [[ ${START_DEBUG} == "true" ]] ; then
@@ -245,7 +250,9 @@ mkdir $logDir
 echo " warm up with one un-measured start first "
 if [[ ! -z $timeToFirstRequest ]] ; then
 #        ( ssh $requestHost $pingperfRequestScript $testHost ) &
-		( ssh $requestHost $firstResponseScript $testHost $testPort $testTarget ) &
+		echo "" > $respMillisFile
+#		( ssh $requestHost $firstResponseScript $testHost $testPort $testTarget ) &
+		( $frNumaargs $firstResponseScript $testHost $testPort $testTarget $respMillisFile ) &
 fi
 ${startCom} --clean > /dev/null
 started=""
@@ -278,7 +285,9 @@ if [[ ${TWO_WARMUPS} == "true" ]] ; then
         echo " second warmup start requested"
         if [[ ! -z $timeToFirstRequest ]] ; then
 #                ( ssh $requestHost $pingperfRequestScript $testHost ) &
-				( ssh $requestHost $firstResponseScript $testHost $testPort $testTarget ) &
+				echo "" > $respMillisFile
+				#( ssh $requestHost $firstResponseScript $testHost $testPort $testTarget ) &
+				( $frNumaargs $firstResponseScript $testHost $testPort $testTarget $respMillisFile ) &
         fi
         ${startCom} > /dev/null
 	started=""
@@ -352,7 +361,9 @@ for i in `seq 1 $iters`; do
 	fi
         if [[ ! -z $timeToFirstRequest ]] ; then
 #                ( ssh $requestHost $pingperfRequestScript $testHost ) &
-				 ( ssh $requestHost $firstResponseScript $testHost $testPort $testTarget ) &
+				 #( ssh $requestHost $firstResponseScript $testHost $testPort $testTarget ) &
+				echo "" > $respMillisFile
+				( $frNumaargs $firstResponseScript $testHost $testPort $testTarget $respMillisFile ) &
         fi
 
   	startMillis=`echo $(($(date +%s%N)/1000000))`
@@ -373,10 +384,11 @@ for i in `seq 1 $iters`; do
                 while [[ -z $RESP_TIME ]] ; do
 #                        resp=`tail -3 ${srvrMsgsLog} | grep " SystemOut " | sed -e "s/.*SystemOut * O //" | awk '{print $1'} | grep -v [a-z,A-Z] | tr -d ','`
                         #resp=$(tail -20 "${srvrMsgsLog}" | grep "$respString" | awk '{print $2}' | sed 's/\(.*\):/\1./')
-						resp=$(cat ${srvrMsgsLog} | grep "$respString" | awk '{print $2}' | sed 's/\(.*\):/\1./')
-						if [[ ! -z $resp ]] ; then
+						#resp=$(cat ${srvrMsgsLog} | grep "$respString" | awk '{print $2}' | sed 's/\(.*\):/\1./')
+						RESP_TIME=`grep "[1-9}[0-9][0-9]" ${respMillisFile}`
+						if [[ ! -z $RESP_TIME ]] ; then
 #						        echo " *** resp: $resp *** "
-                                RESP_TIME=`echo $(($(date +%s%N -d $resp)/1000000))`
+                                #RESP_TIME=`echo $(($(date +%s%N -d $resp)/1000000))`
                                 resptime=`expr $RESP_TIME - $startMillis`
                         else
                                 sleep 2
@@ -385,7 +397,7 @@ for i in `seq 1 $iters`; do
         fi
 
 	if [[ ${NO_SLEEP_FP_CPU} == "false" ]] ; then
-		sleep 15
+		sleep ${SLEEP_FP_CPU}
 	fi
 #	sleep 15
     server_pid=`ps aux | grep java | grep ws-server.jar | awk '{print $2}'`
@@ -540,6 +552,13 @@ if [[ ${GET_JCORE_MEMINFO} == "true" ]] ; then
 
 	echo ""  | tee -a ${resFile}
 fi
+
+newCalc=""
+newCalc="yes"
+
+if [[ -z $newCalc ]] ; then
+
+# ~~~~~~~~~~~ OLD calc ~~~~~~~~~~~~ 
 suRes=`grep top $resFile | awk '{sum+=$1; sumsq+=($1)^2; if(min==""){min=max=$1}; if($1>max) {max=$1}; if($1< min) {min=$1}}END{printf "Startup:    Avg: %2.0f ms, Min: %2.0f ms, Max: %2.0f ms, StdDev: %2.0f ms, SDev/Avg: %2.1f%", sum/NR, min, max, sqrt((sumsq - sum^2/NR)/NR), 100*sqrt((sumsq - sum^2/NR)/NR)/(sum/NR)}'`
 if [[ ! -z $timeToFirstRequest ]] ; then
         respRes=`grep top $resFile | awk '{rsp=$2; sum+=rsp; sumsq+=(rsp)^2; if(min==""){min=max=rsp}; if(rsp>max) {max=rsp}; if(rsp< min) {min=rsp}}END{printf "Response:   Avg: %2.0f ms, Min: %2.0f ms, Max: %2.0f ms, StdDev: %2.0f ms, SDev/Avg: %2.1f%", sum/NR, min, max, sqrt((sumsq - sum^2/NR)/NR), 100*sqrt((sumsq - sum^2/NR)/NR)/(sum/NR)}'`
@@ -573,6 +592,40 @@ else
 				shortRes="Avg_Startup_time: $avg_start\nAvg_First_Response: n/a\nAvg_Footprint_(kb)=$avg_fp0\nAvg_CPU: $avg_cp0\napp: $server"
         fi
 fi
+# ~~~~~~~~~~~ OLD calc ~~~~~~~~~~~~ 
+else
+# ~~~~~~~~~~~ NEW calc ~~~~~~~~~~~~ 
+suRes=`awk '/top/ {print $1}' $resFile | sort -n | tail -n+3 | head -n-2 | awk '{sum+=$1; sumsq+=($1)^2; if(min==""){min=max=$1}; if($1>max) {max=$1}; if($1< min) {min=$1}}END{printf "Startup:    Avg: %2.0f ms, Min: %2.0f ms, Max: %2.0f ms, StdDev: %2.0f ms, SDev/Avg: %2.1f%", sum/NR, min, max, sqrt((sumsq - sum^2/NR)/NR), 100*sqrt((sumsq - sum^2/NR)/NR)/(sum/NR)}'`
+avg_su=`echo $suRes | awk '{print $3}'`
+if [[ ! -z $timeToFirstRequest ]] ; then
+	respRes=`awk '/top/ {print $2}' $resFile  | sort -n | tail -n+3 | head -n-2 | awk '{rsp=$1; sum+=rsp; sumsq+=(rsp)^2; if(min==""){min=max=rsp}; if(rsp>max) {max=rsp}; if(rsp< min) {min=rsp}}END{printf "Response:   Avg: %2.0f ms, Min: %2.0f ms, Max: %2.0f ms, StdDev: %2.0f ms, SDev/Avg: %2.1f%", sum/NR, min, max, sqrt((sumsq - sum^2/NR)/NR), 100*sqrt((sumsq - sum^2/NR)/NR)/(sum/NR)}'`
+	avg_fr=`echo $respRes | awk '{print $3}'`
+	fpRes=`awk '/top/ {print $3}' $resFile | sort -n | tail -n+3 | head -n-2 | awk '{fp=($1/1024) ; sum+=fp; sumsq+=(fp)^2; if(min==""){min=max=fp}; if(fp>max) {max=fp}; if(fp< min) {min=fp}}END{printf "Footprint:  Avg: %2.0f MB, Min: %2.0f MB, Max: %2.0f MB, StdDev: %2.0f MB, SDev/Avg: %2.1f%", sum/NR, min, max, sqrt((sumsq - sum^2/NR)/NR), 100*sqrt((sumsq - sum^2/NR)/NR)/(sum/NR)}'`
+else
+	fpRes=`awk '/top/ {print $2}' $resFile | sort -n | tail -n+3 | head -n-2 | awk '{fp=($1/1024) ; sum+=fp; sumsq+=(fp)^2; if(min==""){min=max=fp}; if(fp>max) {max=fp}; if(fp< min) {min=fp}}END{printf "Footprint:  Avg: %2.0f MB, Min: %2.0f MB, Max: %2.0f MB, StdDev: %2.0f MB, SDev/Avg: %2.1f%", sum/NR, min, max, sqrt((sumsq - sum^2/NR)/NR), 100*sqrt((sumsq - sum^2/NR)/NR)/(sum/NR)}'`
+fi
+avg_fp0=`echo $fpRes | awk '{print $3}'` 
+cpuRes=`awk -F: '/top/ {printf "%4.2f\n",((60*$2)+$3)}' $resFile | sort -n | tail -n+3 | head -n-2 | awk '{cpu=$1 ; sum+=cpu; sumsq+=(cpu)^2; if(min==""){min=max=cpu}; if(cpu>max) {max=cpu}; if(cpu< min) {min=cpu}}END{printf "CPU usage:  Avg: %2.2f secs, Min: %2.2f secs, Max: %2.2f secs, StdDev: %2.2f secs, SDev/Avg: %2.2f%", sum/NR, min, max, sqrt((sumsq - sum^2/NR)/NR), 100*sqrt((sumsq - sum^2/NR)/NR)/(sum/NR)}'`
+avg_cp0=`echo $cpuRes | awk '{print $4}'`
+shortRes=""
+if [[ ! -z $extra30 ]] ; then
+	#avg_fp1=`grep top $resFile | awk '{y++;x+=$3} END {print int(x/y+0.5)}'`
+	avg_fp1=`grep top $resFile | awk '{x+=$3} END {printf "%.0f", x/NR/1024}'`
+	avg_cp1=`grep top $resFile | sed -e "s/.* //" | awk -F: '{x+=$1;y+=$2}END{printf "%2.0f:%2.2f", x/NR, y/NR}'`
+	echo "${suRes}% ; FP: $avg_fp0 MB, CPU: $avg_cp0 ; After 30 secs- FP: $avg_fp1 MB, CPU: $avg_cp1" | tee -a $resFile
+else
+	if [[ ! -z $timeToFirstRequest ]] ; then
+		echo -e "${suRes} \n${respRes} \n${fpRes} \n$cpuRes " | tee -a $resFile
+		#shortRes="SU: $avg_su FR: $avg_fr  FP: $avg_fp0  CPU: $avg_cp0 app: $server"
+		shortRes="Avg_Startup_time: $avg_su\nAvg_First_Response: $avg_fr\nAvg_Footprint_(kb)=$avg_fp0\nAvg_CPU: $avg_cp0\napp: $server"
+	else
+		echo -e "${suRes} \n${fpRes} \n$cpuRes " | tee -a $resFile
+		#shortRes="SU: $avg_su FR: n/a  FP: $avg_fp0  CPU: $avg_cp0 app: $server"
+		shortRes="Avg_Startup_time: $avg_su\nAvg_First_Response: n/a\nAvg_Footprint_(kb)=$avg_fp0\nAvg_CPU: $avg_cp0\napp: $server"
+	fi
+fi
+# ~~~~~~~~~~~ NEW calc ~~~~~~~~~~~~ 
+fi
 
 echo -e $shortRes  | tee -a $resFile
 
@@ -580,3 +633,4 @@ echo -e $shortRes  | tee -a $resFile
 #logDir="${resDir}/${test}-logs"
 #mkdir $logDir
 zip -j ${logDir}/logs.zip ${srvrMsgsLog} ${srvrConLog} > /dev/null
+
