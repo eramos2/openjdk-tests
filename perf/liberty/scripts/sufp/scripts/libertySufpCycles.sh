@@ -40,7 +40,9 @@ shift
 
 testHost=`hostname`
 testPort=9080
-requestHost=${LOAD_DRIVER}
+# run request load on same host - note: set frNumaargs for 
+#    request load to cpu unused by server startup
+requestHost=`hostname`
 
 iters=$1
 if [[ -z $iters ]]; then iters=5; fi
@@ -167,8 +169,10 @@ if [[ $server == "acmeair-micro-1.0" ]] || \
 fi
 
 #pingperfRequestScript=/sufp/pingperfPingScript.sh
-firstResponseScript=/sufp/pingFirstResponse.sh
-cleanupScript=/sufp/cleanupScripts.sh
+#firstResponseScript=/sufp/pingFirstResponse.sh
+firstResponseScript=${TEST_RESROOT}/scripts/sufp/scripts/pingFirstResponse.sh
+#cleanupScript=/sufp/cleanupScripts.sh
+cleanupScript=${TEST_RESROOT}/scripts/sufp/scripts/cleanupScripts.sh
 respMillisFile=/tmp/sufp-resp-millis
 
 echo "*** kill any zombie ping scripts on requestHost ***" 
@@ -385,7 +389,7 @@ for i in `seq 1 $iters`; do
 #                        resp=`tail -3 ${srvrMsgsLog} | grep " SystemOut " | sed -e "s/.*SystemOut * O //" | awk '{print $1'} | grep -v [a-z,A-Z] | tr -d ','`
                         #resp=$(tail -20 "${srvrMsgsLog}" | grep "$respString" | awk '{print $2}' | sed 's/\(.*\):/\1./')
 						#resp=$(cat ${srvrMsgsLog} | grep "$respString" | awk '{print $2}' | sed 's/\(.*\):/\1./')
-						RESP_TIME=`grep "[1-9}[0-9][0-9]" ${respMillisFile}`
+						RESP_TIME=`grep "[1-9][0-9][0-9]" ${respMillisFile}`
 						if [[ ! -z $RESP_TIME ]] ; then
 #						        echo " *** resp: $resp *** "
                                 #RESP_TIME=`echo $(($(date +%s%N -d $resp)/1000000))`
