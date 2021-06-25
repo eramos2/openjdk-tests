@@ -136,6 +136,19 @@
 		</groups>
 	</test>
 	<test>
+		<testCaseName>DockerOpenLibertySUFPJakartaEE-9.1</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) jakartaee-9.1 $(TEST_RESROOT) OL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
 		<testCaseName>DockerOpenLibertySUFPJavaEE7</testCaseName>
 		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) javaee7 $(TEST_RESROOT) OL; \
 			${TEST_STATUS}</command>
@@ -357,8 +370,8 @@
 		</groups>
 	</test>
 	<test>
-		<testCaseName>DockerOpenLibertySUFPWebprofile9</testCaseName>
-		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) webProfile9 $(TEST_RESROOT) OL; \
+		<testCaseName>DockerOpenLibertySUFPWebprofile-9.1</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) webProfile-9.1 $(TEST_RESROOT) OL; \
 			${TEST_STATUS}</command>
 		<!-- scripts are only tested on linux -->
 		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
@@ -480,6 +493,19 @@
 	<test>
 		<testCaseName>DockerWebsphereLibertySUFPHugeEJB</testCaseName>
 		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) huge-ejb $(TEST_RESROOT) WL; \
+			${TEST_STATUS}</command>
+		<!-- scripts are only tested on linux -->
+		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>perf</group>
+		</groups>
+	</test>
+	<test>
+		<testCaseName>DockerWebsphereLibertySUFPJakartaEE-9.1</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) jakartaee-9.1 $(TEST_RESROOT) WL; \
 			${TEST_STATUS}</command>
 		<!-- scripts are only tested on linux -->
 		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
@@ -711,8 +737,8 @@
 		</groups>
 	</test>
 	<test>
-		<testCaseName>DockerWebsphereLibertySUFPWebprofile9</testCaseName>
-		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) webProfile9 $(TEST_RESROOT) WL; \
+		<testCaseName>DockerWebsphereLibertySUFPWebprofile-9.1</testCaseName>
+		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_docker_sufp.sh$(Q) webProfile-9.1 $(TEST_RESROOT) WL; \
 			${TEST_STATUS}</command>
 		<!-- scripts are only tested on linux -->
 		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
