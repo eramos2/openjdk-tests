@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server description="new server">
+    <!-- Enable features -->
+    <featureManager>
+        <feature>jakartaee-9.0</feature>
+    </featureManager>
+    <!-- To access this server from a remote client add a host attribute to the following element, e.g. host="*" -->
+    <httpEndpoint id="defaultHttpEndpoint"
+                  httpPort="9080"
+                  httpsPort="9443" />
+<!--
+        <logging traceSpecification="com.ibm.ws.threading.internal.ThreadPoolController=all=enabled" maxFileSize="1024" maxFiles="10" />
+-->
+    <!-- Automatically expand WAR files and EAR files -->
+    <applicationManager autoExpand="true"/>
+    <!-- Default SSL configuration enables trust for default certificates from the Java runtime -->
+    <ssl id="defaultSSLConfig" trustDefaultCerts="true" />
+    <basicRegistry id="basic" realm="customRealm">
+     <user name="mlee" password="p@ssw0rd" />
+     <user name="rkumar" password="pa$$w0rd" />
+     <user name="gjones" password="{xor}Lz4sLCgwLTs=" />
+     <group name="students">
+         <member name="mlee" />
+         <member name="rkumar" />
+     </group>
+    </basicRegistry>
+</server>
