@@ -206,7 +206,7 @@ elif [[ $server == "jaxrs-fat" ]] ; then
 	testTarget="/jaxrs-fat/rest/hello/sayHello"
 	respString="SRVE0242I.*jaxrs-fat.*Initialization successful"
 elif [[ $server == "jenkins" ]] ; then
-	testTarget="/jenkins/"
+	testTarget="/jenkins/login"
 	respString="SRVE0242I.*jenkins.*Initialization successful"
 elif [[ $server == "petclinic" ]] ; then
 	testTarget="/petclinic/"
