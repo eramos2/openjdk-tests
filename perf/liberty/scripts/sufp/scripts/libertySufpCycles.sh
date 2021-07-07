@@ -371,6 +371,7 @@ for i in `seq 1 $iters`; do
         fi
 
   	startMillis=`echo $(($(date +%s%N)/1000000))`
+	echo "startMillis:" $startMillis   
 	${startCom} > /dev/null
 	started=""
 	while [[ -z $started ]] ; do
@@ -398,6 +399,7 @@ for i in `seq 1 $iters`; do
                                 sleep 2
                         fi
                 done
+				echo "RESP_TIME: " $RESP_TIME " resptime: " $resptime
         fi
 
 	if [[ ${NO_SLEEP_FP_CPU} == "false" ]] ; then
