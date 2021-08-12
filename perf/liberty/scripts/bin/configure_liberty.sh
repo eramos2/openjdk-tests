@@ -308,6 +308,9 @@ AUTH_NEEDED=true
 ls ${APP_DEST}
 downloadDepencies
 
+if [[ "${REPLACE_JAR}" == "true" ]]; then
+	scp "${SOURCE_JAR_FILE}" ${APP_DEST}/wlp/lib
+fi
 ##########################
 
 unsetVars
@@ -318,6 +321,10 @@ EXTRACT_NEW_NAME="${EXTRACT_ORIGINAL_NAME}"
 APP_DEST="${DEST}/libertyBinaries/WL-liberty"
 AUTH_NEEDED=true
 downloadDepencies
+
+if [[ "${REPLACE_JAR}" == "true" ]]; then
+	scp "${SOURCE_JAR_FILE}" ${APP_DEST}/wlp/lib
+fi
 
 ##########################
 
