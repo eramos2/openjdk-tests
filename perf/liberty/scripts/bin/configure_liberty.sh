@@ -308,7 +308,7 @@ AUTH_NEEDED=true
 ls ${APP_DEST}
 downloadDepencies
 
-if [[ "${REPLACE_JAR}" == "true" ]]; then
+if [[ "${REPLACE_LIBERTY_JAR}" == "true" ]]; then
 	scp "${SOURCE_JAR_FILE}" ${APP_DEST}/wlp/lib
 fi
 ##########################
@@ -322,7 +322,7 @@ APP_DEST="${DEST}/libertyBinaries/WL-liberty"
 AUTH_NEEDED=true
 downloadDepencies
 
-if [[ "${REPLACE_JAR}" == "true" ]]; then
+if [[ "${REPLACE_LIBERTY_JAR}" == "true" ]]; then
 	scp "${SOURCE_JAR_FILE}" ${APP_DEST}/wlp/lib
 fi
 
