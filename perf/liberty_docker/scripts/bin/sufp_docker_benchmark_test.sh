@@ -95,7 +95,7 @@ setFirstResponse()
 | First Response Setup
 "
   # Scenarios that do first response request
-  local FR_SCENARIOS=("acmeair-micro-1.0" "acmeair-micro-4.0" "acmeair-mono" "cdi-base" "cdi-fat" "cdi-one-jar-fat" "pingperf" "dt7" "dt8" "jaxrs-fat" "jenkins" "petclinic" "spring-1.5.6" "spring-2.1.1" "springboot-war" "tradelite7" "tradelite8")  
+  local FR_SCENARIOS=("acmeair-micro-1.0" "acmeair-micro-4.0" "acmeair-mono" "cdi-base" "cdi-fat" "cdi-one-jar-fat" "pingperf" "pingperf-jakarta9" "dt7" "dt8" "jaxrs-fat" "jenkins" "petclinic" "spring-1.5.6" "spring-2.1.1" "springboot-war" "tradelite7" "tradelite8")  
   
   timeToFirstRequest=""
   firstResponseScript=/sufp/pingFirstResponse.sh
@@ -114,7 +114,7 @@ setFirstResponse()
 
   # Assign testTarget and respString accorging to current scenario
   case ${SCENARIO} in
-    pingperf)
+    pingperf|pingperf-jakarta9)
       testTarget="/pingperf/ping/greeting"
 	    respString=" SystemOut "
       ;;
