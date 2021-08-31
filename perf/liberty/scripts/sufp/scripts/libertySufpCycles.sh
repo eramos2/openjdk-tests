@@ -155,6 +155,7 @@ if [[ $server == "acmeair-micro-1.0" ]] || \
 	[[ $server == "cdi-fat" ]] || \
 	[[ $server == "cdi-one-jar-fat" ]] || \
 	[[ $server == "pingperf" ]] || \
+	[[ $server == "pingperf-jakarta9" ]] || \
 	[[ $server == "dt7" ]] || \
 	[[ $server == "dt8" ]] || \
 	[[ $server == "jaxrs-fat" ]] || \
@@ -183,7 +184,7 @@ startedString=" is ready to run a smarter"
 respString=""
 testTarget=""
 
-if [[ $server == "pingperf" ]] ; then
+if [[ $server == "pingperf" ]] || [[ $server == "pingperf-jakarta9" ]]; then
 	testTarget="/pingperf/ping/greeting"
 	respString=" SystemOut "
 elif [[ $server == "acmeair-micro-1.0" ]] ; then
