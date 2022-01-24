@@ -417,7 +417,7 @@
 		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
 		<levels>
 			<level>extended</level>
-			<level>regression</level>
+			<level>special</level>
 		</levels>
 		<groups>
 			<group>perf</group>
@@ -460,7 +460,7 @@
 		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
 		<levels>
 			<level>extended</level>
-			<level>regression</level>
+			<level>special</level>
 		</levels>
 		<groups>
 			<group>perf</group>
@@ -552,7 +552,7 @@
 		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
 		<levels>
 			<level>extended</level>
-			<level>regression</level>
+			<level>special</level>
 		</levels>
 		<groups>
 			<group>perf</group>
@@ -657,7 +657,7 @@
 		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
 		<levels>
 			<level>extended</level>
-			<level>regression</level>
+			<level>special</level>
 		</levels>
 		<groups>
 			<group>perf</group>
@@ -671,7 +671,7 @@
 		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
 		<levels>
 			<level>extended</level>
-			<level>regression</level>
+			<level>special</level>
 		</levels>
 		<groups>
 			<group>perf</group>
@@ -763,7 +763,7 @@
 		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
 		<levels>
 			<level>extended</level>
-			<level>regression</level>
+			<level>special</level>
 		</levels>
 		<groups>
 			<group>perf</group>
