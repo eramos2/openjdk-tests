@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server>
+  <!-- Enable features -->
+  <featureManager>
+    <feature>microProfile-5.0</feature>
+  </featureManager>
+
+  <!-- To access this server from a remote client add a host attribute to the following element, e.g. host="*" -->
+  <httpEndpoint 
+    id="defaultHttpEndpoint" 
+    host="*" 
+    httpPort="9080" 
+    httpsPort="9443">
+    <accessLogging 
+      enabled="false" 
+      filepath="${server.output.dir}/logs/http_defaultEndpoint_access.log" 
+      logFormat='%h %u %t "%r" %s %b %D %{User-agent}i'>
+    </accessLogging>
+  </httpEndpoint>
+
+  <quickStartSecurity userName="${env.USERNAME}" userPassword="${env.PASSWORD}" />
+
+  <logging 
+    consoleFormat="simple" 
+    consoleSource="message,trace,accessLog,ffdc,audit" 
+    messageFormat="simple" 
+    messageSource="message,trace,accessLog,ffdc,audit" 
+    traceSpecification="*=info" />
+
+  <webApplication name="acmeair-authservice" location="/sufp/apps/acmeair-micro-5.0/acmeair-authservice-java-5.0.war" contextRoot="/auth">
+    <!-- enable visibility to third party apis -->
+    <classloader apiTypeVisibility="api,ibm-api,spec,stable,third-party" />
+  </webApplication>
+
+  <keyStore id="defaultKeyStore" password="secret" />
+
+  <cors 
+    domain="/auth" 
+    allowedOrigins="*" 
+    allowedMethods="GET, DELETE, POST, OPTIONS" 
+    allowedHeaders="*" 
+    allowCredentials="true" 
+    maxAge="3600" />
+</server>

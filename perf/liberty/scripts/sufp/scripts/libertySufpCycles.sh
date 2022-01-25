@@ -194,13 +194,15 @@ elif [[ $server == "acmeair-micro-1.0" ]] ; then
 elif [[ $server == "acmeair-micro-4.0" ]] ; then
 	testTarget="/flight"
 	respString="SRVE0242I.*acmeair-flightservice.*Initialization successful"
+elif [[ $server == "acmeair-micro-5.0" ]] ; then
+    testTarget="/auth"
 elif [[ $server == "acmeair-mono" ]] ; then
 	testTarget="/rest/info/config/runtime"
 	respString="SRVE0242I.*acmeair-monolithic.*Initialization successful"
 elif [[ $server == "cdi-base" ]] || [[ $server == "cdi-fat" ]] || [[ $server == "cdi-one-jar-fat" ]] ; then
 	testTarget="/meetings/rest/meetings"
 	respString="SRVE0242I.*meetings.*Initialization successful"
-elif [[ $server == "dt7" ]] || [[ $server == "dt8" ]] ; then
+elif [[ $server == "dt7" ]] || [[ $server == "dt8" ]] || [[ $server == "dt9" ]]; then
 	testTarget="/daytrader/servlet/PingServlet"
 	respString="SRVE0242I.*PingServlet.*Initialization successful"
 elif [[ $server == "jaxrs-fat" ]] ; then
@@ -615,7 +617,7 @@ avg_fp0=`echo $fpRes | awk '{print $3}'`
 cpuRes=`awk -F: '/top/ {printf "%4.2f\n",((60*$2)+$3)}' $resFile | sort -n | tail -n+3 | head -n-2 | awk '{cpu=$1 ; sum+=cpu; sumsq+=(cpu)^2; if(min==""){min=max=cpu}; if(cpu>max) {max=cpu}; if(cpu< min) {min=cpu}}END{printf "CPU usage:  Avg: %2.2f secs, Min: %2.2f secs, Max: %2.2f secs, StdDev: %2.2f secs, SDev/Avg: %2.2f%", sum/NR, min, max, sqrt((sumsq - sum^2/NR)/NR), 100*sqrt((sumsq - sum^2/NR)/NR)/(sum/NR)}'`
 avg_cp0=`echo $cpuRes | awk '{print $4}'`
 shortRes=""
-if [[ ! -z $extra30 ]] ; then
+if [[ ! -z ${EXTRA30} ]] ; then
 	#avg_fp1=`grep top $resFile | awk '{y++;x+=$3} END {print int(x/y+0.5)}'`
 	avg_fp1=`grep top $resFile | awk '{x+=$3} END {printf "%.0f", x/NR/1024}'`
 	avg_cp1=`grep top $resFile | sed -e "s/.* //" | awk -F: '{x+=$1;y+=$2}END{printf "%2.0f:%2.2f", x/NR, y/NR}'`

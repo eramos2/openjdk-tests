@@ -54,7 +54,7 @@ $numaargs ./bin/server create ${APP}
 #Edit server.xml to point to app location
 sed -i "s|\"/sufp/apps|\"${targDir}|g" usr/servers/${APP}/server.xml  
 test=$(echo ${targDir}/${APP} | sed -e "s/\// /g")
-if [[ `echo $test | grep spring ` ]] ; then
+if [[ `echo $test | grep spring | grep -v war` ]] ; then
 	mkdir usr/servers/${APP}/dropins/spring
 	cp ${targDir}/${APP}/*.jar usr/servers/${APP}/dropins/spring
 fi
