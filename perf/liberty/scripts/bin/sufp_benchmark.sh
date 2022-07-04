@@ -14,8 +14,10 @@
 # limitations under the License.
 ################################################################################
 
-
-
+echo "Create /sufp directory on LOAD_DRIVER ${LOAD_DRIVER}"
+ssh root@${LOAD_DRIVER} "mkdir -p /sufp"
+echo "Give permissions to sufp directory on LOAD_DRIVER ${LOAD_DRIVER}"
+ssh root@${LOAD_DRIVER} "chmod -R 777"
 echo "Transfering sufp scripts (pingperfPingScript.sh, cleanupScripts.sh, pingFirstResponse.sh) to load driver - ${LOAD_DRIVER}"
 scp -r ${TEST_RESROOT}/scripts/sufp/scripts/pingperfPingScript.sh ${TEST_RESROOT}/scripts/sufp/scripts/cleanupScripts.sh ${TEST_RESROOT}/scripts/sufp/scripts/pingFirstResponse.sh root@${LOAD_DRIVER}:/sufp/ 
 
