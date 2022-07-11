@@ -214,11 +214,11 @@
 			<group>perf</group>
 		</groups>
 	</test>
-	<test>
+	<!-- <test>
 		<testCaseName>OpenLibertySUFPJenkins</testCaseName>
 		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) jenkins $(TEST_RESROOT) OL; \
 			${TEST_STATUS}</command>
-		<!-- scripts are only tested on linux -->
+		<!- scripts are only tested on linux ->
 		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
 		<levels>
 			<level>extended</level>
@@ -226,7 +226,7 @@
 		<groups>
 			<group>perf</group>
 		</groups>
-	</test>
+	</test> -->
 	<test>
 		<testCaseName>OpenLibertySUFPMicroProfile3.0</testCaseName>
 		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) micro-profile-3.0 $(TEST_RESROOT) OL; \
@@ -637,11 +637,11 @@
 			<group>perf</group>
 		</groups>
 	</test>
-	<test>
+	<!--<test>
 		<testCaseName>WebsphereLibertySUFPJenkins</testCaseName>
 		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) jenkins $(TEST_RESROOT) WL; \
 			${TEST_STATUS}</command>
-		<!-- scripts are only tested on linux -->
+		<!- scripts are only tested on linux ->
 		<platformRequirements>os.linux,arch.x86,bits.64</platformRequirements>
 		<levels>
 			<level>extended</level>
@@ -650,7 +650,7 @@
 			<group>perf</group>
 		</groups>
 	</test>
-	<test>
+	<test>-->
 		<testCaseName>WebsphereLibertySUFPMicroProfile3.0</testCaseName>
 		<command>bash $(Q)$(TEST_RESROOT)$(D)configs$(D)liberty_sufp.sh$(Q) micro-profile-3.0 $(TEST_RESROOT) WL; \
 			${TEST_STATUS}</command>
